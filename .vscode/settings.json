@@ -1,0 +1,7 @@
+{
+  "editor.formatOnSave": true,
+  "files.eol": "\n",
+  "editor.rulers": [120],
+  "editor.tabSize": 2,
+  "window.title": "Front-end Pack&Go"
+}
