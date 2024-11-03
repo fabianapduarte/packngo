@@ -3,5 +3,11 @@
   "files.eol": "\n",
   "editor.rulers": [120],
   "editor.tabSize": 2,
-  "window.title": "Front-end Pack&Go"
+  "window.title": "Front-end Pack&Go",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  }
 }
