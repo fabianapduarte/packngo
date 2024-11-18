@@ -1,0 +1,19 @@
+.register-container {
+  width: 900px;
+}
+
+.register-container img {
+  border-top-right-radius: 0 !important;
+}
+
+@media screen and (max-width: 1024px) {
+  .register-container {
+    width: 100%;
+  }
+
+  .register-container img {
+    height: 270px;
+    width: 100%;
+    border-top-right-radius: 10px !important;
+  }
+}
