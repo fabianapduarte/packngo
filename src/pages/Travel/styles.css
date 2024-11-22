@@ -1,0 +1,20 @@
+.grid-travel {
+  display: grid;
+  grid-template-columns: 310px 3fr;
+  gap: 24px;
+}
+
+.img-card {
+  width: 270px;
+  height: 270px;
+}
+
+@media (max-width: 1200px) {
+  .grid-travel {
+    grid-template-columns: 1fr;
+  }
+
+  .img-card {
+    width: 100%;
+  }
+}

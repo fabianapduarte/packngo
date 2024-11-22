@@ -1,4 +1,4 @@
-export const ButtonOutlined = ({ label, color, icon = null }) => {
+export const ButtonOutlined = ({ label, color, Icon = null }) => {
   const colorVariants = {
     primary: 'text-primary border-primary hover:bg-primary hover:text-primary-foreground',
     red: 'text-red border-red hover:bg-red hover:text-red-foreground',
@@ -6,9 +6,13 @@ export const ButtonOutlined = ({ label, color, icon = null }) => {
 
   return (
     <button
-      className={`flex items-center px-3 py-2 bg-transparent border ${colorVariants[color]} transition-colors text-base rounded`}
+      className={`flex items-center px-3 py-2 bg-transparent border ${colorVariants[color]} transition-colors text-base rounded w-fit`}
     >
-      {icon && <span className="mr-2">{icon}</span>}
+      {Icon && (
+        <span className="mr-2">
+          <Icon size={16} />
+        </span>
+      )}
       {label}
     </button>
   )

@@ -5,6 +5,7 @@ import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
 import { HyperLink } from '../../components/HyperLink'
 import './styles.css'
+import { enumButtonColor } from '../../enums/enumButtonColor'
 
 export default function Register() {
   return (
@@ -20,7 +21,7 @@ export default function Register() {
             <Input id="password" label="Senha" type="password" />
             <Input id="confirm-password" label="Confirmar senha" type="password" />
           </div>
-          <Button label="Cadastrar" color="primary" icon={<UserPlus size={16} />} />
+          <Button label="Cadastrar" color={enumButtonColor.primary} Icon={UserPlus} />
           <span className="mt-5">
             Já possui conta? <HyperLink text="Ir para login" url="/" />
           </span>

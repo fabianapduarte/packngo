@@ -5,6 +5,7 @@ module.exports = {
   theme: {
     borderRadius: {
       DEFAULT: '10px',
+      full: '9999px',
     },
     container: {
       center: true,
@@ -44,6 +45,12 @@ module.exports = {
           DEFAULT: '#FAFAFA',
           foreground: '#0A0A0A',
         },
+        planned: '#1479B8',
+        plannedDarker: '#106194',
+        progress: '#E8B931',
+        progressDarker: '#E5A000',
+        finished: '#14AE5C',
+        finishedDarker: '#009951',
       },
     },
   },
