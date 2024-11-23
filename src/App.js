@@ -10,7 +10,7 @@ export default function App() {
     <Routes>
       <Route path="/">
         <Route index element={<Login />} />
-        <Route path="/viagem" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/cadastro" element={<Register />} />
         <Route path="/viagem/:id" element={<Travel />} />
       </Route>

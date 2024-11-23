@@ -7,7 +7,7 @@ import { HyperLink } from '../../components/HyperLink'
 import DATAF from '../../assets/data.json'
 import './styles.css'
 import React, { useState, useEffect } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [data, setData] = useState([]);
@@ -15,6 +15,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function Login() {
         localStorage.removeItem('email');
         localStorage.removeItem('password');
       }
-      //Navigate("/viagem");  
+      navigate("/home");
     }
     else {
       setMessage('Email ou senha incorretos!');
