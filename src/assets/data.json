@@ -1,0 +1,36 @@
+[
+  {
+    "users": [
+      {
+        "id": 1,
+        "email": "joao.silva@example.com",
+        "name": "João Silva da Costa",
+        "password": "testing123",
+        "image": "",
+        "activeTrips": [
+          {
+            "id": 1
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "email": "marina.lima@example.com",
+        "name": "Marina Lima Silvera",
+        "password": "testing321"
+      }
+    ],
+    "trips": [
+      {
+        "id": 1,
+        "title": "Viagem de fim de ano",
+        "destination": "https://maps.app.goo.gl/wjZXkZHECUaRgHxx6",
+        "dateStart": "2024-11-20T16:45:00Z",
+        "dateEnd": "2024-12-20T16:45:00Z",
+        "status": 0,
+        "inviteCode": "5510ff",
+        "image": "https://lh5.googleusercontent.com/p/AF1QipP6o9juQ0SRxpm5Kals5G1d07e87TnDOGTgAeCz=w426-h240-k-no"
+      }
+    ]
+  }
+]
