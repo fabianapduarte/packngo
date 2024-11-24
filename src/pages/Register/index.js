@@ -1,11 +1,9 @@
 import { UserPlus } from 'react-feather'
 import img from '../../assets/passports.jpg'
-import { Logotype } from '../../components/Logotype'
-import { Button } from '../../components/Button'
-import { Input } from '../../components/Input'
-import { HyperLink } from '../../components/HyperLink'
-import './styles.css'
+import { Button, HyperLink, Input, Logotype } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
+
+import './styles.css'
 
 export default function Register() {
   return (

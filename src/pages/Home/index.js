@@ -1,10 +1,10 @@
 import { LogIn } from 'react-feather'
 import { Plus } from 'react-feather'
-import { Navbar } from '../../components/Navbar'
 import { Card } from '../../components/Card'
 import { TravelStatus } from '../../components/TravelStatus'
-import { Button } from '../../components/Button'
-import './styles.css'
+import { Navbar, Button } from '../../components'
+//import './styles.css'
+
 
 export default function Home() {
   return (

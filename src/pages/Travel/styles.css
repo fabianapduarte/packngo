@@ -1,20 +1,17 @@
 .grid-travel {
   display: grid;
-  grid-template-columns: 310px 3fr;
+  grid-template-columns: minmax(310px, 1fr) 3fr;
   gap: 24px;
 }
 
 .img-card {
-  width: 270px;
+  min-width: 270px;
+  width: 100%;
   height: 270px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1000px) {
   .grid-travel {
     grid-template-columns: 1fr;
-  }
-
-  .img-card {
-    width: 100%;
   }
 }
