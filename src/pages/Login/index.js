@@ -57,10 +57,10 @@ export default function Login() {
     <main className="flex justify-center lg:items-center min-h-screen p-8">
       <div className="lg:grid lg:grid-cols-2 h-fit form-container rounded shadow-lg bg-white">
         <img src={img} alt="Passaportes" className="rounded-t lg:rounded-tl lg:rounded-bl h-full object-cover" />
-        <div className="p-8 flex flex-col items-center justify-center">
+        <div className="py-6 px-8 flex flex-col items-center justify-center">
           <Logotype />
           <h2 className="font-semibold text-xl mt-2 mb-5">Login</h2>
-          <form onSubmit={handleLogin} className="flex flex-col gap-3 mb-4 w-full">
+          <form onSubmit={handleLogin} className="flex flex-col gap-3 w-full">
             <p className="text-wrap text-error">{message}</p>
             <Input
               id="email"
