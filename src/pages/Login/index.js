@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import img from '../../assets/passports.jpg'
 import DATAF from '../../assets/data.json'
-import { Button, HyperLink, Input, Logotype } from '../../components'
+import { Button, Checkbox, HyperLink, Input, Logotype } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
 import './styles.css'
@@ -79,17 +79,19 @@ export default function Login() {
               type="password"
             />
             <div className="mb-2">
-              <label>
-                <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} /> Lembrar
-                de mim
-              </label>
+              <Checkbox
+                name="remember-me"
+                text="Lembrar de mim"
+                isChecked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
             </div>
             <div className="self-center">
               <Button label="Login" color={enumButtonColor.primary} type="submit" Icon={LogIn} />
             </div>
           </form>
           <span className="mt-5">
-            Não possui conta? <HyperLink text="Ir para registrar" url="/cadastro" />
+            Não possui conta? <HyperLink text="Ir para cadastro" url="/cadastro" />
           </span>
         </div>
       </div>
