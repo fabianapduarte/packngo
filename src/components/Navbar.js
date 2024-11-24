@@ -14,6 +14,8 @@ const NavbarLink = ({ text, url }) => {
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const MenuIcon = isMenuOpen ? X : Menu
+
   const handleClickOnMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -27,12 +29,7 @@ export const Navbar = () => {
           <NavbarLink text="Conta" url="/minha-conta" />
           <NavbarLink text="Sair" url="/" />
         </div>
-        {isMenuOpen && (
-          <X className="flex sm:hidden cursor-pointer" size={24} color="#BCC1BA" onClick={handleClickOnMenu} />
-        )}
-        {!isMenuOpen && (
-          <Menu className="flex sm:hidden cursor-pointer" size={24} color="#BCC1BA" onClick={handleClickOnMenu} />
-        )}
+        <MenuIcon className="flex sm:hidden cursor-pointer" size={24} color="#BCC1BA" onClick={handleClickOnMenu} />
       </div>
 
       <div
