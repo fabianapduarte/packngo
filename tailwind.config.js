@@ -5,6 +5,7 @@ module.exports = {
   theme: {
     borderRadius: {
       DEFAULT: '10px',
+      sm: '4px',
       full: '9999px',
     },
     container: {
@@ -54,5 +55,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 }
