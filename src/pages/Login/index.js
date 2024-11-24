@@ -1,14 +1,13 @@
-import { LogIn } from 'react-feather'
-import img from '../../assets/passports.jpg'
-import { Logotype } from '../../components/Logotype'
-import { Button } from '../../components/Button'
-import { Input } from '../../components/Input'
-import { HyperLink } from '../../components/HyperLink'
-import DATAF from '../../assets/data.json'
-import './styles.css'
 import React, { useState, useEffect } from 'react'
+import { LogIn } from 'react-feather'
 import { useNavigate } from 'react-router-dom'
+
+import img from '../../assets/passports.jpg'
+import DATAF from '../../assets/data.json'
+import { Button, HyperLink, Input, Logotype } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
+
+import './styles.css'
 
 export default function Login() {
   const [data, setData] = useState([])
