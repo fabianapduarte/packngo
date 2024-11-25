@@ -8,7 +8,9 @@ import { Layout } from './Layout'
 import { Logotype } from './Logotype'
 import { Navbar } from './Navbar'
 import { Participant } from './Participant'
+import { SimpleInput } from './SimpleInput'
 import { TextButton } from './TextButton'
+import { Tooltip } from './Tooltip'
 import { TravelStatus } from './TravelStatus'
 
 export {
@@ -22,6 +24,8 @@ export {
   Logotype,
   Navbar,
   Participant,
+  SimpleInput,
   TextButton,
+  Tooltip,
   TravelStatus,
 }

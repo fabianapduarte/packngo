@@ -46,6 +46,7 @@ module.exports = {
           DEFAULT: '#FAFAFA',
           foreground: '#0A0A0A',
         },
+        cardGray: '#EAEAEC',
         planned: '#1479B8',
         plannedDarker: '#106194',
         progress: '#E8B931',

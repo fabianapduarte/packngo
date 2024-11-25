@@ -15,3 +15,11 @@
     grid-template-columns: 1fr;
   }
 }
+
+.card-slider {
+  width: 210px;
+}
+
+.card {
+  flex: 0 0 auto;
+}
