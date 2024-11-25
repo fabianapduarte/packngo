@@ -1,40 +1,30 @@
-import { LogIn } from 'react-feather'
-import { Plus } from 'react-feather'
-import { Card } from '../../components/Card'
-import { TravelStatus } from '../../components/TravelStatus'
+import { LogIn, Plus } from 'react-feather';
 import { Navbar, Button } from '../../components'
-//import './styles.css'
+import { TravelCard } from '../../components/TravelCard'
+import { enumButtonColor } from '../../enums/enumButtonColor'
+
+import './styles.css'
 
 
 export default function Home() {
   return (
     <div>
       <Navbar />
-      <Card>
-        <div className="container-fluid mx-5">
-          <div className="col-md-4">
-            <div className="container-fluid">
-              <div className="col-md-7">
-                <h1>Minhas Viagens</h1>
-              </div>
-              <div className="col-md-5">
-                <div className="col-md-3">
-                  <Button label="Entrar em viagem" icon={<LogIn size={16} />} />
-                </div>
-                <div className="col-md-2">
-                  <Button label="Criar viagem" icon={<Plus size={16} />} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-8">
-            <h1>Viagem de fim de ano</h1>
-            <TravelStatus></TravelStatus>
-            <p>Local</p>
-            <p>Data</p>
+      <div className="bg-gray lg:items-center min-h-screen px-20 pt-5">
+        <div className="flex items-center justify-between mb-7">
+          <div className="font-bold text-2xl">Minhas viagens</div>
+          <div className="flex space-x-4">
+            <Button label="Entrar em viagem" color={enumButtonColor.primary} type="submit" Icon={LogIn} />
+            <Button label="Criar viagem" color={enumButtonColor.primary} type="submit" Icon={Plus} />
           </div>
         </div>
-      </Card>
+        <TravelCard
+          name="Minha Viagem de Teste"
+          status="1"
+          date="01/01/2025"
+          location="Paris"
+        />
+      </div>
     </div>
   )
 }
