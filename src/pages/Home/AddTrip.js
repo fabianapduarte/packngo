@@ -4,6 +4,7 @@ import { Button, Input } from '../../components';
 import { enumButtonColor } from '../../enums/enumButtonColor';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import "./styles.css";
 
 export default function AddTrip({ show, onClose }) {
   const [title, setTitle] = useState('');
@@ -42,7 +43,7 @@ export default function AddTrip({ show, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-1">
       <div className="max-w-md mx-auto bg-white shadow-md rounded p-6 relative">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-bold">Criar nova viagem</h1>
