@@ -47,7 +47,7 @@ export default function Login() {
         localStorage.removeItem('email')
         localStorage.removeItem('password')
       }
-      navigate('/home')
+      navigate('/home', { state: { user } })
     } else {
       setMessage('Email ou senha incorretos!')
       setPassword('')

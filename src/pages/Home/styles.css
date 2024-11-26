@@ -1,3 +1,17 @@
 .bg-gray{
   background-color : #FAFAFA;
 }
+.image-container {
+  width: 150px; /* largura fixa */
+  height: 150px; /* altura fixa */
+  overflow: hidden;
+  position: relative;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ajusta e corta a imagem para cobrir o container */
+  position: relative;
+  z-index : 0;
+}

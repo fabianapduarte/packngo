@@ -1,15 +1,20 @@
 import { Calendar, MapPin } from 'react-feather';
 import { TravelStatus } from './TravelStatus';
+import "../pages/Home/styles.css"
 
 
 export const TravelCard = ({ name, status, date, location, image = "https://placehold.co/600x400@2x.png", imageAlt = "Placeholder" }) => {
   return (
-    <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl rounded overflow-hidden shadow-lg bg-white">
+    <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl overflow-hidden shadow-lg bg-white">
       <div className="lg:grid lg:grid-cols-3">
-        <img src={image} alt={imageAlt} className="rounded-l" />
+        <div className="image-container lg:rounded-l lg:rounded-t-0 col-span-1">
+          <img src={image} alt={imageAlt} className="w-full h-full object-cover" />
+        </div>
         <div className="rounded-r px-6 py-4 col-span-2 my-auto">
           <div className="font-bold text-xl mb-2">{name}</div>
-          <TravelStatus status={status} />
+          <div className="pl-0.5">
+            <TravelStatus status={status} />
+          </div>
           <p className="text-gray-700 text-base flex items-center pr-3 w-fit">
             <span className="mr-2">
               <MapPin size={16} />

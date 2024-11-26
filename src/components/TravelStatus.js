@@ -13,7 +13,7 @@ export const TravelStatus = ({ status }) => {
 
   return (
     <span className="flex items-center">
-      <div className={`rounded-full mr-2 size-3 border ${colorVariants[status]}`}></div>
+      <div className={`rounded-full mr-2.5 size-3 border ${colorVariants[status]}`}></div>
       {statusLabel[status]}
     </span>
   )
