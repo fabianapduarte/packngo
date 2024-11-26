@@ -47,7 +47,7 @@ export default function Home() {
       <div className="lg:items-center">
         <AddTrip show={showAddTrip} onClose={handleCloseAddTrip} />
         <div className="flex items-center justify-between mb-7">
-          <div className="font-bold text-2xl">Minhas viagens</div>
+          <h3 className="font-bold text-2xl">Minhas viagens</h3>
           <div className="flex space-x-4">
             <Button label="Entrar em viagem" color={enumButtonColor.primary} type="submit" Icon={LogIn} />
             <Button label="Criar viagem" onClick={handleOpenAddTrip} color={enumButtonColor.primary} type="submit" Icon={Plus} />
