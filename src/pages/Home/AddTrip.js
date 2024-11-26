@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import { Plus } from 'react-feather';
 import { Button, Input } from '../../components';
 import { enumButtonColor } from '../../enums/enumButtonColor';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import "./styles.css";
 
-export default function AddTrip({ show, onClose }) {
+export default function AddTrip({ show, onClose, onAddTrip, trips }) {
   const [title, setTitle] = useState('');
   const [destination, setDestination] = useState('');
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [image, setImage] = useState(null);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [image, setImage] = useState("https://placehold.co/400x400@2x.png");
   const [imagePreview, setImagePreview] = useState(null);
 
   if (!show) {
@@ -25,6 +23,7 @@ export default function AddTrip({ show, onClose }) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
+        setImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -32,14 +31,21 @@ export default function AddTrip({ show, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aqui você pode adicionar a lógica para salvar a viagem, por exemplo, enviando os dados para uma API
-    console.log({
-      title,
-      destination,
-      startDate,
-      endDate,
-      image
-    });
+    const newTrip = {
+      id: (trips.length + 1),
+      title: title,
+      destination: destination,
+      dateStart: startDate,
+      dateEnd: endDate,
+      status: 0,
+      inviteCode: Date.now(),
+      image: image,
+      checklist: [],
+      events: [],
+      polls: [],
+    };
+    onAddTrip(newTrip);
+    onClose();
   };
 
   return (
@@ -73,20 +79,22 @@ export default function AddTrip({ show, onClose }) {
           <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700 mb-2">Data de Início</label>
-              <DatePicker
+              <input
+                type="date"
                 id="dateStart"
-                selected={startDate}
-                onChange={date => setStartDate(date)}
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
                 className="rounded border border-gray focus:ring-secondary focus:border-secondary px-3 py-2 bg-white w-full"
                 required
               />
             </div>
             <div>
               <label className="block text-gray-700 mb-2">Data de Fim</label>
-              <DatePicker
+              <input
+                type="date"
                 id="dateEnd"
-                selected={endDate}
-                onChange={date => setEndDate(date)}
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
                 className="rounded border border-gray focus:ring-secondary focus:border-secondary px-3 py-2 bg-white w-full"
                 required
               />
