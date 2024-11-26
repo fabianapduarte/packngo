@@ -37,7 +37,7 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
       destination: destination,
       dateStart: startDate,
       dateEnd: endDate,
-      status: 0, // Status inicial como "Planejada"
+      status: 0,
       inviteCode: Date.now(),
       image: image,
       checklist: [],
