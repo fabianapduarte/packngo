@@ -13,7 +13,7 @@ import './styles.css';
 export default function Home() {
   const location = useLocation();
   const [trips, setTrips] = useState([]);
-  const { user } = location.state || {};
+  const [user, setUser] = useState(location.state.user)
   const [showAddTrip, setShowAddTrip] = useState(false);
 
   const handleOpenAddTrip = () => {
@@ -21,6 +21,17 @@ export default function Home() {
   };
   const handleCloseAddTrip = () => {
     setShowAddTrip(false);
+  };
+
+  const handleAddTrip = (newTrip) => {
+    const updatedTrips = [...trips, newTrip];
+    setTrips(updatedTrips);
+    const updatedUser = {
+      ...user, activeTrips: [
+        ...user.activeTrips, newTrip.id
+      ]
+    };
+    setUser(updatedUser);
   };
 
   const getUserTrips = () => {
@@ -39,13 +50,21 @@ export default function Home() {
   };
 
   useEffect(() => {
-    setTrips(DATAF[0].trips);
+    if (DATAF && DATAF[0] && DATAF[0].trips) {
+      setTrips(DATAF[0].trips);
+    }
   }, []);
+
+  useEffect(() => {
+  }, [trips]);
+  useEffect(() => {
+
+  }, [user]);
 
   return (
     <Layout>
       <div className="lg:items-center">
-        <AddTrip show={showAddTrip} onClose={handleCloseAddTrip} />
+        <AddTrip show={showAddTrip} onClose={handleCloseAddTrip} onAddTrip={handleAddTrip} trips={trips} />
         <div className="flex items-center justify-between mb-7">
           <div className="font-bold text-2xl">Minhas viagens</div>
           <div className="flex space-x-4">
@@ -53,7 +72,7 @@ export default function Home() {
             <Button label="Criar viagem" onClick={handleOpenAddTrip} color={enumButtonColor.primary} type="submit" Icon={Plus} />
           </div>
         </div>
-        <div className="grid grid-cols-1 place-items-center md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 place-items-center md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {getUserTrips().map((trip) => (
             <TravelCard
               key={trip.id}
