@@ -155,7 +155,7 @@ export const Travel = () => {
           </div>
         </Card>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 overflow-hidden">
           <Card>
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-6">
               <h3 className="font-bold text-xl">Eventos</h3>

@@ -53,7 +53,7 @@ export default function Home() {
             <Button label="Criar viagem" onClick={handleOpenAddTrip} color={enumButtonColor.primary} type="submit" Icon={Plus} />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 place-items-center md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
           {getUserTrips().map((trip) => (
             <TravelCard
               key={trip.id}
