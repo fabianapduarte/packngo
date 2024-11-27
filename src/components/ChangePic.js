@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { Plus, RefreshCw } from 'react-feather';
-import { Button, Input } from '../../components';
-import { enumButtonColor } from '../../enums/enumButtonColor';
-import "./styles.css";
+import { Button, Input } from '.';
+import { enumButtonColor } from '../enums/enumButtonColor';
 
-export default function ChangePic({ show, onClose,  }) {
-  const [title, setTitle] = useState('');
-  const [destination, setDestination] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+export const ChangePic = ({ show, onClose, imgClass}) => {
   const [image, setImage] = useState("https://placehold.co/400x400@2x.png");
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -44,7 +39,7 @@ export default function ChangePic({ show, onClose,  }) {
     e.preventDefault();
   
     if (imagePreview) {
-      const profileImage = document.querySelector('.profile-picture');
+      const profileImage = document.querySelector(imgClass);
       
       if (profileImage) {
         profileImage.src = imagePreview;

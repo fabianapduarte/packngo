@@ -71,14 +71,13 @@ export default function Home() {
   useEffect(() => {
     if (DATAF && DATAF[0] && DATAF[0].trips && DATAF[0].users) {
       setTrips(DATAF[0].trips);
-      setUsers(DATAF[0].users)
+      setUsers(DATAF[0].users);
     }
   }, []);
 
   useEffect(() => {
   }, [trips]);
   useEffect(() => {
-
   }, [user]);
 
   return (

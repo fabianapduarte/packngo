@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LogIn, Calendar, MapPin, Check } from 'react-feather';
 import { TravelStatus } from '../../components/TravelStatus';
 import { Button, Input } from '../../components';
@@ -7,6 +7,7 @@ import { enumTravelStatus } from '../../enums/enumTravelStatus';
 import "./styles.css";
 
 export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
+  const [tripUsers, setTripUsers] = useState(0);
   const [step, setStep] = useState(1);
   const [inviteCode, setInviteCode] = useState('');
   const [trip, setTrip] = useState(null);
@@ -20,6 +21,7 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
     if (found) {
       setTrip(found);
       setStep(step + 1);
+      setTripUsers(getTripUsers(found));
     } else {
       alert("Viagem não encontrada. Por favor, verifique o código e tente novamente.");
     }
@@ -40,6 +42,7 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
     }
   };
 
+
   const dateFormat = (dateStart, dateEnd) => {
     return new Date(dateStart).toLocaleDateString() + " - " + new Date(dateEnd).toLocaleDateString();
   };
@@ -55,6 +58,11 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
       default:
         return "Desconhecido";
     }
+  };
+
+  const getTripUsers = (trip) => {
+    if (!trip || !users) return [];
+    return users.filter(user => user.activeTrips.includes(trip.id));
   };
 
   return (
@@ -111,6 +119,21 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
                         </span>
                         {dateFormat(trip.dateStart, trip.dateEnd)}
                       </p>
+                      <div className="flex mt-2">
+                        {tripUsers.slice(0, 3).map((participant) => (
+                          <img
+                            key={participant.id}
+                            src={participant.image}
+                            alt={participant.name}
+                            className="w-10 h-10 rounded-full border-2 border-white -ml-2 first:ml-0"
+                          />
+                        ))}
+                        {tripUsers && tripUsers.length > 3 && (
+                          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 -ml-2">
+                            +{tripUsers.length - 3} participantes
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
