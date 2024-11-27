@@ -10,6 +10,7 @@ import { Logotype } from './Logotype'
 import { Navbar } from './Navbar'
 import { Participant } from './Participant'
 import { SimpleInput } from './SimpleInput'
+import { Slider } from './Slider'
 import { TextButton } from './TextButton'
 import { Tooltip } from './Tooltip'
 import { TravelStatus } from './TravelStatus'
@@ -27,6 +28,7 @@ export {
   Navbar,
   Participant,
   SimpleInput,
+  Slider,
   TextButton,
   Tooltip,
   TravelStatus,
