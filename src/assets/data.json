@@ -6,7 +6,7 @@
         "email": "joao.silva@example.com",
         "name": "João Silva da Costa",
         "password": "testing123",
-        "image": "",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
         "activeTrips": [1, 2, 3]
       },
       {
@@ -14,7 +14,7 @@
         "email": "marina.lima@example.com",
         "name": "Marina Lima Silvera",
         "password": "testing321",
-        "image": "",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
         "activeTrips": [4]
       }
     ],
@@ -166,7 +166,20 @@
           },
           {
             "title": "Destino da viagem",
-            "options": [{ "value": "Londres" }, { "value": "Paris" }, { "value": "Espanha" }, { "value": "Alemanha" }],
+            "options": [
+              {
+                "value": "Londres"
+              },
+              {
+                "value": "Paris"
+              },
+              {
+                "value": "Espanha"
+              },
+              {
+                "value": "Alemanha"
+              }
+            ],
             "open": false
           }
         ]
