@@ -13,7 +13,7 @@ export const ModalAddParticipant = ({ code, onClose }) => {
   }
 
   return (
-    <Modal title="Adicionar participantes" onClose={onClose}>
+    <Modal title="Adicionar participantes" onClose={onClose} size="sm">
       <div className="flex flex-col gap-2">
         <p>Compartilhe o código com as pessoas que você deseja incluir no grupo da viagem.</p>
         <div className="text-center text-xl font-bold">{code}</div>

@@ -7,11 +7,7 @@
         "name": "João Silva da Costa",
         "password": "testing123",
         "image": "",
-        "activeTrips": [
-          1,
-          2,
-          3
-        ]
+        "activeTrips": [1, 2, 3]
       },
       {
         "id": 2,
@@ -59,64 +55,116 @@
         "events": [
           {
             "title": "Almoçar",
-            "date": "01/12/2024",
-            "time": "12:00"
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            "place": "Lorem ipsum dolor",
+            "dateStart": "01/12/2024",
+            "timeStart": "12:00",
+            "dateEnd": "01/12/2024",
+            "timeEnd": "13:00",
+            "category": "Alimentação",
+            "amount": 100
           },
           {
             "title": "Visitar a London Eye",
-            "date": "01/12/2024",
-            "time": "14:00"
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            "place": "London Eye",
+            "dateStart": "01/12/2024",
+            "timeStart": "14:00",
+            "dateEnd": "01/12/2024",
+            "timeEnd": "16:00",
+            "category": "Lazer e entretenimento",
+            "amount": 100
           },
           {
             "title": "Jantar",
-            "date": "01/12/2024",
-            "time": "18:00"
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            "place": "Lorem ipsum dolor",
+            "dateStart": "01/12/2024",
+            "timeStart": "18:00",
+            "dateEnd": "01/12/2024",
+            "timeEnd": "20:00",
+            "category": "Alimentação",
+            "amount": 100
           },
           {
             "title": "Almoçar",
-            "date": "01/12/2024",
-            "time": "12:00"
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            "place": "Lorem ipsum dolor",
+            "dateStart": "01/12/2024",
+            "timeStart": "12:00",
+            "dateEnd": "01/12/2024",
+            "timeEnd": "13:00",
+            "category": "Alimentação",
+            "amount": 100
           },
           {
-            "title": "Almoçar",
-            "date": "01/12/2024",
-            "time": "12:00"
+            "title": "Visitar a London Eye",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            "place": "London Eye",
+            "dateStart": "01/12/2024",
+            "timeStart": "14:00",
+            "dateEnd": "01/12/2024",
+            "timeEnd": "16:00",
+            "category": "Lazer e entretenimento",
+            "amount": 100
           },
           {
-            "title": "Almoçar",
-            "date": "01/12/2024",
-            "time": "12:00"
-          },
-          {
-            "title": "Almoçar",
-            "date": "01/12/2024",
-            "time": "12:00"
-          },
-          {
-            "title": "Almoçar",
-            "date": "01/12/2024",
-            "time": "12:00"
+            "title": "Jantar",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            "place": "Lorem ipsum dolor",
+            "dateStart": "01/12/2024",
+            "timeStart": "18:00",
+            "dateEnd": "01/12/2024",
+            "timeEnd": "20:00",
+            "category": "Alimentação",
+            "amount": 100
           }
         ],
         "polls": [
           {
             "title": "Destino da viagem",
+            "options": [
+              { "value": "Londres", "votes": 3 },
+              { "value": "Paris", "votes": 2 },
+              { "value": "Espanha", "votes": 1 },
+              { "value": "Alemanha", "votes": 0 }
+            ],
+            "open": true,
+            "alreadyVoted": true
+          },
+          {
+            "title": "Destino da viagem",
+            "options": [
+              { "value": "Londres", "votes": 3 },
+              { "value": "Paris", "votes": 2 },
+              { "value": "Espanha", "votes": 1 },
+              { "value": "Alemanha", "votes": 0 }
+            ],
             "open": true
           },
           {
             "title": "Destino da viagem",
-            "open": true
-          },
-          {
-            "title": "Destino da viagem",
+            "options": [
+              { "value": "Londres", "votes": 3 },
+              { "value": "Paris", "votes": 2 },
+              { "value": "Espanha", "votes": 1 },
+              { "value": "Alemanha", "votes": 0 }
+            ],
             "open": false
           },
           {
             "title": "Destino da viagem",
+            "options": [
+              { "value": "Londres", "votes": 3 },
+              { "value": "Paris", "votes": 2 },
+              { "value": "Espanha", "votes": 1 },
+              { "value": "Alemanha", "votes": 0 }
+            ],
             "open": false
           },
           {
             "title": "Destino da viagem",
+            "options": [{ "value": "Londres" }, { "value": "Paris" }, { "value": "Espanha" }, { "value": "Alemanha" }],
             "open": false
           }
         ]

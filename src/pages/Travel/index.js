@@ -37,6 +37,9 @@ import { ModalLeaveTrip } from './ModalLeaveTrip'
 import { ModalDeleteTrip } from './ModalDeleteTrip'
 import { ModalCreatePoll } from './ModalCreatePoll'
 import './styles.css'
+import { ModalSeeEvent } from './ModalSeeEvent'
+import { ModalDeleteEvent } from './ModalDeleteEvent'
+import { ModalSeePoll } from './ModalSeePoll'
 
 const InfoItem = ({ Icon, text }) => {
   return (
@@ -58,38 +61,38 @@ const ChecklistItem = ({ text, isChecked, onClick }) => {
   )
 }
 
-const EventCard = ({ title, date, time }) => {
+const EventCard = ({ event, onClick }) => {
   return (
     <div className="card">
       <div className="p-4 rounded bg-cardGray card-slider block max-w-full">
-        <h4 className="text-md font-bold text-ellipsis whitespace-nowrap overflow-hidden">{title}</h4>
+        <h4 className="text-md font-bold text-ellipsis whitespace-nowrap overflow-hidden">{event.title}</h4>
         <div className="flex gap-2 items-center mb-3">
           <Calendar size={16} />
           <span>
-            {date} - {time}
+            {event.dateStart} - {event.timeStart}
           </span>
         </div>
-        <TextButton label="Ver evento" Icon={ArrowRight} />
+        <TextButton label="Ver evento" Icon={ArrowRight} onClick={onClick} />
       </div>
     </div>
   )
 }
 
-const PollCard = ({ title, open }) => {
+const PollCard = ({ title, isOpen, openPoll }) => {
   return (
     <div className="card">
       <div className="p-4 rounded bg-cardGray card-slider block max-w-full">
         <h4 className="text-md font-bold text-ellipsis whitespace-nowrap overflow-hidden">{title}</h4>
-        {open && <div className="text-primary mb-3">Votação aberta</div>}
-        {!open && <div className="text-red mb-3">Votação fechada</div>}
-        <TextButton label="Ver votação" Icon={CheckSquare} />
+        {isOpen && <div className="text-primary mb-3">Votação aberta</div>}
+        {!isOpen && <div className="text-red mb-3">Votação fechada</div>}
+        <TextButton label="Ver votação" Icon={CheckSquare} onClick={openPoll} />
       </div>
     </div>
   )
 }
 
 export const Travel = () => {
-  const isParticipant = false
+  const isParticipant = true
   const { events, polls, inviteCode, title } = data[0].trips[0]
   const { id } = useParams()
 
@@ -99,6 +102,11 @@ export const Travel = () => {
   const [openModalLeaveTrip, setOpenModalLeaveTrip] = useState(false)
   const [openModalDeleteTrip, setModalOpenDeleteTrip] = useState(false)
   const [openModalCreatePoll, setOpenModalCreatePoll] = useState(false)
+  const [openModalSeeEvent, setOpenModalSeeEvent] = useState(false)
+  const [openModalSeePoll, setOpenModalSeePoll] = useState(false)
+  const [openModalDeleteEvent, setOpenModalDeleteEvent] = useState(false)
+  const [eventSelected, setEventSelected] = useState(null)
+  const [pollSelected, setPollSelected] = useState(null)
 
   const handleDeleteItemOnChecklist = (indexToDelete) => {
     const newChecklist = checklist.filter((_, index) => index !== indexToDelete)
@@ -109,6 +117,26 @@ export const Travel = () => {
     const newChecklist = [...checklist, { title: value, isChecked: false }]
     setChecklist(newChecklist)
     setNewItemOnChecklist(false)
+  }
+
+  const handleSeeEvent = (event) => {
+    setOpenModalSeeEvent(true)
+    setEventSelected(event)
+  }
+
+  const handleCloseModalSeeEvent = () => {
+    setOpenModalSeeEvent(false)
+    setEventSelected(null)
+  }
+
+  const handleSeePoll = (poll) => {
+    setOpenModalSeePoll(true)
+    setPollSelected(poll)
+  }
+
+  const handleCloseModalSeePoll = () => {
+    setOpenModalSeePoll(false)
+    setPollSelected(null)
   }
 
   return (
@@ -174,7 +202,7 @@ export const Travel = () => {
             <Slider
               noElementsMessage="Não há eventos cadastrados."
               elements={events.map((event, index) => (
-                <EventCard key={`event-${index}`} title={event.title} date={event.date} time={event.time} />
+                <EventCard key={`event-${index}`} event={event} onClick={() => handleSeeEvent(event)} />
               ))}
             />
           </Card>
@@ -192,7 +220,14 @@ export const Travel = () => {
               noElementsMessage="Não há enquetes cadastradas."
               elements={
                 polls.length > 0 &&
-                polls.map((poll, index) => <PollCard key={`poll-${index}`} title={poll.title} open={poll.open} />)
+                polls.map((poll, index) => (
+                  <PollCard
+                    key={`poll-${index}`}
+                    title={poll.title}
+                    isOpen={poll.open}
+                    openPoll={() => handleSeePoll(poll)}
+                  />
+                ))
               }
             />
           </Card>
@@ -232,6 +267,18 @@ export const Travel = () => {
       {openModalDeleteTrip && <ModalDeleteTrip onClose={() => setModalOpenDeleteTrip(false)} />}
 
       {openModalCreatePoll && <ModalCreatePoll onClose={() => setOpenModalCreatePoll(false)} />}
+
+      {openModalSeeEvent && (
+        <ModalSeeEvent
+          event={eventSelected}
+          onClose={handleCloseModalSeeEvent}
+          openDeleteModal={() => setOpenModalDeleteEvent(true)}
+        />
+      )}
+
+      {openModalDeleteEvent && <ModalDeleteEvent onClose={() => setOpenModalDeleteEvent(false)} />}
+
+      {openModalSeePoll && <ModalSeePoll onClose={handleCloseModalSeePoll} poll={pollSelected} />}
     </Layout>
   )
 }

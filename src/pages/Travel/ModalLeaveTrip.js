@@ -15,7 +15,7 @@ export const ModalLeaveTrip = ({ onClose, tripTitle }) => {
   }
 
   return (
-    <Modal title="Sair da viagem em grupo" onClose={onClose}>
+    <Modal title="Sair da viagem em grupo" onClose={onClose} size="sm">
       <div className="flex flex-col gap-2">
         <p>
           Você tem certeza de que deseja sair do grupo {tripTitle}? Esta ação removerá sua participação e poderá
