@@ -141,7 +141,9 @@ export const Travel = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-6">
               <h3 className="font-bold text-xl">Eventos</h3>
               <div className="flex flex-wrap gap-4">
-                <ButtonOutlined color={enumButtonColor.primary} label="Ver agenda" Icon={Calendar} />
+                <Link to={`/viagem/${id}/agenda`}>
+                  <ButtonOutlined color={enumButtonColor.primary} label="Ver agenda" Icon={Calendar} />
+                </Link>
                 <ButtonOutlined color={enumButtonColor.primary} label="Criar evento" Icon={Plus} />
               </div>
             </div>
