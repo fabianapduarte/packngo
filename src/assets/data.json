@@ -24,12 +24,12 @@
       {
         "id": 1,
         "title": "Viagem de fim de ano",
-        "destination": "Sedis",
+        "destination": "Londres",
         "dateStart": "2024-11-20T16:45:00Z",
         "dateEnd": "2024-12-20T16:45:00Z",
-        "status": 0,
+        "status": 1,
         "inviteCode": "5510ff",
-        "image": "https://lh5.googleusercontent.com/p/AF1QipP6o9juQ0SRxpm5Kals5G1d07e87TnDOGTgAeCz=w426-h240-k-no",
+        "image": "https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2021/12/londres.jpg?w=1220&h=674&crop=1&quality=85",
         "checklist": [
           {
             "title": "Guardar passaporte",
