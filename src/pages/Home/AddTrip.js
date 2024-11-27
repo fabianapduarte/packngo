@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus } from 'react-feather';
+import { Plus, Image } from 'react-feather';
 import { Button, Input } from '../../components';
 import { enumButtonColor } from '../../enums/enumButtonColor';
 import "./styles.css";
@@ -10,7 +10,7 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [image, setImage] = useState("https://placehold.co/400x400@2x.png");
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState("https://placehold.co/400x400@2x.png");
 
   if (!show) {
     return null;
@@ -19,7 +19,6 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -32,7 +31,7 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newTrip = {
-      id: (trips.length + 1),
+      id: trips.length + 1,
       title: title,
       destination: destination,
       dateStart: startDate,
@@ -99,18 +98,24 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Imagem</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="rounded border border-gray focus:ring-secondary focus:border-secondary px-3 py-2 bg-white w-full"
-            />
-            {imagePreview && (
-              <div className="mt-4">
-                <img src={imagePreview} alt="Pré-visualização" className="w-full h-64 object-cover rounded" />
-              </div>
-            )}
+            <div className="flex items-center space-x-4">
+              <img src={imagePreview} alt="Pré-visualização" className="w-10 h-10 object-cover rounded" />
+              <label htmlFor="imageInput" className="flex items-center cursor-pointer text-primary border border-primary hover:bg-primary hover:text-primary-foreground rounded px-4 py-2 w-fit">
+                {Image && (
+                  <span className="mr-2">
+                    <Image size={16} />
+                  </span>
+                )}
+                Alterar Imagem
+              </label>
+              <input
+                id="imageInput"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+              />
+            </div>
           </div>
           <div className="flex justify-end space-x-4">
             <Button label="Cancelar" color={enumButtonColor.transparentPrimary} type="button" onClick={onClose} />
