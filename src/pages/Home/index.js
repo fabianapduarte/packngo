@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 import { LogIn, Plus } from 'react-feather'
 import { Button, Layout } from '../../components'
 import { TravelCard } from '../../components/TravelCard'
@@ -10,6 +9,7 @@ import AddTrip from './AddTrip'
 import JoinTrip from './JoinTrip'
 import DATAF from '../../assets/data.json'
 import './styles.css'
+import { useSnackbar } from 'notistack'
 
 export default function Home() {
   const [users, setUsers] = useState([])
@@ -17,6 +17,8 @@ export default function Home() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
   const [showAddTrip, setShowAddTrip] = useState(false)
   const [showJoinTrip, setShowJoinTrip] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
 
   const handleOpenAddTrip = () => {
     setShowAddTrip(true)
@@ -39,6 +41,8 @@ export default function Home() {
       ...user,
       activeTrips: [...user.activeTrips, newTrip.id],
     }
+    enqueueSnackbar('Viagem criada com sucesso!', { variant: 'success' })
+    navigate(`/viagem/${newTrip.id}`)
     setUser(updatedUser)
   }
 
@@ -48,6 +52,8 @@ export default function Home() {
       activeTrips: [...user.activeTrips, newTrip.id],
     }
     setUser(updatedUser)
+    enqueueSnackbar('Sucesso ao entrar no grupo da viagem', { variant: 'success' })
+    navigate(`/viagem/${newTrip.id}`)
   }
 
   const getUserTrips = () => {

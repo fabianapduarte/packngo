@@ -4,8 +4,11 @@ import { Button, HyperLink, Input, Logotype } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
 import './styles.css'
+import { useNavigate } from 'react-router-dom'
 
 export default function Register() {
+  const navigate = useNavigate()
+
   return (
     <main className="flex justify-center lg:items-center min-h-screen p-8">
       <div className="lg:grid lg:grid-cols-2 h-fit register-container rounded shadow-lg bg-white">
@@ -19,7 +22,7 @@ export default function Register() {
             <Input id="password" label="Senha" type="password" />
             <Input id="confirm-password" label="Confirmar senha" type="password" />
           </div>
-          <Button label="Cadastrar" color={enumButtonColor.primary} Icon={UserPlus} />
+          <Button label="Cadastrar" color={enumButtonColor.primary} Icon={UserPlus} onClick={() => navigate('/home')} />
           <span className="mt-5">
             Já possui conta? <HyperLink text="Ir para login" url="/" />
           </span>

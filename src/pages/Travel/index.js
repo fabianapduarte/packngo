@@ -95,7 +95,7 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 }
 
 export const Travel = () => {
-  const isParticipant = true
+  const isParticipant = false
   const travel = data[0].trips[0]
   const { events, polls, inviteCode, title } = travel
   const { id } = useParams()
