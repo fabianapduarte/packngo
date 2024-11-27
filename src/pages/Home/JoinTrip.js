@@ -1,67 +1,127 @@
 import React, { useState } from 'react';
-import { LogIn } from 'react-feather';
+import { LogIn, Calendar, MapPin, Check } from 'react-feather';
+import { TravelStatus } from '../../components/TravelStatus';
 import { Button, Input } from '../../components';
 import { enumButtonColor } from '../../enums/enumButtonColor';
+import { enumTravelStatus } from '../../enums/enumTravelStatus';
 import "./styles.css";
 
-export default function JoinTrip({ show, onClose, onJoinTrip }) {
+export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
   const [step, setStep] = useState(1);
-  const [code, setCode] = useState('');
+  const [inviteCode, setInviteCode] = useState('');
+  const [trip, setTrip] = useState(null);
 
   if (!show) {
     return null;
   }
 
   const handleNext = () => {
-    setStep(step + 1);
-  };
-  const handlePrev = () => {
-    setStep(step - 1);
+    const found = trips.find((t) => t.inviteCode === inviteCode);
+    if (found) {
+      setTrip(found);
+      setStep(step + 1);
+    } else {
+      alert("Viagem não encontrada. Por favor, verifique o código e tente novamente.");
+    }
   };
 
-}; const handleSubmit = (e) => {
-  e.preventDefault();
-  // TODO Codigo de submit
-  onClose();
+  const handlePrev = () => {
+    setStep(step - 1);
+    setInviteCode("");
+    setTrip(null);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (trip) {
+      onJoinTrip(trip);
+      onClose();
+      handlePrev();
+    }
+  };
+
+  const dateFormat = (dateStart, dateEnd) => {
+    return new Date(dateStart).toLocaleDateString() + " - " + new Date(dateEnd).toLocaleDateString();
+  };
+
+  const statusFormat = (status) => {
+    switch (status) {
+      case 0:
+        return enumTravelStatus.planned;
+      case 1:
+        return enumTravelStatus.progress;
+      case 2:
+        return enumTravelStatus.finished;
+      default:
+        return "Desconhecido";
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-1">
-      <div className="max-w-md mx-auto bg-white shadow-md rounded p-6 relative">
-        {step === 1 && (
-          <div className="flex justify-between items-center mb-4">          
-            <h1 className="text-xl font-bold">Entrar em uma viagem</h1>
-            <button onClick={onClose} className="text-gray-500">X</button>
-          </div>
-          <form>
-            <div className="mb-4">
-              <Input
-                value={code}
-                id="code"
-                onChange={(e) => setCode(e.target.value)}
-                label="Código"
-                type="text"
-                required
-              />
-            </div>          
-          </form>
-        )}
-        {step === 2 && (
-          <div className="flex justify-between items-center mb-4">          
-          <h1 className="text-xl font-bold">Entrar em uma viagem</h1>
-          <button onClick={onClose} className="text-gray-500">X</button>
-        </div>
-        <form>
-          <div className="mb-4">
-            <Input
-              value={code}
-              id="code"
-              onChange={(e) => setCode(e.target.value)}
-              label="Código"
-              type="text"
-              required
-            />
-          </div>          
+      <div className="max-w-lg mx-auto bg-white shadow-md rounded p-6 relative">
+        <form onSubmit={handleSubmit}>
+          {step === 1 && (
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-xl font-bold">Entrar em uma viagem</h1>
+                <button type="button" onClick={onClose} className="text-gray-500">X</button>
+              </div>
+              <div className="mb-4">
+                <Input
+                  value={inviteCode}
+                  id="inviteCode"
+                  onChange={(e) => setInviteCode(e.target.value)}
+                  label="Código"
+                  type="text"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-4">
+                <Button label="Cancelar" color={enumButtonColor.transparentPrimary} type="button" onClick={onClose} />
+                <Button Icon={LogIn} label="Entrar" onClick={handleNext} color={enumButtonColor.primary} type="button" />
+              </div>
+            </div>
+          )}
+          {step === 2 && trip && (
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-xl font-bold">Deseja entrar em {trip.title}?</h1>
+                <button type="button" onClick={onClose} className="text-gray-500">X</button>
+              </div>
+              <div className="mb-4">
+                <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl overflow-hidden bg-white my-4 rounded min-h-36 h-full">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 min-h-full">
+                    <div className="relative overflow-hidden object-cover min-w-[175px] min-h-[175px] rounded col-span-1">
+                      <img src={trip.image} alt={trip.imageAlt} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="px-6 py-4 col-span-2 my-auto ml-5">
+                      <div className="pl-0.5">
+                        <TravelStatus status={statusFormat(trip.status)} />
+                      </div>
+                      <p className="text-gray-700 text-base flex items-center pr-3 w-fit">
+                        <span className="mr-2">
+                          <MapPin size={16} />
+                        </span>
+                        {trip.destination}
+                      </p>
+                      <p className="text-gray-700 text-base flex items-center pr-3 w-fit">
+                        <span className="mr-2">
+                          <Calendar size={16} />
+                        </span>
+                        {dateFormat(trip.dateStart, trip.dateEnd)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-end space-x-4">
+                <Button label="Cancelar" color={enumButtonColor.transparentPrimary} type="button" onClick={handlePrev} />
+                <Button Icon={Check} label="Confirmar" color={enumButtonColor.primary} type="submit" />
+              </div>
+            </div>
+          )}
         </form>
-        )}
       </div>
     </div>
   );

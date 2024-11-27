@@ -7,20 +7,30 @@ import { TravelCard } from '../../components/TravelCard';
 import { enumButtonColor } from '../../enums/enumButtonColor';
 import { enumTravelStatus } from '../../enums/enumTravelStatus';
 import AddTrip from './AddTrip';
+import JoinTrip from './JoinTrip';
 import DATAF from '../../assets/data.json';
 import './styles.css';
 
+
 export default function Home() {
-  const location = useLocation();
+  const [users, setUsers] = useState([]);
   const [trips, setTrips] = useState([]);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
   const [showAddTrip, setShowAddTrip] = useState(false);
+  const [showJoinTrip, setShowJoinTrip] = useState(false);
 
   const handleOpenAddTrip = () => {
     setShowAddTrip(true);
   };
   const handleCloseAddTrip = () => {
     setShowAddTrip(false);
+  };
+
+  const handleOpenJoinTrip = () => {
+    setShowJoinTrip(true);
+  };
+  const handleCloseJoinTrip = () => {
+    setShowJoinTrip(false);
   };
 
   const handleAddTrip = (newTrip) => {
@@ -33,6 +43,15 @@ export default function Home() {
     };
     setUser(updatedUser);
   };
+
+  const handleJoinTrip = (newTrip) => {
+    const updatedUser = {
+      ...user, activeTrips: [
+        ...user.activeTrips, newTrip.id
+      ]
+    };
+    setUser(updatedUser);
+  }
 
   const getUserTrips = () => {
     if (!user) return [];
@@ -50,8 +69,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (DATAF && DATAF[0] && DATAF[0].trips) {
+    if (DATAF && DATAF[0] && DATAF[0].trips && DATAF[0].users) {
       setTrips(DATAF[0].trips);
+      setUsers(DATAF[0].users)
     }
   }, []);
 
@@ -64,11 +84,12 @@ export default function Home() {
   return (
     <Layout>
       <div className="lg:items-center">
+        <JoinTrip show={showJoinTrip} onClose={handleCloseJoinTrip} onJoinTrip={handleJoinTrip} trips={trips} users={users} />
         <AddTrip show={showAddTrip} onClose={handleCloseAddTrip} onAddTrip={handleAddTrip} trips={trips} />
         <div className="flex items-center justify-between mb-7">
           <h3 className="font-bold text-2xl">Minhas viagens</h3>
           <div className="flex space-x-4">
-            <Button label="Entrar em viagem" color={enumButtonColor.primary} type="submit" Icon={LogIn} />
+            <Button label="Entrar em viagem" onClick={handleOpenJoinTrip} color={enumButtonColor.primary} type="submit" Icon={LogIn} />
             <Button label="Criar viagem" onClick={handleOpenAddTrip} color={enumButtonColor.primary} type="submit" Icon={Plus} />
           </div>
         </div>
