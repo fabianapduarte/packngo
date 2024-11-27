@@ -6,7 +6,7 @@
         "email": "joao.silva@example.com",
         "name": "João Silva da Costa",
         "password": "testing123",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
+        "image": "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png",
         "activeTrips": [1, 2, 3]
       },
       {
@@ -14,7 +14,7 @@
         "email": "marina.lima@example.com",
         "name": "Marina Lima Silvera",
         "password": "testing321",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
+        "image": "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png",
         "activeTrips": [4]
       }
     ],
@@ -187,12 +187,12 @@
       {
         "id": 2,
         "title": "Viagem de fim de ano",
-        "destination": "Sedis",
+        "destination": "Paris",
         "dateStart": "2024-11-20T16:45:00Z",
         "dateEnd": "2024-12-20T16:45:00Z",
         "status": 0,
         "inviteCode": "5510ff",
-        "image": "https://lh5.googleusercontent.com/p/AF1QipP6o9juQ0SRxpm5Kals5G1d07e87TnDOGTgAeCz=w426-h240-k-no",
+        "image": "https://images.unsplash.com/photo-1524396309943-e03f5249f002?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "checklist": [
           {
             "title": "Guardar passaporte",
@@ -272,7 +272,7 @@
         "dateEnd": "2024-12-20T16:45:00Z",
         "status": 0,
         "inviteCode": "5510ff",
-        "image": "https://lh5.googleusercontent.com/p/AF1QipP6o9juQ0SRxpm5Kals5G1d07e87TnDOGTgAeCz=w426-h240-k-no",
+        "image": "https://images.unsplash.com/photo-1524396309943-e03f5249f002?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "checklist": [
           {
             "title": "Guardar passaporte",
