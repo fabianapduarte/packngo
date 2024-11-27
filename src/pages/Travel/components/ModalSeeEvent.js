@@ -1,6 +1,6 @@
 import { Check, Edit3, Trash2 } from 'react-feather'
-import { ButtonOutlined, Modal } from '../../components'
-import { enumButtonColor } from '../../enums/enumButtonColor'
+import { ButtonOutlined, Modal } from '../../../components'
+import { enumButtonColor } from '../../../enums/enumButtonColor'
 import { useSnackbar } from 'notistack'
 
 export const ModalSeeEvent = ({ onClose, event, openDeleteModal, openEditModal }) => {

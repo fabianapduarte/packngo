@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { ButtonOutlined, Modal } from '../../components'
-import { enumButtonColor } from '../../enums/enumButtonColor'
+import { ButtonOutlined, Modal } from '../../../components'
+import { enumButtonColor } from '../../../enums/enumButtonColor'
 
 export const ModalSeePoll = ({ onClose, poll }) => {
   const [options, setOptions] = useState(poll.options)

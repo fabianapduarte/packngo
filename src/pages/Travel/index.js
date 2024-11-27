@@ -32,14 +32,17 @@ import {
 import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
-import { ModalAddParticipant } from './ModalAddParticipant'
-import { ModalLeaveTrip } from './ModalLeaveTrip'
-import { ModalDeleteTrip } from './ModalDeleteTrip'
-import { ModalCreatePoll } from './ModalCreatePoll'
+import { ModalAddParticipant } from './components/ModalAddParticipant'
+import { ModalLeaveTrip } from './components/ModalLeaveTrip'
+import { ModalDeleteTrip } from './components/ModalDeleteTrip'
+import { ModalCreatePoll } from './components/ModalCreatePoll'
 import './styles.css'
-import { ModalSeeEvent } from './ModalSeeEvent'
-import { ModalDeleteEvent } from './ModalDeleteEvent'
-import { ModalSeePoll } from './ModalSeePoll'
+import { ModalSeeEvent } from './components/ModalSeeEvent'
+import { ModalDeleteEvent } from './components/ModalDeleteEvent'
+import { ModalSeePoll } from './components/ModalSeePoll'
+import { ModalCreateEvent } from './components/ModalCreateEvent'
+import { ModalEditEvent } from './components/ModalEditEvent'
+import { ModalEditTrip } from './components/ModalEditTrip'
 
 const InfoItem = ({ Icon, text }) => {
   return (
@@ -93,15 +96,19 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 
 export const Travel = () => {
   const isParticipant = true
-  const { events, polls, inviteCode, title } = data[0].trips[0]
+  const travel = data[0].trips[0]
+  const { events, polls, inviteCode, title } = travel
   const { id } = useParams()
 
-  const [checklist, setChecklist] = useState(data[0].trips[0].checklist)
+  const [checklist, setChecklist] = useState(travel.checklist)
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
   const [openModalAddParticipant, setOpenModalAddParticipant] = useState(false)
   const [openModalLeaveTrip, setOpenModalLeaveTrip] = useState(false)
   const [openModalDeleteTrip, setModalOpenDeleteTrip] = useState(false)
   const [openModalCreatePoll, setOpenModalCreatePoll] = useState(false)
+  const [openModalCreateEvent, setOpenModalCreateEvent] = useState(false)
+  const [openModalEditEvent, setOpenModalEditEvent] = useState(false)
+  const [openModalEditTrip, setOpenModalEditTrip] = useState(false)
   const [openModalSeeEvent, setOpenModalSeeEvent] = useState(false)
   const [openModalSeePoll, setOpenModalSeePoll] = useState(false)
   const [openModalDeleteEvent, setOpenModalDeleteEvent] = useState(false)
@@ -126,7 +133,6 @@ export const Travel = () => {
 
   const handleCloseModalSeeEvent = () => {
     setOpenModalSeeEvent(false)
-    setEventSelected(null)
   }
 
   const handleSeePoll = (poll) => {
@@ -137,6 +143,11 @@ export const Travel = () => {
   const handleCloseModalSeePoll = () => {
     setOpenModalSeePoll(false)
     setPollSelected(null)
+  }
+
+  const handleCloseModalEditEvent = () => {
+    setOpenModalEditEvent(false)
+    setEventSelected(null)
   }
 
   return (
@@ -155,7 +166,12 @@ export const Travel = () => {
               text="Seu gasto individual previsto para a viagem"
             />
             <div className="flex gap-2">
-              <ButtonOutlined color={enumButtonColor.primary} label="Editar" Icon={Edit3} />
+              <ButtonOutlined
+                color={enumButtonColor.primary}
+                label="Editar"
+                Icon={Edit3}
+                onClick={() => setOpenModalEditTrip(true)}
+              />
               <ButtonOutlined
                 color={enumButtonColor.red}
                 label="Excluir"
@@ -196,7 +212,12 @@ export const Travel = () => {
                 <Link to={`/viagem/${id}/agenda`}>
                   <ButtonOutlined color={enumButtonColor.primary} label="Ver agenda" Icon={Calendar} />
                 </Link>
-                <ButtonOutlined color={enumButtonColor.primary} label="Criar evento" Icon={Plus} />
+                <ButtonOutlined
+                  color={enumButtonColor.primary}
+                  label="Criar evento"
+                  Icon={Plus}
+                  onClick={() => setOpenModalCreateEvent(true)}
+                />
               </div>
             </div>
             <Slider
@@ -268,11 +289,18 @@ export const Travel = () => {
 
       {openModalCreatePoll && <ModalCreatePoll onClose={() => setOpenModalCreatePoll(false)} />}
 
+      {openModalCreateEvent && <ModalCreateEvent onClose={() => setOpenModalCreateEvent(false)} />}
+
+      {openModalEditEvent && <ModalEditEvent onClose={handleCloseModalEditEvent} event={eventSelected} />}
+
+      {openModalEditTrip && <ModalEditTrip onClose={() => setOpenModalEditTrip(false)} travel={travel} />}
+
       {openModalSeeEvent && (
         <ModalSeeEvent
           event={eventSelected}
           onClose={handleCloseModalSeeEvent}
           openDeleteModal={() => setOpenModalDeleteEvent(true)}
+          openEditModal={() => setOpenModalEditEvent(true)}
         />
       )}
 

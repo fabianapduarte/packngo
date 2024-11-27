@@ -1,6 +1,6 @@
 import { LogOut } from 'react-feather'
-import { Button, Modal } from '../../components'
-import { enumButtonColor } from '../../enums/enumButtonColor'
+import { Button, Modal } from '../../../components'
+import { enumButtonColor } from '../../../enums/enumButtonColor'
 import { useSnackbar } from 'notistack'
 import { useNavigate } from 'react-router-dom'
 

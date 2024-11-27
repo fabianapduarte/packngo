@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useSnackbar } from 'notistack'
 import { Plus, X } from 'react-feather'
-import { Button, Input, Modal, TextButton } from '../../components'
-import { enumButtonColor } from '../../enums/enumButtonColor'
+import { Button, Input, Modal, TextButton } from '../../../components'
+import { enumButtonColor } from '../../../enums/enumButtonColor'
 
 export const ModalCreatePoll = ({ onClose }) => {
   const initialOptions = [{ value: '' }, { value: '' }]
