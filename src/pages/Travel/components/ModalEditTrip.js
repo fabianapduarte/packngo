@@ -14,9 +14,6 @@ export const ModalEditTrip = ({ onClose, travel }) => {
   const [image, setImage] = useState(
     'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   )
-  const [imagePreview, setImagePreview] = useState(
-    'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  )
 
   const handleEdit = () => {
     enqueueSnackbar('Viagem editada com sucesso!', { variant: 'success' })
@@ -28,7 +25,6 @@ export const ModalEditTrip = ({ onClose, travel }) => {
     if (file) {
       const reader = new FileReader()
       reader.onloadend = () => {
-        setImagePreview(reader.result)
         setImage(reader.result)
       }
       reader.readAsDataURL(file)
@@ -59,7 +55,7 @@ export const ModalEditTrip = ({ onClose, travel }) => {
           <Input type="date" id="dateEnd" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
         </div>
         <div className="flex items-center space-x-4">
-          <img src={imagePreview} alt="Pré-visualização" className="w-10 h-10 object-cover rounded" />
+          <img src={image} alt="Pré-visualização" className="w-10 h-10 object-cover rounded" />
           <label
             htmlFor="imageInput"
             className="flex items-center cursor-pointer text-primary border border-primary hover:bg-primary hover:text-primary-foreground rounded px-4 py-2 w-fit"

@@ -17,7 +17,6 @@ import { TextArea } from './TextArea'
 import { TextButton } from './TextButton'
 import { Tooltip } from './Tooltip'
 import { TravelStatus } from './TravelStatus'
-import { ChangePic } from './ChangePic'
 
 export {
   Button,
@@ -39,5 +38,4 @@ export {
   TextButton,
   Tooltip,
   TravelStatus,
-  ChangePic,
 }
