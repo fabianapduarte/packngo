@@ -2,16 +2,16 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { List, LogIn, Plus } from 'react-feather';
-import { Button, ButtonIcon, Card, Input, Layout } from '../../components';
+import { Button, ButtonIcon, Card, Input, Layout, ChangePic } from '../../components';
 import { TravelCard } from '../../components/TravelCard';
 import { enumButtonColor } from '../../enums/enumButtonColor';
 import { enumTravelStatus } from '../../enums/enumTravelStatus';
 import DATAF from '../../assets/data.json';
+import { useSnackbar } from 'notistack'
 import './styles.css';
 
 import profilePic from '../../assets/profilePic.png';
 import { Save, Edit2 } from 'react-feather';
-import ChangePic from './ChangePic';
 
 export default function Account() {
   const [name, setName] = useState('');
@@ -19,6 +19,11 @@ export default function Account() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [user, setUser] = useState(null);
+
+  const { enqueueSnackbar } = useSnackbar()
+  const handleSaveData = () => {
+    enqueueSnackbar('Informações salvas com sucesso!', { variant: 'success' })
+  }
 
   useEffect(() => {
     
@@ -46,7 +51,7 @@ export default function Account() {
 
   return (
     <Layout>
-      <ChangePic show={showChangePic} onClose={handleCloseChangePic} />
+      <ChangePic show={showChangePic} onClose={handleCloseChangePic} imgClass=".profile-picture"/>
       <div className="flex flex-col gap-6 overflow-hidden w-full md:w-2/3 lg:w-5/12 mx-auto pb-12">
         <Card>
           <div className="min-full h-full mb-4">
@@ -111,6 +116,7 @@ export default function Account() {
                   label={"Salvar"}
                   color={"primary"}
                   Icon={Save}
+                  onClick={handleSaveData}
                 />
               </div>
             </div>
