@@ -127,6 +127,8 @@ export const Schedule = () => {
     }
   };
 
+  const diasDaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
   return (
     <Layout>
       <Card>
@@ -145,6 +147,8 @@ export const Schedule = () => {
                   prev2Label={null}
                   onChange={handleDayClick}
                   className="w-full border-none"
+                  locale="pt-BR"
+                  formatShortWeekday={(locale, date) => diasDaSemana[date.getDay()]}
                 />
               </div>
             </div>
