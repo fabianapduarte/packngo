@@ -15,7 +15,7 @@ export default function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/cadastro" element={<Register />} />
         <Route path="/viagem/:id" element={<Travel />} />
-        <Route path="/agenda" element={<Schedule />} />
+        <Route path="/agenda/:id" element={<Schedule />} />
         <Route path="/minha-conta" element={<Account />} />
       </Route>
     </Routes>

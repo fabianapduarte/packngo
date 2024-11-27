@@ -1,16 +1,8 @@
 import { useRef, useState } from 'react'
 import {
-  ArrowLeft,
-  ArrowRight,
   ChevronLeft,
   ChevronRight,
-  CheckSquare,
-  DollarSign,
-  Edit3,
   LogOut,
-  MapPin,
-  Plus,
-  Trash2,
   UserPlus,
 } from 'react-feather'
 
@@ -22,12 +14,8 @@ import {
   ButtonOutlined,
   ButtonIcon,
   Card,
-  Checkbox,
   Layout,
   Participant,
-  SimpleInput,
-  TextButton,
-  Tooltip,
   TravelStatus,
 } from '../../components'
 import { enumTravelStatus } from '../../enums/enumTravelStatus'
@@ -43,8 +31,36 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './styles.css'
 
 const localizer = momentLocalizer(moment); const events = [ 
-  { title: 'Reunião Web I', start: new Date(2024, 10, 27, 15, 0),
-    end: new Date(2024, 10, 27, 17, 0), },
+  { 
+    title: 'Reunião Web I',
+    start: new Date(2024, 10, 27, 15, 0),
+    end: new Date(2024, 10, 27, 17, 0), 
+    desc: 'Reunião com grupo de Web I - Tema react',
+  },
+  { 
+    title: 'Almoço especial',
+    start: new Date(2024, 10, 28, 12, 0),
+    end: new Date(2024, 10, 28, 13, 15), 
+    desc: 'Almoço com amigos no restaurante central',
+  },
+  { 
+    title: 'Almoço especial',
+    start: new Date(2024, 10, 29, 12, 0),
+    end: new Date(2024, 10, 29, 13, 15), 
+    desc: 'Almoço com a equipe para planejar próximos passos',
+  },
+  { 
+    title: 'Trilha',
+    start: new Date(2024, 10, 29, 8, 0),
+    end: new Date(2024, 10, 29, 9, 30), 
+    desc: 'Caminhada matinal na trilha do parque',
+  },
+  { 
+    title: 'Coffee break',
+    start: new Date(2024, 10, 29, 15, 0),
+    end: new Date(2024, 10, 29, 16, 30), 
+    desc: 'Pausa para café com snacks na sala de reuniões',
+  },
 ];
 
 const CustomDayHeader = ({ date, label }) => {
@@ -59,18 +75,35 @@ const CustomDayHeader = ({ date, label }) => {
   );
 };
 
-const CARD_WIDTH = 210
-
-
 export const Schedule = () => {
   const isParticipant = false
   const polls = data[0].trips[0].polls
   const [checklist, setChecklist] = useState(data[0].trips[0].checklist)
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
-  const [currentOffsetEventsContainer, setCurrentOffsetEventsContainer] = useState(0)
-  const [currentOffsetPollsContainer, setCurrentOffsetPollsContainer] = useState(0)
 
-  
+  const [titleDetails, setDetailsTitle] = useState("Detalhes");
+
+  const [selectedEvent, setSelectedEvent] = useState("Clique em um evento para ver mais detalhes sobre ele.");
+  const handleEventClick = (eventTitle, eventDesc, eventStart) => {
+    setDetailsTitle("Descrição");
+    setIsEventVisible(true);
+
+    setSelectedEvent(
+      <>
+        {eventTitle} <br /> 
+        {eventDesc || "Sem descrição"} <br />
+        Inicia às: {new Date(eventStart).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+      </>
+    );
+  };
+
+  const [isEventVisible, setIsEventVisible] = useState(true);
+  const toggleVisibility = () => {
+    if (titleDetails !== "Detalhes") {
+      setIsEventVisible(!isEventVisible);
+      setDetailsTitle(isEventVisible ? "Presença confirmada" : "Descrição");
+    }
+  };
 
   return (
     <Layout>
@@ -95,41 +128,34 @@ export const Schedule = () => {
 
             <div className="flex flex-col gap-2 mb-5 mt-8">
               <div className="flex justify-between items-center">
-                <h4 className="text-md">Detalhes</h4>
+                <h4 className="text-md">{titleDetails}</h4>
                 <div className="flex gap-2 items-center ml-auto">
-                  <ButtonIcon color={enumButtonColor.transparentPrimary} Icon={ChevronLeft} size="30" />
-                  <ButtonIcon color={enumButtonColor.transparentPrimary} Icon={ChevronRight} size="30" />
+                  <ButtonIcon color={enumButtonColor.transparentPrimary} Icon={ChevronLeft} size="30" onClick={toggleVisibility}/>
+                  <ButtonIcon color={enumButtonColor.transparentPrimary} Icon={ChevronRight} size="30" onClick={toggleVisibility}/>
                 </div>
               </div>
 
-              <div className='flex bg-cardGray w-full min-h-64 rounded overflow-hidden items-center'>
-                <h3 className='text-md p-6 text-left opacity-50'>Clique em um evento para ver mais detalhes sobre ele.</h3>
-              </div>
-            </div>
+              {isEventVisible && (
+                <div className="flex bg-cardGray w-full min-h-64 rounded overflow-hidden items-center">
+                  <h3 className="text-md p-6 text-left opacity-70">{selectedEvent}</h3>
+                </div>
+              )}
 
-            {/* <div className="flex flex-col gap-2">
-              <div className="mb-1 font-bold">Participantes</div>
-              <Participant imageSrc={imgParticipantOne} name="Leonardo Oliveira" />
-              <Participant imageSrc={imgParticipantTwo} name="Maria da Silva" />
-              <Participant imageSrc={imgParticipantThree} name="Rafael Rodrigues" />
-              {isParticipant && (
-                <ButtonOutlined color={enumButtonColor.primary} label="Sair da viagem em grupo" Icon={LogOut} />
+              {!isEventVisible && (
+                <div className="flex bg-cardGray w-full min-h-64 rounded overflow-hidden items-center">
+                  <div className="flex flex-col gap-2 p-6">
+                    {/* <div className="mb-1 font-bold">Participantes</div> */}
+                    <Participant imageSrc={imgParticipantOne} name="Leonardo Oliveira" />
+                    <Participant imageSrc={imgParticipantTwo} name="Maria da Silva" />
+                    <Participant imageSrc={imgParticipantThree} name="Rafael Rodrigues" />
+                  </div>
+                </div>
               )}
-              {!isParticipant && (
-                <ButtonOutlined color={enumButtonColor.primary} label="Adicionar participante" Icon={UserPlus} />
-              )}
-            </div> */}
+
+            </div>
           </div>
 
           <div className="flex flex-col h-full gap-6 overflow-hidden">
-            <div className="absolute min-w-auto mt-2 flex justify-between items-center"> 
-              <div className="flex gap-2 items-center mr-auto">
-                <ButtonIcon color={enumButtonColor.transparentPrimary} Icon={ChevronLeft} size="30" />
-              </div>
-              <div className="flex gap-2 items-center ml-auto right-0">
-                <ButtonIcon color={enumButtonColor.transparentPrimary} Icon={ChevronRight} size="30" />
-              </div>
-            </div>
 
             {/* WEEK */}
             <div > 
@@ -145,6 +171,7 @@ export const Schedule = () => {
               components={{
                 header: CustomDayHeader, 
               }}
+              onSelectEvent={(event) => handleEventClick(event.title, event.desc, event.start)}
               /> 
             </div>
           </div>
