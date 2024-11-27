@@ -6,7 +6,7 @@
         "email": "joao.silva@example.com",
         "name": "João Silva da Costa",
         "password": "testing123",
-        "image": "",
+        "image": "https://placehold.co/400x400@2x.png",
         "activeTrips": [
           1,
           2,
@@ -18,7 +18,7 @@
         "email": "marina.lima@example.com",
         "name": "Marina Lima Silvera",
         "password": "testing321",
-        "image": "",
+        "image": "https://placehold.co/400x400@2x.png",
         "activeTrips": [
           4
         ]
