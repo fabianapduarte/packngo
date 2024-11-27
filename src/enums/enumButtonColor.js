@@ -3,4 +3,5 @@ export const enumButtonColor = {
   red: 'red',
   transparent: 'transparent',
   secondary: 'secondary',
+  gray: 'gray',
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, ButtonOutlined, Modal } from '../../components'
+import { ButtonOutlined, Modal } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
 export const ModalSeePoll = ({ onClose, poll }) => {
@@ -19,8 +19,8 @@ export const ModalSeePoll = ({ onClose, poll }) => {
       if (index === indexToVote) return { ...option, votes: option.votes + 1 }
       else return option
     })
+    setTotalVotes(totalVotes + 1)
     calculateResult(updatedOptions)
-    setOptions(updatedOptions)
     setShowResults(true)
   }
 
@@ -34,7 +34,7 @@ export const ModalSeePoll = ({ onClose, poll }) => {
         optionMostVoted = index
       }
 
-      return { ...option, percentage: (option.votes / totalVotes) * 100 }
+      return { ...option, percentage: Math.ceil((option.votes / totalVotes) * 100) }
     })
 
     setOptions(updatedOptions)
@@ -44,11 +44,11 @@ export const ModalSeePoll = ({ onClose, poll }) => {
   const OptionVoted = ({ isMostVoted, option }) => {
     return (
       <div className="flex items-center gap-2">
-        {isMostVoted && <Button color={enumButtonColor.secondary} label={option.value} disabled={true} size="full" />}
+        {isMostVoted && <div className="rounded px-3 py-2 bg-secondary text-white w-full">{option.value}</div>}
         {!isMostVoted && (
-          <ButtonOutlined color={enumButtonColor.primary} label={option.value} disabled={true} size="full" />
+          <div className="rounded px-3 py-2 bg-white text-black border border-gray w-full">{option.value}</div>
         )}
-        <div className="font-semibold text-lg">{option.percentage}</div>
+        <div className="font-semibold text-lg w-10 text-end">{option.percentage}%</div>
       </div>
     )
   }
@@ -57,14 +57,17 @@ export const ModalSeePoll = ({ onClose, poll }) => {
     <Modal title={poll.title} onClose={onClose} size="md">
       <div className="flex flex-col gap-3 w-full mb-4">
         {showResults &&
-          options.map((option, index) => <OptionVoted isMostVoted={index === optionMostVotedIndex} option={option} />)}
+          options.map((option, index) => (
+            <OptionVoted key={`option-${index}`} isMostVoted={index === optionMostVotedIndex} option={option} />
+          ))}
         {!showResults &&
-          options.map((option) => (
+          options.map((option, index) => (
             <ButtonOutlined
-              color={enumButtonColor.primary}
+              key={`option-${index}`}
+              color={enumButtonColor.gray}
               label={option.value}
               disabled={!poll.open}
-              onClick={handleVote}
+              onClick={() => handleVote(index)}
               size="full"
             />
           ))}

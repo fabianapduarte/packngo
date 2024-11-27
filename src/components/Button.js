@@ -1,4 +1,4 @@
-export const Button = ({ label, color, Icon = null, onClick, size = 'fit' }) => {
+export const Button = ({ label, color, Icon = null, onClick, size = 'fit', disabled = false }) => {
   const colorVariants = {
     primary: 'bg-primary text-primary-foreground',
     secondary: 'bg-secondary text-secondary-foreground',
@@ -15,7 +15,8 @@ export const Button = ({ label, color, Icon = null, onClick, size = 'fit' }) => 
   return (
     <button
       onClick={onClick}
-      className={`flex items-center px-3 py-2 ${colorVariants[color]} hover:brightness-90 text-base rounded ${sizeVariation[size]}`}
+      disabled={disabled}
+      className={`flex items-center px-3 py-2 ${colorVariants[color]} hover:brightness-90 disabled:brightness-100 text-base rounded ${sizeVariation[size]}`}
     >
       {Icon && (
         <span className="mr-2">

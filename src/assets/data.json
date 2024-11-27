@@ -15,9 +15,7 @@
         "name": "Marina Lima Silvera",
         "password": "testing321",
         "image": "",
-        "activeTrips": [
-          4
-        ]
+        "activeTrips": [4]
       }
     ],
     "trips": [
@@ -128,7 +126,7 @@
           {
             "title": "Destino da viagem",
             "options": [
-              { "value": "Londres", "votes": 3 },
+              { "value": "Londres", "votes": 4 },
               { "value": "Paris", "votes": 2 },
               { "value": "Espanha", "votes": 1 },
               { "value": "Alemanha", "votes": 0 }
@@ -139,7 +137,7 @@
           {
             "title": "Destino da viagem",
             "options": [
-              { "value": "Londres", "votes": 3 },
+              { "value": "Londres", "votes": 4 },
               { "value": "Paris", "votes": 2 },
               { "value": "Espanha", "votes": 1 },
               { "value": "Alemanha", "votes": 0 }
@@ -149,7 +147,7 @@
           {
             "title": "Destino da viagem",
             "options": [
-              { "value": "Londres", "votes": 3 },
+              { "value": "Londres", "votes": 4 },
               { "value": "Paris", "votes": 2 },
               { "value": "Espanha", "votes": 1 },
               { "value": "Alemanha", "votes": 0 }
@@ -159,7 +157,7 @@
           {
             "title": "Destino da viagem",
             "options": [
-              { "value": "Londres", "votes": 3 },
+              { "value": "Londres", "votes": 4 },
               { "value": "Paris", "votes": 2 },
               { "value": "Espanha", "votes": 1 },
               { "value": "Alemanha", "votes": 0 }

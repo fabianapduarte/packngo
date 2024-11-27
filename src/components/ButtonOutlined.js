@@ -2,6 +2,7 @@ export const ButtonOutlined = ({ label, color, Icon = null, onClick, disabled = 
   const colorVariants = {
     primary: 'text-primary border-primary hover:bg-primary hover:text-primary-foreground',
     red: 'text-red border-red hover:bg-red hover:text-red-foreground',
+    gray: 'text-black border-gray hover:bg-gray',
   }
 
   const sizeVariation = {
