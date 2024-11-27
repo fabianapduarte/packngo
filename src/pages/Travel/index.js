@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import {
   ArrowRight,
   Calendar,
@@ -31,6 +32,10 @@ import {
 import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
+import { ModalAddParticipant } from './ModalAddParticipant'
+import { ModalLeaveTrip } from './ModalLeaveTrip'
+import { ModalDeleteTrip } from './ModalDeleteTrip'
+import { ModalCreatePoll } from './ModalCreatePoll'
 import './styles.css'
 
 const InfoItem = ({ Icon, text }) => {
@@ -85,11 +90,15 @@ const PollCard = ({ title, open }) => {
 
 export const Travel = () => {
   const isParticipant = false
-  const events = data[0].trips[0].events
-  const polls = data[0].trips[0].polls
+  const { events, polls, inviteCode, title } = data[0].trips[0]
+  const { id } = useParams()
 
   const [checklist, setChecklist] = useState(data[0].trips[0].checklist)
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
+  const [openModalAddParticipant, setOpenModalAddParticipant] = useState(false)
+  const [openModalLeaveTrip, setOpenModalLeaveTrip] = useState(false)
+  const [openModalDeleteTrip, setModalOpenDeleteTrip] = useState(false)
+  const [openModalCreatePoll, setOpenModalCreatePoll] = useState(false)
 
   const handleDeleteItemOnChecklist = (indexToDelete) => {
     const newChecklist = checklist.filter((_, index) => index !== indexToDelete)
@@ -107,7 +116,7 @@ export const Travel = () => {
       <div className="grid-travel">
         <Card>
           <img src={img} alt="Imagem da viagem" className="rounded object-cover img-card self-center" />
-          <h2 className="mt-2 mb-5 text-2xl font-bold w-full line-clamp-2">Viagem de fim de ano</h2>
+          <h2 className="mt-2 mb-5 text-2xl font-bold w-full line-clamp-2">{title}</h2>
           <div className="flex flex-col gap-2 mb-5">
             <div className="mb-1 font-bold">Informações</div>
             <TravelStatus status={enumTravelStatus.progress} />
@@ -119,7 +128,12 @@ export const Travel = () => {
             />
             <div className="flex gap-2">
               <ButtonOutlined color={enumButtonColor.primary} label="Editar" Icon={Edit3} />
-              <ButtonOutlined color={enumButtonColor.red} label="Excluir" Icon={Trash2} />
+              <ButtonOutlined
+                color={enumButtonColor.red}
+                label="Excluir"
+                Icon={Trash2}
+                onClick={() => setModalOpenDeleteTrip(true)}
+              />
             </div>
           </div>
           <div className="flex flex-col gap-2">
@@ -128,10 +142,20 @@ export const Travel = () => {
             <Participant imageSrc={imgParticipantTwo} name="Maria da Silva" />
             <Participant imageSrc={imgParticipantThree} name="Rafael Rodrigues" />
             {isParticipant && (
-              <ButtonOutlined color={enumButtonColor.primary} label="Sair da viagem em grupo" Icon={LogOut} />
+              <ButtonOutlined
+                color={enumButtonColor.primary}
+                label="Sair da viagem em grupo"
+                Icon={LogOut}
+                onClick={() => setOpenModalLeaveTrip(true)}
+              />
             )}
             {!isParticipant && (
-              <ButtonOutlined color={enumButtonColor.primary} label="Adicionar participante" Icon={UserPlus} />
+              <ButtonOutlined
+                color={enumButtonColor.primary}
+                label="Adicionar participante"
+                Icon={UserPlus}
+                onClick={() => setOpenModalAddParticipant(true)}
+              />
             )}
           </div>
         </Card>
@@ -157,7 +181,12 @@ export const Travel = () => {
           <Card>
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-6">
               <h3 className="font-bold text-xl">Enquetes</h3>
-              <ButtonOutlined color={enumButtonColor.primary} label="Criar enquete" Icon={CheckSquare} />
+              <ButtonOutlined
+                color={enumButtonColor.primary}
+                label="Criar enquete"
+                Icon={CheckSquare}
+                onClick={() => setOpenModalCreatePoll(true)}
+              />
             </div>
             <Slider
               noElementsMessage="Não há enquetes cadastradas."
@@ -193,6 +222,16 @@ export const Travel = () => {
           </Card>
         </div>
       </div>
+
+      {openModalAddParticipant && (
+        <ModalAddParticipant code={inviteCode} onClose={() => setOpenModalAddParticipant(false)} />
+      )}
+
+      {openModalLeaveTrip && <ModalLeaveTrip tripTitle={title} onClose={() => setOpenModalLeaveTrip(false)} />}
+
+      {openModalDeleteTrip && <ModalDeleteTrip onClose={() => setModalOpenDeleteTrip(false)} />}
+
+      {openModalCreatePoll && <ModalCreatePoll onClose={() => setOpenModalCreatePoll(false)} />}
     </Layout>
   )
 }
