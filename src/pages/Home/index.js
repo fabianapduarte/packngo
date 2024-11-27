@@ -96,6 +96,7 @@ export default function Home() {
           {getUserTrips().map((trip) => (
             <TravelCard
               key={trip.id}
+              id={trip.id}
               name={trip.title}
               status={statusFormat(trip.status)}
               date={dateFormat(trip.dateStart, trip.dateEnd)}
