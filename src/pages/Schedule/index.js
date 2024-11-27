@@ -136,7 +136,7 @@ export const Schedule = () => {
             </div>
             <div className="flex flex-col gap-2 mb-5 mt-8">
               <div className="flex justify-between items-center">
-                <h4 className="text-md">{titleDetails}</h4>
+                <h4 className="text-md font-semibold">{titleDetails}</h4>
                 <div className="flex gap-2 items-center ml-auto">
                   <ButtonIcon
                     color={enumButtonColor.transparentPrimary}
