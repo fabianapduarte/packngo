@@ -50,7 +50,7 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-1">
-      <div className="max-w-md mx-auto bg-white shadow-md rounded p-6 relative">
+      <div className="max-w-lg mx-auto bg-white shadow-md rounded p-6 relative">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-bold">Criar nova viagem</h1>
           <button onClick={onClose} className="text-gray-500">X</button>

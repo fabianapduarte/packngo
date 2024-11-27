@@ -280,6 +280,106 @@
             "open": false
           }
         ]
+      },
+      {
+        "id": 4,
+        "title": "Viagem de fim de IMD",
+        "destination": "IMD",
+        "dateStart": "2024-11-20T16:45:00Z",
+        "dateEnd": "2024-12-20T16:45:00Z",
+        "status": 0,
+        "inviteCode": "5511ff",
+        "image": "https://lh5.googleusercontent.com/p/AF1QipM5vSTx75UHsX1yd5cXaeyqJmkzjBTFV4mOu9BE=w408-h271-k-no",
+        "checklist": [
+          {
+            "title": "Guardar passaporte",
+            "isChecked": true
+          },
+          {
+            "title": "Confirmar reserva de voos de ida e volta",
+            "isChecked": true
+          },
+          {
+            "title": "Confirmar hospedagem",
+            "isChecked": true
+          },
+          {
+            "title": "Adicionar itinerários",
+            "isChecked": true
+          },
+          {
+            "title": "Verificar previsão do tempo",
+            "isChecked": false
+          },
+          {
+            "title": "Planejar transporte",
+            "isChecked": false
+          }
+        ],
+        "events": [
+          {
+            "title": "Almoçar",
+            "date": "01/12/2024",
+            "time": "12:00"
+          },
+          {
+            "title": "Visitar a London Eye",
+            "date": "01/12/2024",
+            "time": "14:00"
+          },
+          {
+            "title": "Jantar",
+            "date": "01/12/2024",
+            "time": "18:00"
+          },
+          {
+            "title": "Almoçar",
+            "date": "01/12/2024",
+            "time": "12:00"
+          },
+          {
+            "title": "Almoçar",
+            "date": "01/12/2024",
+            "time": "12:00"
+          },
+          {
+            "title": "Almoçar",
+            "date": "01/12/2024",
+            "time": "12:00"
+          },
+          {
+            "title": "Almoçar",
+            "date": "01/12/2024",
+            "time": "12:00"
+          },
+          {
+            "title": "Almoçar",
+            "date": "01/12/2024",
+            "time": "12:00"
+          }
+        ],
+        "polls": [
+          {
+            "title": "Destino da viagem",
+            "open": true
+          },
+          {
+            "title": "Destino da viagem",
+            "open": true
+          },
+          {
+            "title": "Destino da viagem",
+            "open": false
+          },
+          {
+            "title": "Destino da viagem",
+            "open": false
+          },
+          {
+            "title": "Destino da viagem",
+            "open": false
+          }
+        ]
       }
     ]
   }
