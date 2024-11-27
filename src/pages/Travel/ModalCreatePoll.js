@@ -38,7 +38,7 @@ export const ModalCreatePoll = ({ onClose }) => {
   )
 
   return (
-    <Modal title="Criar enquete" onClose={onClose}>
+    <Modal title="Criar enquete" onClose={onClose} size="md">
       <div className="flex flex-col gap-3 w-full mb-4">
         <Input id="title" label="Título" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
         <div className="flex flex-col gap-2">
