@@ -105,6 +105,28 @@ export const Schedule = () => {
     }
   };
 
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const handleDayClick = async (date) => {
+    setSelectedDate(date);
+
+    const previousSelected = document.querySelector('.emphasis');
+    if (previousSelected) {
+      previousSelected.classList.remove('emphasis');
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const formattedDate = moment(date).format('DD');
+    const matchingElement = Array.from(document.querySelectorAll('.rbc-time-header-cell span.formattedDate')).find(
+      (span) => span.textContent === formattedDate
+    );
+
+    if (matchingElement) {
+      matchingElement.classList.add('emphasis');
+    }
+  };
+
   return (
     <Layout>
       <Card>
@@ -121,6 +143,7 @@ export const Schedule = () => {
                   // value={date}
                   next2Label={null}
                   prev2Label={null}
+                  onChange={handleDayClick}
                   className="w-full border-none"
                 />
               </div>
@@ -171,7 +194,9 @@ export const Schedule = () => {
               components={{
                 header: CustomDayHeader, 
               }}
+
               onSelectEvent={(event) => handleEventClick(event.title, event.desc, event.start)}
+              date={selectedDate}
               /> 
             </div>
           </div>
