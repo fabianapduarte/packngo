@@ -23,7 +23,10 @@ export const Navbar = () => {
   return (
     <nav className="px-10 md:px-20 lg:px-28 xl:px-40 py-6 bg-foreground border-b border-gray">
       <div className="flex justify-between items-center">
-        <Logotype />
+        <Link to={'/home'}>
+          <Logotype />
+        </Link>
+
         <div className="hidden sm:flex gap-8">
           <NavbarLink text="Viagens" url="/home" />
           <NavbarLink text="Conta" url="/minha-conta" />
