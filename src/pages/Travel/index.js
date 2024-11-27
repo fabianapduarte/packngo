@@ -1,6 +1,5 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import {
-  ArrowLeft,
   ArrowRight,
   Calendar,
   CheckSquare,
@@ -24,6 +23,7 @@ import {
   Layout,
   Participant,
   SimpleInput,
+  Slider,
   TextButton,
   Tooltip,
   TravelStatus,
@@ -32,8 +32,6 @@ import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
 import './styles.css'
-
-const CARD_WIDTH = 210
 
 const InfoItem = ({ Icon, text }) => {
   return (
@@ -89,16 +87,9 @@ export const Travel = () => {
   const isParticipant = false
   const events = data[0].trips[0].events
   const polls = data[0].trips[0].polls
+
   const [checklist, setChecklist] = useState(data[0].trips[0].checklist)
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
-  const [currentOffsetEventsContainer, setCurrentOffsetEventsContainer] = useState(0)
-  const [currentOffsetPollsContainer, setCurrentOffsetPollsContainer] = useState(0)
-  const eventsSliderRef = useRef(null)
-  const pollsSliderRef = useRef(null)
-  const showLeftButtonOnEvents = events.length > 0 && currentOffsetEventsContainer > 0
-  const showRightButtonOnEvents = events.length > 0
-  const showLeftButtonOnPolls = polls.length > 0 && currentOffsetPollsContainer > 0
-  const showRightButtonOnPolls = polls.length > 0
 
   const handleDeleteItemOnChecklist = (indexToDelete) => {
     const newChecklist = checklist.filter((_, index) => index !== indexToDelete)
@@ -109,16 +100,6 @@ export const Travel = () => {
     const newChecklist = [...checklist, { title: value, isChecked: false }]
     setChecklist(newChecklist)
     setNewItemOnChecklist(false)
-  }
-
-  const handleRightButtonOnEvents = () => {
-    // const containerWidth = eventsSliderRef.current.offsetWidth
-    // if (currentOffsetEventsContainer + CARD_WIDTH < containerWidth) {
-    //   setCurrentOffsetEventsContainer(currentOffsetEventsContainer - CARD_WIDTH)
-    // } else {
-    //   setCurrentOffsetEventsContainer(currentOffsetEventsContainer - (containerWidth - currentOffsetEventsContainer))
-    // }
-    // eventsSliderRef.current.style.transform = `translateX(${currentOffsetEventsContainer}px)`
   }
 
   return (
@@ -164,54 +145,25 @@ export const Travel = () => {
                 <ButtonOutlined color={enumButtonColor.primary} label="Criar evento" Icon={Plus} />
               </div>
             </div>
-            <div className="flex items-center relative">
-              <div className="flex gap-4 overflow-x-hidden whitespace-nowrap" ref={eventsSliderRef}>
-                {events.length > 0 &&
-                  events.map((event, index) => (
-                    <EventCard key={`event-${index}`} title={event.title} date={event.date} time={event.time} />
-                  ))}
-              </div>
-              {events.length === 0 && <p className="text-center w-full">Não há eventos cadastrados.</p>}
-              {showLeftButtonOnEvents && (
-                <button className="p-3 ml-3 rounded-full absolute left-0 bg-primary text-white">
-                  <ArrowLeft size={16} />
-                </button>
-              )}
-              {showRightButtonOnEvents && (
-                <button
-                  className="p-3 mr-3 rounded-full absolute right-0 bg-primary text-white"
-                  onClick={handleRightButtonOnEvents}
-                >
-                  <ArrowRight size={16} />
-                </button>
-              )}
-            </div>
+            <Slider
+              noElementsMessage="Não há eventos cadastrados."
+              elements={events.map((event, index) => (
+                <EventCard key={`event-${index}`} title={event.title} date={event.date} time={event.time} />
+              ))}
+            />
           </Card>
           <Card>
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-6">
               <h3 className="font-bold text-xl">Enquetes</h3>
               <ButtonOutlined color={enumButtonColor.primary} label="Criar enquete" Icon={CheckSquare} />
             </div>
-            <div className="flex items-center relative">
-              <div className="flex gap-4 overflow-x-hidden whitespace-nowrap" ref={pollsSliderRef}>
-                {polls.length > 0 &&
-                  polls.map((poll, index) => <PollCard key={`poll-${index}`} title={poll.title} open={poll.open} />)}
-              </div>
-              {polls.length === 0 && <p className="text-center w-full">Não há enquetes cadastradas.</p>}
-              {showLeftButtonOnPolls && (
-                <button className="p-3 ml-3 rounded-full absolute left-0 bg-primary text-white">
-                  <ArrowLeft size={16} />
-                </button>
-              )}
-              {showRightButtonOnPolls && (
-                <button
-                  className="p-3 mr-3 rounded-full absolute right-0 bg-primary text-white"
-                  onClick={handleRightButtonOnEvents}
-                >
-                  <ArrowRight size={16} />
-                </button>
-              )}
-            </div>
+            <Slider
+              noElementsMessage="Não há enquetes cadastradas."
+              elements={
+                polls.length > 0 &&
+                polls.map((poll, index) => <PollCard key={`poll-${index}`} title={poll.title} open={poll.open} />)
+              }
+            />
           </Card>
           <Card>
             <div className="flex flex-col">
