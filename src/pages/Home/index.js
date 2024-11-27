@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { List, LogIn, Plus } from 'react-feather';
+import { LogIn, Plus } from 'react-feather';
 import { Button, Layout } from '../../components';
 import { TravelCard } from '../../components/TravelCard';
 import { enumButtonColor } from '../../enums/enumButtonColor';
@@ -13,7 +13,7 @@ import './styles.css';
 export default function Home() {
   const location = useLocation();
   const [trips, setTrips] = useState([]);
-  const [user, setUser] = useState(location.state.user)
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
   const [showAddTrip, setShowAddTrip] = useState(false);
 
   const handleOpenAddTrip = () => {

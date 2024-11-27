@@ -79,23 +79,21 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
           <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700 mb-2">Data de Início</label>
-              <input
+              <Input
                 type="date"
                 id="dateStart"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="rounded border border-gray focus:ring-secondary focus:border-secondary px-3 py-2 bg-white w-full"
                 required
               />
             </div>
             <div>
               <label className="block text-gray-700 mb-2">Data de Fim</label>
-              <input
+              <Input
                 type="date"
                 id="dateEnd"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="rounded border border-gray focus:ring-secondary focus:border-secondary px-3 py-2 bg-white w-full"
                 required
               />
             </div>
