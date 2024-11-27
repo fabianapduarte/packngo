@@ -47,6 +47,9 @@ export default function Login() {
         localStorage.removeItem('email')
         localStorage.removeItem('password')
       }
+      if (JSON.parse(localStorage.getItem('user')) != null) {
+        localStorage.removeItem('user');
+      }
       localStorage.setItem('user', JSON.stringify(user));
       navigate('/home')
     } else {
