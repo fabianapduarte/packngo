@@ -1,0 +1,11 @@
+.content-container {
+  width: 900px;
+  height: 80vh;
+}
+
+@media screen and (max-width: 1024px) {
+  .content-container {
+    width: 100%;
+    height: auto;
+  }
+}

@@ -54,6 +54,9 @@ module.exports = {
         finished: '#14AE5C',
         finishedDarker: '#009951',
       },
+      backgroundImage: {
+        'not-found': "url('/src/assets/not-found-bg.jpg')",
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],

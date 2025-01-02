@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import Home from './pages/Home'
 import Account from './pages/Account'
 import { Schedule } from './pages/Schedule'
+import NotFound from './pages/NotFound'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/viagem/:id" element={<Travel />} />
         <Route path="/viagem/:id/agenda" element={<Schedule />} />
         <Route path="/minha-conta" element={<Account />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   )
