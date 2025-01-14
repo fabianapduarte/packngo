@@ -3,14 +3,12 @@ import { baseUrl } from './routesApi'
 import { cookies } from './cookies'
 
 const getHeaders = () => {
-  const token = cookies.get('token')
+  const authToken = cookies.get('token')
+  const headers = { Accept: 'application/json' }
 
-  return {
-    headers: {
-      Accept: 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  }
+  if (authToken) headers.Authorization = `Bearer ${authToken.token}`
+
+  return { headers }
 }
 
 const getFullUrl = (url) => {
