@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
-  const login = async (email, password) => {
+  const login = async ({ email, password }) => {
     cookies.remove('token')
 
     try {

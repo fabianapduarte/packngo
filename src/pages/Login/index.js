@@ -19,7 +19,7 @@ export default function Login() {
     if (email.length === 0 || password.length === 0) {
       enqueueSnackbar('Preencha todos os campos', { variant: 'warning' })
     } else {
-      authContext.login(email, password)
+      authContext.login({ email, password })
     }
   }
 
