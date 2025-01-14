@@ -1,35 +1,45 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Save, Edit2 } from 'react-feather'
-import { Button, Card, Input, Layout } from '../../components'
 import { useSnackbar } from 'notistack'
-import './styles.css'
 
 import profilePic from '../../assets/profilePic.png'
+import { Button, ButtonLoading, Card, Input, Layout } from '../../components'
+import { AuthContext, UserContext } from '../../context/AuthContext'
+import { enumButtonColor } from '../../enums/enumButtonColor'
+
+import './styles.css'
 
 export default function Account() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [passwordConfirm, setPasswordConfirm] = useState('')
-  const [user, setUser] = useState(null)
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [image, setImage] = useState(profilePic)
 
   const { enqueueSnackbar } = useSnackbar()
-  const handleSaveData = () => {
-    enqueueSnackbar('Informações salvas com sucesso!', { variant: 'success' })
+  const { user } = useContext(UserContext)
+  const { loading, updateUser } = useContext(AuthContext)
+
+  const handleSaveData = async () => {
+    if (name.length === 0) {
+      enqueueSnackbar('Preencha os campos.', { variant: 'warning' })
+    } else if (name.length < 2) {
+      enqueueSnackbar('O nome precisa ter mais de dois caracteres.', { variant: 'warning' })
+    } else if (password.length < 8 && password.length !== 0) {
+      enqueueSnackbar('A senha precisa ter no mínimo 8 caracteres.', { variant: 'warning' })
+    } else if (password !== passwordConfirmation) {
+      enqueueSnackbar('A senha e a confirmação de senha não coincidem.', { variant: 'warning' })
+    } else {
+      await updateUser({ name, password, passwordConfirmation })
+      setPassword('')
+      setPasswordConfirmation('')
+    }
   }
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'))
-    setUser(storedUser)
-  }, [])
-
-  useEffect(() => {
     if (user) {
-      setName(user.name || '')
-      setEmail(user.email || '')
-      setPassword(user.password || '')
-      setPasswordConfirm(user.password || '')
+      setName(user.name)
+      setEmail(user.email)
     }
   }, [user])
 
@@ -85,7 +95,7 @@ export default function Account() {
                 <Input
                   value={password}
                   id="password"
-                  label="Senha"
+                  label="Nova senha"
                   type="password"
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -93,16 +103,19 @@ export default function Account() {
               </div>
               <div className="mb-4">
                 <Input
-                  value={passwordConfirm}
+                  value={passwordConfirmation}
                   id="passwordConfirm"
-                  label="Confirmar Senha"
+                  label="Confirmar nova senha"
                   type="password"
-                  onChange={(e) => setPasswordConfirm(e.target.value)}
+                  onChange={(e) => setPasswordConfirmation(e.target.value)}
                   required
                 />
               </div>
               <div className="flex justify-center">
-                <Button label={'Salvar'} color={'primary'} Icon={Save} onClick={handleSaveData} />
+                {loading && <ButtonLoading color={enumButtonColor.primary} />}
+                {!loading && (
+                  <Button label="Salvar" color={enumButtonColor.primary} Icon={Save} onClick={handleSaveData} />
+                )}
               </div>
             </div>
           </div>

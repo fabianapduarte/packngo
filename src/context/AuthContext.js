@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 
-import { get, post } from '../utils/api'
+import { get, patch, post } from '../utils/api'
 import { cookies } from '../utils/cookies'
 import { loginUrl, logoutUrl, registerUrl, userUrl } from '../utils/routesApi'
 import { homeRoute, loginRoute, registerRoute } from '../utils/routes'
@@ -107,13 +107,38 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const updateUser = (newUser) => {
-    console.log('updateUser')
-    setUser({ ...user, newUser })
+  const updateUser = async ({ name, password, passwordConfirmation }) => {
+    try {
+      setLoading(true)
+
+      const newData = {}
+      if (name) newData.name = name
+      if (password && passwordConfirmation) {
+        newData.password = password
+        newData.password_confirmation = passwordConfirmation
+      }
+
+      const url = userUrl(user.id)
+      const { data } = await patch(url, newData)
+
+      setUser({ ...data.user })
+      enqueueSnackbar('Informações salvas com sucesso!', { variant: 'success' })
+    } catch (error) {
+      if (error.status === 401) {
+        enqueueSnackbar('Você não está autenticado. Faça login e tente novamente.', { variant: 'error' })
+        navigate(loginRoute)
+      } else if (error.status === 400) {
+        enqueueSnackbar('Revise os dados informados e tente novamente.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <AuthContext.Provider value={{ login, logout, register, updateUser, loading }}>
+    <AuthContext.Provider value={{ login, logout, register, loading, updateUser }}>
       <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
     </AuthContext.Provider>
   )
