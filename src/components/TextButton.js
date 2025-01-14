@@ -1,7 +1,12 @@
-export const TextButton = ({ label, Icon = null, onClick = () => {} }) => {
+export const TextButton = ({ label, Icon = null, color = 'primary', onClick = () => {} }) => {
+  const colorVariants = {
+    primary: 'text-primary hover:text-secondary',
+    black: 'text-black hover:text-primary',
+  }
+
   return (
     <button
-      className="flex items-center text-primary hover:text-secondary transition-colors font-semibold w-fit"
+      className={`flex items-center ${colorVariants[color]} transition-colors font-semibold w-fit`}
       onClick={onClick}
     >
       {Icon && (

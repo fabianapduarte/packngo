@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { api } from '../utils/api'
+import { post } from '../utils/api'
 import { cookies } from '../utils/cookies'
 import * as routesApi from '../utils/routesApi'
 import { useSnackbar } from 'notistack'
@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
     try {
       setLoading(true)
-      const { data } = await api.post(routesApi.getLogin(), { email, password })
+      const { data } = await post(routesApi.getLogin(), { email, password })
       const { user, token } = data
       setUser(user)
       cookies.set('token', token)
@@ -43,8 +43,16 @@ export const AuthProvider = ({ children }) => {
     console.log('register')
   }
 
-  const logout = () => {
-    console.log('logout')
+  const logout = async () => {
+    try {
+      await post(routesApi.getLogout())
+      setUser(null)
+      cookies.remove('token')
+    } catch (error) {
+      enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+    } finally {
+      navigate('/')
+    }
   }
 
   const updateUser = (newUser) => {

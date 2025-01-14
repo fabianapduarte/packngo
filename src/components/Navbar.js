@@ -1,7 +1,10 @@
-import { Menu, X } from 'react-feather'
-import { Logotype } from './Logotype'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { Menu, X } from 'react-feather'
+
+import { AuthContext } from '../context/AuthContext'
+import { Logotype } from './Logotype'
+import { TextButton } from './TextButton'
 
 const NavbarLink = ({ text, url }) => {
   return (
@@ -11,13 +14,28 @@ const NavbarLink = ({ text, url }) => {
   )
 }
 
+const Links = ({ handleLogout }) => {
+  return (
+    <>
+      <NavbarLink text="Viagens" url="/home" />
+      <NavbarLink text="Conta" url="/minha-conta" />
+      <TextButton label="Sair" color="black" onClick={handleLogout} />
+    </>
+  )
+}
+
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const authContext = useContext(AuthContext)
 
   const MenuIcon = isMenuOpen ? X : Menu
 
   const handleClickOnMenu = () => {
     setIsMenuOpen(!isMenuOpen)
+  }
+
+  const handleLogout = () => {
+    authContext.logout()
   }
 
   return (
@@ -28,9 +46,7 @@ export const Navbar = () => {
         </Link>
 
         <div className="hidden sm:flex gap-8">
-          <NavbarLink text="Viagens" url="/home" />
-          <NavbarLink text="Conta" url="/minha-conta" />
-          <NavbarLink text="Sair" url="/" />
+          <Links handleLogout={handleLogout} />
         </div>
         <MenuIcon className="flex sm:hidden cursor-pointer" size={24} color="#BCC1BA" onClick={handleClickOnMenu} />
       </div>
@@ -41,9 +57,7 @@ export const Navbar = () => {
         }
       >
         <div className="mt-8 flex flex-col gap-5">
-          <NavbarLink text="Viagens" url="/home" />
-          <NavbarLink text="Conta" url="/minha-conta" />
-          <NavbarLink text="Sair" url="/" />
+          <Links handleLogout={handleLogout} />
         </div>
       </div>
     </nav>
