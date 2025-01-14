@@ -39,8 +39,30 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const register = () => {
-    console.log('register')
+  const register = async ({ name, email, password, passwordConfirmation }) => {
+    cookies.remove('token')
+
+    try {
+      setLoading(true)
+      const { data } = await post(routesApi.getRegister(), {
+        name,
+        email,
+        password,
+        password_confirmation: passwordConfirmation,
+      })
+      const { user, token } = data
+      setUser(user)
+      cookies.set('token', token)
+      navigate('/home')
+    } catch (error) {
+      if (error.status === 400) {
+        enqueueSnackbar('Revise os dados informados e tente novamente.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   const logout = async () => {
