@@ -10,6 +10,7 @@ import JoinTrip from './JoinTrip'
 import DATAF from '../../assets/data.json'
 import './styles.css'
 import { useSnackbar } from 'notistack'
+import { tripRoute } from '../../utils/routes'
 
 export default function Home() {
   const [users, setUsers] = useState([])
@@ -42,7 +43,7 @@ export default function Home() {
       activeTrips: [...user.activeTrips, newTrip.id],
     }
     enqueueSnackbar('Viagem criada com sucesso!', { variant: 'success' })
-    navigate(`/viagem/${newTrip.id}`)
+    navigate(tripRoute(newTrip.id))
     setUser(updatedUser)
   }
 
@@ -53,7 +54,7 @@ export default function Home() {
     }
     setUser(updatedUser)
     enqueueSnackbar('Sucesso ao entrar no grupo da viagem', { variant: 'success' })
-    navigate(`/viagem/${newTrip.id}`)
+    navigate(tripRoute(newTrip.id))
   }
 
   const getUserTrips = () => {

@@ -8,6 +8,7 @@ import { AuthContext } from '../../context/AuthContext'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
 import './styles.css'
+import { loginRoute } from '../../utils/routes'
 
 export default function Register() {
   const [name, setName] = useState('')
@@ -79,7 +80,7 @@ export default function Register() {
           </div>
           <Button label="Cadastrar" color={enumButtonColor.primary} Icon={UserPlus} onClick={handleRegister} />
           <span className="mt-5">
-            Já possui conta? <HyperLink text="Ir para login" url="/" />
+            Já possui conta? <HyperLink text="Ir para login" url={loginRoute} />
           </span>
         </div>
       </div>

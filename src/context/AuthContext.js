@@ -5,6 +5,7 @@ import { useSnackbar } from 'notistack'
 import { post } from '../utils/api'
 import { cookies } from '../utils/cookies'
 import { loginUrl, logoutUrl, registerUrl } from '../utils/routesApi'
+import { homeRoute, loginRoute } from '../utils/routes'
 
 export const AuthContext = createContext({})
 
@@ -25,7 +26,7 @@ export const AuthProvider = ({ children }) => {
       const { user, token } = data
       setUser(user)
       cookies.set('token', token)
-      navigate('/home')
+      navigate(homeRoute)
     } catch (error) {
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
       const { user, token } = data
       setUser(user)
       cookies.set('token', token)
-      navigate('/home')
+      navigate(homeRoute)
     } catch (error) {
       if (error.status === 400) {
         enqueueSnackbar('Revise os dados informados e tente novamente.', { variant: 'error' })
@@ -73,7 +74,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
     } finally {
-      navigate('/')
+      navigate(loginRoute)
     }
   }
 

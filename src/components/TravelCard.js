@@ -2,6 +2,7 @@ import { Calendar, MapPin } from 'react-feather'
 import { TravelStatus } from './TravelStatus'
 import { Link } from 'react-router-dom'
 import '../pages/Home/styles.css'
+import { tripRoute } from '../utils/routes'
 
 export const TravelCard = ({
   id,
@@ -14,7 +15,7 @@ export const TravelCard = ({
 }) => {
   return (
     <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl overflow-hidden bg-white my-4 rounded min-h-36 h-full">
-      <Link to={`/viagem/${id}`}>
+      <Link to={tripRoute(id)}>
         <div className="grid grid-cols-1 lg:grid-cols-3 min-h-full">
           <div className="relative overflow-hidden object-cover min-w-[100px] md:rounded-l md:rounded-t-none lg:rounded-l lg:rounded-t-none col-span-1">
             <img src={image} alt={imageAlt} className="w-full h-full object-cover" />

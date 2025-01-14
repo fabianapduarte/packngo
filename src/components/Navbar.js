@@ -5,6 +5,7 @@ import { Menu, X } from 'react-feather'
 import { AuthContext } from '../context/AuthContext'
 import { Logotype } from './Logotype'
 import { TextButton } from './TextButton'
+import { homeRoute, myAccountRoute } from '../utils/routes'
 
 const NavbarLink = ({ text, url }) => {
   return (
@@ -17,8 +18,8 @@ const NavbarLink = ({ text, url }) => {
 const Links = ({ handleLogout }) => {
   return (
     <>
-      <NavbarLink text="Viagens" url="/home" />
-      <NavbarLink text="Conta" url="/minha-conta" />
+      <NavbarLink text="Viagens" url={homeRoute} />
+      <NavbarLink text="Conta" url={myAccountRoute} />
       <TextButton label="Sair" color="black" onClick={handleLogout} />
     </>
   )
@@ -41,7 +42,7 @@ export const Navbar = () => {
   return (
     <nav className="px-10 md:px-20 lg:px-28 xl:px-40 py-6 bg-foreground border-b border-gray">
       <div className="flex justify-between items-center">
-        <Link to={'/home'}>
+        <Link to={homeRoute}>
           <Logotype />
         </Link>
 

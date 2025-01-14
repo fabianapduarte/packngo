@@ -3,6 +3,7 @@ import { Button, Modal } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'
 import { useSnackbar } from 'notistack'
 import { useNavigate } from 'react-router-dom'
+import { homeRoute } from '../../../utils/routes'
 
 export const ModalLeaveTrip = ({ onClose, tripTitle }) => {
   const { enqueueSnackbar } = useSnackbar()
@@ -11,7 +12,7 @@ export const ModalLeaveTrip = ({ onClose, tripTitle }) => {
   const handleExit = () => {
     enqueueSnackbar('Você saiu da viagem em grupo', { variant: 'success' })
     onClose()
-    navigate('/home')
+    navigate(homeRoute)
   }
 
   return (

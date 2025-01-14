@@ -8,6 +8,7 @@ import { AuthContext } from '../../context/AuthContext'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
 import './styles.css'
+import { registerRoute } from '../../utils/routes'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -57,7 +58,7 @@ export default function Login() {
             </div>
           </div>
           <span className="mt-5">
-            Não possui conta? <HyperLink text="Ir para cadastro" url="/cadastro" />
+            Não possui conta? <HyperLink text="Ir para cadastro" url={registerRoute} />
           </span>
         </div>
       </div>
