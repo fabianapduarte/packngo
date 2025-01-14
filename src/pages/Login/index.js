@@ -30,7 +30,7 @@ export default function Login() {
         <div className="py-6 px-8 flex flex-col items-center justify-center">
           <Logotype />
           <h2 className="font-semibold text-xl mt-2 mb-5">Login</h2>
-          <form className="flex flex-col gap-3 w-full">
+          <div className="flex flex-col gap-3 w-full">
             <Input
               id="email"
               value={email}
@@ -55,7 +55,7 @@ export default function Login() {
                 <Button label="Login" color={enumButtonColor.primary} Icon={LogIn} onClick={handleLogin} />
               )}
             </div>
-          </form>
+          </div>
           <span className="mt-5">
             Não possui conta? <HyperLink text="Ir para cadastro" url="/cadastro" />
           </span>
