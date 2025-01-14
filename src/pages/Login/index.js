@@ -1,62 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import { LogIn } from 'react-feather'
-import { useNavigate } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
 import img from '../../assets/passports.jpg'
-import DATAF from '../../assets/data.json'
-import { Button, Checkbox, HyperLink, Input, Logotype } from '../../components'
+import { Button, ButtonLoading, HyperLink, Input, Logotype } from '../../components'
+import { AuthContext } from '../../context/AuthContext'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
 import './styles.css'
 
 export default function Login() {
-  const [data, setData] = useState([])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [message, setMessage] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
-  const navigate = useNavigate()
+  const authContext = useContext(AuthContext)
+  const { enqueueSnackbar } = useSnackbar()
 
-  useEffect(() => {
-    // Get Data
-    setData(DATAF[0].users)
-
-    // Set Remember me values if exists
-    const savedEmail = localStorage.getItem('email')
-    const savedPassword = localStorage.getItem('password')
-    if (savedEmail && savedPassword) {
-      setEmail(savedEmail)
-      setPassword(savedPassword)
-      setRememberMe(true)
-    }
-  }, [])
-
-  const handleLogin = (event) => {
-    event.preventDefault()
-
-    // Checks for existing user
-    const user = data.find((user) => user.email === email.trim() && user.password === password.trim())
-    if (user) {
-      setMessage(`Bem-vindo, ${user.name}!`)
-
-      // Saving remember me data
-      if (rememberMe) {
-        localStorage.setItem('email', email)
-        localStorage.setItem('password', password)
-      } else {
-        localStorage.removeItem('email')
-        localStorage.removeItem('password')
-      }
-      if (JSON.parse(localStorage.getItem('user')) != null) {
-        localStorage.removeItem('user');
-      }
-      localStorage.setItem('user', JSON.stringify(user));
-      navigate('/home')
+  const handleLogin = () => {
+    if (email.length === 0 || password.length === 0) {
+      enqueueSnackbar('Preencha todos os campos', { variant: 'warning' })
     } else {
-      setMessage('Email ou senha incorretos!')
-      setPassword('')
+      authContext.login(email, password)
     }
   }
+
   return (
     <main className="flex justify-center lg:items-center min-h-screen p-8">
       <div className="lg:grid lg:grid-cols-2 h-fit form-container rounded shadow-lg bg-white">
@@ -64,12 +30,12 @@ export default function Login() {
         <div className="py-6 px-8 flex flex-col items-center justify-center">
           <Logotype />
           <h2 className="font-semibold text-xl mt-2 mb-5">Login</h2>
-          <form onSubmit={handleLogin} className="flex flex-col gap-3 w-full">
-            <p className="text-wrap text-error">{message}</p>
+          <form className="flex flex-col gap-3 w-full">
             <Input
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onEnter={handleLogin}
               required
               label="Email"
               type="email"
@@ -78,20 +44,16 @@ export default function Login() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onEnter={handleLogin}
               required
               label="Senha"
               type="password"
             />
-            <div className="mb-2">
-              <Checkbox
-                name="remember-me"
-                text="Lembrar de mim"
-                isChecked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-              />
-            </div>
-            <div className="self-center">
-              <Button label="Login" color={enumButtonColor.primary} type="submit" Icon={LogIn} />
+            <div className="self-center mt-2">
+              {authContext.loading && <ButtonLoading color={enumButtonColor.primary} />}
+              {!authContext.loading && (
+                <Button label="Login" color={enumButtonColor.primary} Icon={LogIn} onClick={handleLogin} />
+              )}
             </div>
           </form>
           <span className="mt-5">

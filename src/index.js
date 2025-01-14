@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
 
+import { AuthProvider } from './context/AuthContext'
 import './index.css'
 import App from './App'
 
@@ -11,7 +12,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <SnackbarProvider anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </SnackbarProvider>
     </BrowserRouter>
   </React.StrictMode>,

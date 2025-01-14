@@ -1,5 +1,6 @@
 import { Button } from './Button'
 import { ButtonIcon } from './ButtonIcon'
+import { ButtonLoading } from './ButtonLoading'
 import { ButtonOutlined } from './ButtonOutlined'
 import { Card } from './Card'
 import { Checkbox } from './Checkbox'
@@ -21,6 +22,7 @@ import { TravelStatus } from './TravelStatus'
 export {
   Button,
   ButtonIcon,
+  ButtonLoading,
   ButtonOutlined,
   Card,
   Checkbox,
