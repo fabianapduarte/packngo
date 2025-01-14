@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }) => {
       const { user, token } = data
       const authToken = { token, userId: user.id }
       setUser(user)
-      cookies.set('token', token, authToken)
+      cookies.set('token', authToken)
       navigate(homeRoute)
     } catch (error) {
       if (error.status === 400) {
