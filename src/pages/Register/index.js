@@ -3,7 +3,7 @@ import { UserPlus } from 'react-feather'
 import { useSnackbar } from 'notistack'
 
 import img from '../../assets/passports.jpg'
-import { Button, HyperLink, Input, Logotype } from '../../components'
+import { Button, ButtonLoading, HyperLink, Input, Logotype } from '../../components'
 import { AuthContext } from '../../context/AuthContext'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
@@ -78,7 +78,10 @@ export default function Register() {
               onEnter={handleRegister}
             />
           </div>
-          <Button label="Cadastrar" color={enumButtonColor.primary} Icon={UserPlus} onClick={handleRegister} />
+          {authContext.loading && <ButtonLoading color={enumButtonColor.primary} />}
+          {!authContext.loading && (
+            <Button label="Cadastrar" color={enumButtonColor.primary} Icon={UserPlus} onClick={handleRegister} />
+          )}
           <span className="mt-5">
             Já possui conta? <HyperLink text="Ir para login" url={loginRoute} />
           </span>
