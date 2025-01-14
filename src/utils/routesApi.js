@@ -1,13 +1,7 @@
 export const baseUrl = 'http://localhost:8000/api'
 
-export const getLogin = () => {
-  return '/login'
-}
+export const loginUrl = '/login'
 
-export const getLogout = () => {
-  return '/logout'
-}
+export const logoutUrl = '/logout'
 
-export const getRegister = () => {
-  return '/register'
-}
+export const registerUrl = '/register'

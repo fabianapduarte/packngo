@@ -1,10 +1,10 @@
 import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
 import { post } from '../utils/api'
 import { cookies } from '../utils/cookies'
-import * as routesApi from '../utils/routesApi'
-import { useSnackbar } from 'notistack'
+import { loginUrl, logoutUrl, registerUrl } from '../utils/routesApi'
 
 export const AuthContext = createContext({})
 
@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
     try {
       setLoading(true)
-      const { data } = await post(routesApi.getLogin(), { email, password })
+      const { data } = await post(loginUrl, { email, password })
       const { user, token } = data
       setUser(user)
       cookies.set('token', token)
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 
     try {
       setLoading(true)
-      const { data } = await post(routesApi.getRegister(), {
+      const { data } = await post(registerUrl, {
         name,
         email,
         password,
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await post(routesApi.getLogout())
+      await post(logoutUrl)
       setUser(null)
       cookies.remove('token')
     } catch (error) {
