@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Plus, Image } from 'react-feather'
 import { Button, Input, Modal } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
+import { UserContext } from '../../context/UserContext'
+import { useSnackbar } from 'notistack'
 import './styles.css'
 
 export default function AddTrip({ show, onClose, onAddTrip, trips }) {
@@ -15,6 +17,9 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
   const [imagePreview, setImagePreview] = useState(
     'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   )
+
+  const userContext = useContext(UserContext)
+  const { enqueueSnackbar } = useSnackbar()
 
   if (!show) {
     return null
@@ -47,8 +52,18 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
       events: [],
       polls: [],
     }
-    onAddTrip(newTrip)
-    onClose()
+  }
+
+  const handleAddTrip = async () => {
+    if (title.length === 0 || destination.length === 0) {
+      enqueueSnackbar('Preencha todos os campos', { variant: 'warning' })
+    } else {
+      const result = await userContext.addTrip({ title, destination, startDate, endDate, imagePreview })
+      if(result.success){
+        onAddTrip(result.data.trip)
+        onClose()
+      }
+    }
   }
 
   return (
@@ -59,6 +74,7 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
             value={title}
             id="title"
             onChange={(e) => setTitle(e.target.value)}
+            onEnter={handleAddTrip}
             label="Título"
             type="text"
             required
@@ -69,6 +85,7 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
             value={destination}
             id="destination"
             onChange={(e) => setDestination(e.target.value)}
+            onEnter={handleAddTrip}
             label="Destino"
             type="text"
             required
@@ -82,12 +99,19 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
               id="dateStart"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
+              onEnter={handleAddTrip}
               required
             />
           </div>
           <div>
             <label className="block text-gray-700 mb-2">Data de Fim</label>
-            <Input type="date" id="dateEnd" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
+            <Input 
+              type="date" 
+              id="dateEnd" 
+              value={endDate} 
+              onChange={(e) => setEndDate(e.target.value)} 
+              required 
+            />
           </div>
         </div>
         <div className="mb-4">
@@ -109,7 +133,7 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
         </div>
         <div className="flex justify-end space-x-4">
           <Button label="Cancelar" color={enumButtonColor.transparentPrimary} type="button" onClick={onClose} />
-          <Button label="Cadastrar" color={enumButtonColor.primary} type="submit" Icon={Plus} />
+          <Button label="Cadastrar" color={enumButtonColor.primary} type="submit" Icon={Plus} onClick={handleAddTrip}/>
         </div>
       </form>
     </Modal>

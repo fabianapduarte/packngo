@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
   ArrowRight,
@@ -31,6 +31,7 @@ import {
 } from '../../components'
 import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import { enumButtonColor } from '../../enums/enumButtonColor'
+import { format, isBefore, isAfter } from 'date-fns';
 
 import { ModalAddParticipant } from './components/ModalAddParticipant'
 import { ModalLeaveTrip } from './components/ModalLeaveTrip'
@@ -44,6 +45,7 @@ import { ModalCreateEvent } from './components/ModalCreateEvent'
 import { ModalEditEvent } from './components/ModalEditEvent'
 import { ModalEditTrip } from './components/ModalEditTrip'
 import { calendarRoute } from '../../utils/routes'
+import { UserContext } from '../../context/UserContext'
 
 const InfoItem = ({ Icon, text }) => {
   return (
@@ -100,6 +102,35 @@ export const Travel = () => {
   const travel = data[0].trips[0]
   const { events, polls, inviteCode, title } = travel
   const { id } = useParams()
+  const userContext = useContext(UserContext)
+  const [trip, setTrip] = useState(null);
+  const [tripStatus, setTripStatus] = useState(null);
+
+  useEffect(() => {
+    const fetchTripData = async () => {
+      const result = await userContext.showTrip(`${id}`);
+      console.log(result)
+      if (result.success) {
+        setTrip(result.trip);
+
+        //Decisao de status
+        let status = null
+        const now = new Date();
+        if (isBefore(now, new Date(result.trip.start_date))) {
+          status = enumTravelStatus.planned;
+        } else if (isAfter(now, new Date(result.trip.end_date))) {
+          status = enumTravelStatus.finished;
+        } else {
+          status = enumTravelStatus.progress;
+        }
+        setTripStatus(status)
+      } else {
+        
+      }
+    };
+
+    fetchTripData();
+  }, [id]);
 
   const [checklist, setChecklist] = useState(travel.checklist)
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
@@ -156,12 +187,18 @@ export const Travel = () => {
       <div className="grid-travel">
         <Card>
           <img src={img} alt="Imagem da viagem" className="rounded object-cover img-card self-center" />
-          <h2 className="mt-2 mb-5 text-2xl font-bold w-full line-clamp-2">{title}</h2>
+          <h2 className="mt-2 mb-5 text-2xl font-bold w-full line-clamp-2">
+            {trip && trip.title ? trip.title : 'Carregando...'}
+          </h2>
           <div className="flex flex-col gap-2 mb-5">
             <div className="mb-1 font-bold">Informações</div>
-            <TravelStatus status={enumTravelStatus.progress} />
-            <InfoItem Icon={MapPin} text="Londres" />
-            <InfoItem Icon={Calendar} text="01/12/2024 - 10/12/2024" />
+            <TravelStatus status={tripStatus ? tripStatus : '-'} />
+            <InfoItem Icon={MapPin} text={trip && trip.destination ? trip.destination : 'Carregando...'} />
+            <InfoItem Icon={Calendar} text={
+              trip && trip.start_date && trip.end_date 
+                ? `${new Date(trip.start_date).toLocaleDateString('pt-BR')} - ${new Date(trip.end_date).toLocaleDateString('pt-BR')}` 
+                : 'Período...'
+            }   />
             <Tooltip
               element={<InfoItem Icon={DollarSign} text="R$ 7500,00" />}
               text="Seu gasto individual previsto para a viagem"
