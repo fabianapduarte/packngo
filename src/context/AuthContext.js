@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack'
 
 import { get, patch, post } from '../utils/api'
 import { cookies } from '../utils/cookies'
-import { loginUrl, logoutUrl, registerUrl, userUrl } from '../utils/routesApi'
+import { loginUrl, logoutUrl, registerUrl, userProfileUrl, userUrl } from '../utils/routesApi'
 import { homeRoute, loginRoute, registerRoute } from '../utils/routes'
 import { UserProvider } from './UserContext';
 
@@ -138,8 +138,32 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const updateUserImage = async ({ file, onLoading, onSuccess, onError }) => {
+    onLoading()
+
+    try {
+      const form = new FormData()
+      form.append('image', file)
+
+      const url = userProfileUrl(user.id)
+      const { data } = await post(url, form)
+
+      setUser({ ...data.user })
+      onSuccess(data.user.image_path)
+      enqueueSnackbar('Imagem do perfil atualizada com sucesso!', { variant: 'success' })
+    } catch (error) {
+      onError()
+      if (error.status === 401) {
+        enqueueSnackbar('Você não está autenticado. Faça login e tente novamente.', { variant: 'error' })
+        navigate(loginRoute)
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ login, logout, register, loading, updateUser }}>
+    <AuthContext.Provider value={{ login, logout, register, loading, updateUser, updateUserImage }}>
       <UserProvider>{children}</UserProvider>
     </AuthContext.Provider>
   )

@@ -84,7 +84,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="lg:items-center">
+      <div className="lg:items-center self-start w-full">
         <JoinTrip
           show={showJoinTrip}
           onClose={handleCloseJoinTrip}

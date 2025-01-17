@@ -7,6 +7,7 @@ import { Checkbox } from './Checkbox'
 import { HyperLink } from './HyperLink'
 import { Input } from './Input'
 import { Layout } from './Layout'
+import { Loading } from './Loading'
 import { Logotype } from './Logotype'
 import { Modal } from './Modal'
 import { Navbar } from './Navbar'
@@ -29,6 +30,7 @@ export {
   HyperLink,
   Input,
   Layout,
+  Loading,
   Logotype,
   Modal,
   Navbar,
