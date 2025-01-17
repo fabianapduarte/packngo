@@ -172,24 +172,22 @@ export const Schedule = () => {
             </div>
           </div>
 
-          <div className="flex flex-col h-full gap-6 overflow-hidden">
-            <div>
-              <BigCalendar
-                localizer={localizer}
-                events={events}
-                toolbar={false}
-                startAccessor="start"
-                endAccessor="end"
-                defaultView="week"
-                min={new Date(2001, 1, 1, 6, 0)}
-                className="max-h-full overflow-auto"
-                components={{
-                  header: CustomDayHeader,
-                }}
-                onSelectEvent={(event) => handleEventClick(event.title, event.desc, event.start)}
-                date={selectedDate}
-              />
-            </div>
+          <div className="h-full w-full gap-6 overflow-auto">
+            <BigCalendar
+              localizer={localizer}
+              events={events}
+              toolbar={false}
+              startAccessor="start"
+              endAccessor="end"
+              defaultView="week"
+              min={new Date(2001, 1, 1, 6, 0)}
+              className="max-h-full min-calendar"
+              components={{
+                header: CustomDayHeader,
+              }}
+              onSelectEvent={(event) => handleEventClick(event.title, event.desc, event.start)}
+              date={selectedDate}
+            />
           </div>
         </div>
       </Card>
