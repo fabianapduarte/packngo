@@ -14,8 +14,6 @@ import {
 } from 'react-feather'
 import img from '../../assets/london.jpg'
 import imgParticipantOne from '../../assets/avatar1.png'
-import imgParticipantTwo from '../../assets/avatar2.png'
-import imgParticipantThree from '../../assets/avatar3.png'
 import data from '../../assets/data.json'
 import {
   ButtonOutlined,
@@ -31,7 +29,7 @@ import {
 } from '../../components'
 import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import { enumButtonColor } from '../../enums/enumButtonColor'
-import { format, isBefore, isAfter } from 'date-fns';
+import { isBefore, isAfter } from 'date-fns'
 
 import { ModalAddParticipant } from './components/ModalAddParticipant'
 import { ModalLeaveTrip } from './components/ModalLeaveTrip'
@@ -45,8 +43,8 @@ import { ModalCreateEvent } from './components/ModalCreateEvent'
 import { ModalEditEvent } from './components/ModalEditEvent'
 import { ModalEditTrip } from './components/ModalEditTrip'
 import { calendarRoute } from '../../utils/routes'
-import { UserContext } from '../../context/UserContext'
-import { dateFormat } from '../../utils/dateFormat';
+import { dateFormat } from '../../utils/dateFormat'
+import { TripContext } from '../../context/TripContext'
 
 const InfoItem = ({ Icon, text }) => {
   return (
@@ -103,44 +101,42 @@ export const Travel = () => {
   const travel = data[0].trips[0]
   const { events, polls, inviteCode, title } = travel
   const { id } = useParams()
-  const userContext = useContext(UserContext)
-  const [trip, setTrip] = useState(null);
-  const [tripStatus, setTripStatus] = useState(null);
+  const tripContext = useContext(TripContext)
+  const [trip, setTrip] = useState(null)
+  const [tripStatus, setTripStatus] = useState(null)
   const [participants, setParticipants] = useState([])
 
   useEffect(() => {
     const fetchTripData = async () => {
-      const trip = await userContext.showTrip(`${id}`);
-      console.log(trip)
+      const trip = await tripContext.showTrip(`${id}`)
       if (trip) {
-        setTrip(trip);
+        setTrip(trip)
 
         //Decisao de status
         let status = null
-        const now = new Date();
+        const now = new Date()
         if (isBefore(now, new Date(trip.start_date))) {
-          status = enumTravelStatus.planned;
+          status = enumTravelStatus.planned
         } else if (isAfter(now, new Date(trip.end_date))) {
-          status = enumTravelStatus.finished;
+          status = enumTravelStatus.finished
         } else {
-          status = enumTravelStatus.progress;
+          status = enumTravelStatus.progress
         }
         setTripStatus(status)
       } else {
-        
       }
       fetchTripParticipants()
-    };
+    }
 
     const fetchTripParticipants = async () => {
-      const data = await userContext.getParticipants(`${id}`);
-      if(data){
+      const data = await tripContext.getParticipants(`${id}`)
+      if (data) {
         setParticipants(data)
       }
     }
 
-    fetchTripData();
-  }, [id]);
+    fetchTripData()
+  }, [id, tripContext])
 
   const [checklist, setChecklist] = useState(travel.checklist)
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
@@ -196,7 +192,11 @@ export const Travel = () => {
     <Layout>
       <div className="grid-travel">
         <Card>
-          <img src={trip && trip.image_path ? trip.image_path : img} alt="Imagem da viagem" className="rounded object-cover img-card self-center" />
+          <img
+            src={trip && trip.image_path ? trip.image_path : img}
+            alt="Imagem da viagem"
+            className="rounded object-cover img-card self-center"
+          />
           <h2 className="mt-2 mb-5 text-2xl font-bold w-full line-clamp-2">
             {trip && trip.title ? trip.title : 'Carregando...'}
           </h2>
@@ -204,11 +204,14 @@ export const Travel = () => {
             <div className="mb-1 font-bold">Informações</div>
             <TravelStatus status={tripStatus ? tripStatus : '-'} />
             <InfoItem Icon={MapPin} text={trip && trip.destination ? trip.destination : 'Carregando...'} />
-            <InfoItem Icon={Calendar} text={
-              trip && trip.start_date && trip.end_date 
-                ? `${dateFormat(trip.start_date, trip.end_date)}`
-                : 'Período...'
-            }   />
+            <InfoItem
+              Icon={Calendar}
+              text={
+                trip && trip.start_date && trip.end_date
+                  ? `${dateFormat(trip.start_date, trip.end_date)}`
+                  : 'Período...'
+              }
+            />
             <Tooltip
               element={<InfoItem Icon={DollarSign} text="R$ 7500,00" />}
               text="Seu gasto individual previsto para a viagem"
@@ -231,10 +234,7 @@ export const Travel = () => {
           <div className="flex flex-col gap-2">
             <div className="mb-1 font-bold">Participantes</div>
             {participants?.map((participant) => (
-              <Participant 
-                imageSrc={imgParticipantOne} 
-                name={participant}
-              />
+              <Participant imageSrc={imgParticipantOne} name={participant} />
             ))}
             {isParticipant && (
               <ButtonOutlined
@@ -330,9 +330,7 @@ export const Travel = () => {
         </div>
       </div>
 
-      {openModalAddParticipant && (
-        <ModalAddParticipant code={id} onClose={() => setOpenModalAddParticipant(false)} />
-      )}
+      {openModalAddParticipant && <ModalAddParticipant code={id} onClose={() => setOpenModalAddParticipant(false)} />}
 
       {openModalLeaveTrip && <ModalLeaveTrip tripTitle={title} onClose={() => setOpenModalLeaveTrip(false)} />}
 

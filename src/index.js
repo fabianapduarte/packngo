@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
 
 import { AuthProvider } from './context/AuthContext'
+import { TripProvider } from './context/TripContext'
 import './index.css'
 import App from './App'
 
@@ -13,7 +14,9 @@ root.render(
     <BrowserRouter>
       <SnackbarProvider anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
         <AuthProvider>
-          <App />
+          <TripProvider>
+            <App />
+          </TripProvider>
         </AuthProvider>
       </SnackbarProvider>
     </BrowserRouter>

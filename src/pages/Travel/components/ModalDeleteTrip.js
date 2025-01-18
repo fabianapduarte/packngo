@@ -1,27 +1,27 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import { Trash2 } from 'react-feather'
 import { Button, Modal } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'
 import { useSnackbar } from 'notistack'
 import { useNavigate } from 'react-router-dom'
 import { homeRoute } from '../../../utils/routes'
-import { UserContext } from '../../../context/UserContext'
 import { useParams } from 'react-router-dom'
+import { TripContext } from '../../../context/TripContext'
 
 export const ModalDeleteTrip = ({ onClose }) => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const { id } = useParams()
-  const userContext = useContext(UserContext)
+  const tripContext = useContext(TripContext)
 
   const handleDelete = async () => {
-    const result = await userContext.deleteTrip( id )
-    if(result.success){
+    const result = await tripContext.deleteTrip(id)
+    if (result.success) {
       enqueueSnackbar('Viagem em grupo excluída', { variant: 'success' })
       onClose()
       navigate(homeRoute)
-    }else{
-      enqueueSnackbar('Não foi possível deletar a viagem no momento. Tente novamente mais tarde.', { variant: 'error' });
+    } else {
+      enqueueSnackbar('Não foi possível deletar a viagem no momento. Tente novamente mais tarde.', { variant: 'error' })
     }
   }
 

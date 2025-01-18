@@ -6,7 +6,6 @@ import { get, patch, post } from '../utils/api'
 import { cookies } from '../utils/cookies'
 import { loginUrl, logoutUrl, registerUrl, userProfileUrl, userUrl } from '../utils/routesApi'
 import { homeRoute, loginRoute, registerRoute } from '../utils/routes'
-import { UserProvider } from './UserContext';
 
 export const AuthContext = createContext({})
 
@@ -173,7 +172,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ login, logout, register, loading, updateUser, updateUserImage, getUserId }}>
-      <UserProvider>{children}</UserProvider>
+      <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
     </AuthContext.Provider>
   )
 }

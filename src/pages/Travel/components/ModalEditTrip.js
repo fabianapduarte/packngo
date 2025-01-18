@@ -4,7 +4,7 @@ import { Button, Input, Modal } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'
 import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
-import { UserContext } from '../../../context/UserContext'
+import { TripContext } from '../../../context/TripContext'
 
 export const ModalEditTrip = ({ onClose, travel }) => {
   const { enqueueSnackbar } = useSnackbar()
@@ -18,8 +18,8 @@ export const ModalEditTrip = ({ onClose, travel }) => {
   )
 
   const { id } = useParams()
-  const userContext = useContext(UserContext)
-  const [trip, setTrip] = useState(null);
+  const tripContext = useContext(TripContext)
+  const [trip, setTrip] = useState(null)
 
   const handleEdit = () => {
     enqueueSnackbar('Viagem editada com sucesso!', { variant: 'success' })

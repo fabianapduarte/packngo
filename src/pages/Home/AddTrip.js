@@ -2,23 +2,20 @@ import React, { useState, useContext } from 'react'
 import { Plus, Image } from 'react-feather'
 import { Button, Input, Modal } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
-import { UserContext } from '../../context/UserContext'
+import { TripContext } from '../../context/TripContext'
 import { useSnackbar } from 'notistack'
 import './styles.css'
 
-export default function AddTrip({ show, onClose, onAddTrip, trips }) {
+export default function AddTrip({ show, onClose, onAddTrip }) {
   const [title, setTitle] = useState('')
   const [destination, setDestination] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [image, setImage] = useState(
-    'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  )
   const [imagePreview, setImagePreview] = useState(
     'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   )
   const { enqueueSnackbar } = useSnackbar()
-  const userContext = useContext(UserContext)
+  const tripContext = useContext(TripContext)
 
   if (!show) {
     return null
@@ -30,26 +27,8 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
       const reader = new FileReader()
       reader.onloadend = () => {
         setImagePreview(reader.result)
-        setImage(reader.result)
       }
       reader.readAsDataURL(file)
-    }
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const newTrip = {
-      id: trips.length + 1,
-      title: title,
-      destination: destination,
-      dateStart: startDate,
-      dateEnd: endDate,
-      status: 0,
-      inviteCode: Date.now(),
-      image: image,
-      checklist: [],
-      events: [],
-      polls: [],
     }
   }
 
@@ -57,8 +36,8 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
     if (title.length === 0 || destination.length === 0) {
       enqueueSnackbar('Preencha todos os campos', { variant: 'warning' })
     } else {
-      const result = await userContext.addTrip({ title, destination, startDate, endDate, imagePreview })
-      if(result.success){
+      const result = await tripContext.addTrip({ title, destination, startDate, endDate, imagePreview })
+      if (result.success) {
         onAddTrip(result.data.trip)
         onClose()
       }
@@ -67,7 +46,7 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
 
   return (
     <Modal title="Criar nova viagem" size="sm" onClose={onClose}>
-      <form onSubmit={handleSubmit}>
+      <div>
         <div className="mb-4">
           <Input
             value={title}
@@ -104,13 +83,7 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
           </div>
           <div>
             <label className="block text-gray-700 mb-2">Data de Fim</label>
-            <Input 
-              type="date" 
-              id="dateEnd" 
-              value={endDate} 
-              onChange={(e) => setEndDate(e.target.value)} 
-              required 
-            />
+            <Input type="date" id="dateEnd" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
           </div>
         </div>
         <div className="mb-4">
@@ -132,9 +105,9 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
         </div>
         <div className="flex justify-end space-x-4">
           <Button label="Cancelar" color={enumButtonColor.transparentPrimary} type="button" onClick={onClose} />
-          <Button label="Cadastrar" color={enumButtonColor.primary} type="submit" Icon={Plus} onClick={handleAddTrip}/>
+          <Button label="Cadastrar" color={enumButtonColor.primary} type="submit" Icon={Plus} onClick={handleAddTrip} />
         </div>
-      </form>
+      </div>
     </Modal>
   )
 }

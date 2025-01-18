@@ -6,8 +6,7 @@ import { enumButtonColor } from '../../enums/enumButtonColor'
 import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import './styles.css'
 import { useSnackbar } from 'notistack'
-import { UserContext } from '../../context/UserContext'
-import { useParams } from 'react-router-dom'
+import { TripContext } from '../../context/TripContext'
 
 export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
   const [tripUsers, setTripUsers] = useState(0)
@@ -15,15 +14,15 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
   const [inviteCode, setInviteCode] = useState('')
   const [trip, setTrip] = useState(null)
   const { enqueueSnackbar } = useSnackbar()
-  const userContext = useContext(UserContext)
+  const tripContext = useContext(TripContext)
 
   if (!show) {
     return null
   }
 
-  const handleNext = async(e) => {
-    e.preventDefault();
-    const foundTrip = await userContext.showTrip(inviteCode);
+  const handleNext = async (e) => {
+    e.preventDefault()
+    const foundTrip = await tripContext.showTrip(inviteCode)
     if (foundTrip) {
       setTrip(foundTrip)
       setStep(step + 1)
@@ -39,9 +38,9 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
     setTrip(null)
   }
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const newTrip = await userContext.joinTrip(inviteCode)
+    const newTrip = await tripContext.joinTrip(inviteCode)
     if (newTrip) {
       //onJoinTrip(trip)
       setTrip(newTrip)
@@ -138,7 +137,7 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
             </div>
             <div className="flex justify-end space-x-4">
               <Button label="Cancelar" color={enumButtonColor.transparentPrimary} type="button" onClick={handlePrev} />
-              <Button Icon={Check} label="Confirmar" color={enumButtonColor.primary} type="submit"/>
+              <Button Icon={Check} label="Confirmar" color={enumButtonColor.primary} type="submit" />
             </div>
           </>
         )}
