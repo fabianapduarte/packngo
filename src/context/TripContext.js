@@ -1,23 +1,35 @@
-import { createContext } from 'react'
+import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { isBefore, isAfter } from 'date-fns'
 import { post, get, del } from '../utils/api'
 import { getTripParticipantsUrl, joinTripUrl, tripsUrl, tripUrl } from '../utils/routesApi'
-import { homeRoute } from '../utils/routes'
+import { tripRoute } from '../utils/routes'
 import { enumTravelStatus } from '../enums/enumTravelStatus'
 
 export const TripContext = createContext({})
 
 export const TripProvider = ({ children }) => {
+  const [loading, setLoading] = useState(false)
+
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
-  const addTrip = async ({ title, destination, startDate, endDate, imagePreview }) => {
+  const addTrip = async ({ title, destination, startDate, endDate, image }) => {
     try {
-      const { data } = await post(tripsUrl, { title, destination, startDate, endDate, imagePreview })
-      navigate(homeRoute)
-      return { success: true, data }
+      setLoading(true)
+
+      const form = new FormData()
+      form.append('title', title)
+      form.append('destination', destination)
+      form.append('startDate', startDate)
+      form.append('endDate', endDate)
+      if (image) form.append('image', image)
+
+      const { data } = await post(tripsUrl, form)
+
+      enqueueSnackbar('Viagem criada com sucesso!', { variant: 'success' })
+      navigate(tripRoute(data.trip.id))
     } catch (error) {
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
@@ -32,7 +44,8 @@ export const TripProvider = ({ children }) => {
       } else {
         enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
       }
-      return { success: false }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -100,7 +113,7 @@ export const TripProvider = ({ children }) => {
   }
 
   return (
-    <TripContext.Provider value={{ addTrip, showTrip, deleteTrip, getTrips, getParticipants, joinTrip }}>
+    <TripContext.Provider value={{ loading, addTrip, showTrip, deleteTrip, getTrips, getParticipants, joinTrip }}>
       {children}
     </TripContext.Provider>
   )

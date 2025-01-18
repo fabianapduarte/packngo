@@ -195,7 +195,11 @@ export const Travel = () => {
     <Layout>
       <div className="grid-travel">
         <Card>
-          <img src={img} alt="Imagem da viagem" className="rounded object-cover img-card self-center" />
+          <img
+            src={getTripImage(trip.image_path)}
+            alt="Imagem da viagem"
+            className="rounded object-cover img-card self-center"
+          />
           <h2 className="mt-2 mb-5 text-2xl font-bold w-full line-clamp-2">{trip.title}</h2>
           <div className="flex flex-col gap-2 mb-5">
             <div className="mb-1 font-bold">Informações</div>

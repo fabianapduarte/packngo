@@ -1,25 +1,21 @@
 import React, { useState, useContext } from 'react'
 import { Plus, Image } from 'react-feather'
-import { Button, Input, Modal } from '../../components'
+import { useSnackbar } from 'notistack'
+import defaultImgTrip from '../../assets/map.jpg'
+import { Button, ButtonLoading, Input, Modal } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 import { TripContext } from '../../context/TripContext'
-import { useSnackbar } from 'notistack'
 import './styles.css'
 
-export default function AddTrip({ show, onClose, onAddTrip }) {
+export default function AddTrip({ show, onClose }) {
   const [title, setTitle] = useState('')
   const [destination, setDestination] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [imagePreview, setImagePreview] = useState(
-    'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  )
+  const [imagePreview, setImagePreview] = useState(null)
+  const [imageFile, setImageFile] = useState(null)
   const { enqueueSnackbar } = useSnackbar()
   const tripContext = useContext(TripContext)
-
-  if (!show) {
-    return null
-  }
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
@@ -27,6 +23,7 @@ export default function AddTrip({ show, onClose, onAddTrip }) {
       const reader = new FileReader()
       reader.onloadend = () => {
         setImagePreview(reader.result)
+        setImageFile(file)
       }
       reader.readAsDataURL(file)
     }
@@ -36,12 +33,12 @@ export default function AddTrip({ show, onClose, onAddTrip }) {
     if (title.length === 0 || destination.length === 0) {
       enqueueSnackbar('Preencha todos os campos', { variant: 'warning' })
     } else {
-      const result = await tripContext.addTrip({ title, destination, startDate, endDate, imagePreview })
-      if (result.success) {
-        onAddTrip(result.data.trip)
-        onClose()
-      }
+      await tripContext.addTrip({ title, destination, startDate, endDate, image: imageFile })
     }
+  }
+
+  if (!show) {
+    return null
   }
 
   return (
@@ -88,7 +85,11 @@ export default function AddTrip({ show, onClose, onAddTrip }) {
         </div>
         <div className="mb-4">
           <div className="flex items-center space-x-4">
-            <img src={imagePreview} alt="Pré-visualização" className="w-10 h-10 object-cover rounded" />
+            <img
+              src={imagePreview ? imagePreview : defaultImgTrip}
+              alt="Pré-visualização"
+              className="w-10 h-10 object-cover rounded"
+            />
             <label
               htmlFor="imageInput"
               className="flex items-center cursor-pointer text-primary border border-primary hover:bg-primary hover:text-primary-foreground rounded px-4 py-2 w-fit"
@@ -104,8 +105,23 @@ export default function AddTrip({ show, onClose, onAddTrip }) {
           </div>
         </div>
         <div className="flex justify-end space-x-4">
-          <Button label="Cancelar" color={enumButtonColor.transparentPrimary} type="button" onClick={onClose} />
-          <Button label="Cadastrar" color={enumButtonColor.primary} type="submit" Icon={Plus} onClick={handleAddTrip} />
+          <Button
+            label="Cancelar"
+            color={enumButtonColor.transparentPrimary}
+            type="button"
+            onClick={onClose}
+            disabled={tripContext.loading}
+          />
+          {tripContext.loading && <ButtonLoading color={enumButtonColor.primary} />}
+          {!tripContext.loading && (
+            <Button
+              label="Cadastrar"
+              color={enumButtonColor.primary}
+              type="submit"
+              Icon={Plus}
+              onClick={handleAddTrip}
+            />
+          )}
         </div>
       </div>
     </Modal>

@@ -38,13 +38,6 @@ export default function Home() {
     setShowJoinTrip(false)
   }
 
-  const handleAddTrip = (newTrip) => {
-    const updatedTrips = [...trips, newTrip]
-    setTrips(updatedTrips)
-    enqueueSnackbar('Viagem criada com sucesso!', { variant: 'success' })
-    navigate(tripRoute(newTrip.id))
-  }
-
   const handleJoinTrip = (newTrip) => {
     enqueueSnackbar('Sucesso ao entrar no grupo da viagem', { variant: 'success' })
     navigate(tripRoute(newTrip.id))
@@ -90,7 +83,7 @@ export default function Home() {
           trips={trips}
           users={users}
         />
-        <AddTrip show={showAddTrip} onClose={handleCloseAddTrip} onAddTrip={handleAddTrip} />
+        <AddTrip show={showAddTrip} onClose={handleCloseAddTrip} />
         <div className="flex items-center justify-between mb-7">
           <h3 className="font-bold text-2xl">Minhas viagens</h3>
           <div className="flex space-x-4">

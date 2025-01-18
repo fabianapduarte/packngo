@@ -8,7 +8,7 @@ export const Modal = ({ onClose, title, children, size }) => {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-1 min-h-screen min-w-screen p-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10 min-h-screen min-w-screen p-4">
       <div className={`${sizeVariation[size]} bg-white shadow-md rounded p-6 m-4 max-h-full overflow-auto`}>
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-bold">{title}</h1>
