@@ -8,18 +8,14 @@ export const logoutUrl = '/logout'
 
 export const registerUrl = '/register'
 
-export const addTripUrl = '/addTrip'
-
-export const getTripsUrl = '/getTrips'
-
-export const getParticipantsUrl = '/getParticipants'
-
-export const joinTripUrl = '/joinTrip'
-
-export const showTripUrl = '/showTrip'
-
-export const deleteTripUrl = '/deleteTrip'
-
 export const userUrl = (id) => `/users/${id}`
 
 export const userProfileUrl = (id) => `/users/${id}/update-profile-img`
+
+export const tripsUrl = '/trips'
+
+export const tripUrl = (id) => `/trips/${id}`
+
+export const joinTripUrl = (id) => `/trips/${id}/join`
+
+export const getTripParticipantsUrl = (id) => `/trips/${id}/participants`

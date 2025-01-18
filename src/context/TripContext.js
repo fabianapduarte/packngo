@@ -2,15 +2,8 @@ import { createContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { isBefore, isAfter } from 'date-fns'
-import { post, get, patch } from '../utils/api'
-import {
-  addTripUrl,
-  showTripUrl,
-  getTripsUrl,
-  deleteTripUrl,
-  getParticipantsUrl,
-  joinTripUrl,
-} from '../utils/routesApi'
+import { post, get, del } from '../utils/api'
+import { getTripParticipantsUrl, joinTripUrl, tripsUrl, tripUrl } from '../utils/routesApi'
 import { homeRoute } from '../utils/routes'
 import { enumTravelStatus } from '../enums/enumTravelStatus'
 
@@ -22,7 +15,7 @@ export const TripProvider = ({ children }) => {
 
   const addTrip = async ({ title, destination, startDate, endDate, imagePreview }) => {
     try {
-      const { data } = await post(addTripUrl, { title, destination, startDate, endDate, imagePreview })
+      const { data } = await post(tripsUrl, { title, destination, startDate, endDate, imagePreview })
       navigate(homeRoute)
       return { success: true, data }
     } catch (error) {
@@ -45,7 +38,7 @@ export const TripProvider = ({ children }) => {
 
   const getTrips = async () => {
     try {
-      const { data } = await get(getTripsUrl)
+      const { data } = await get(tripsUrl)
       return data
     } catch (error) {
       return null
@@ -54,7 +47,8 @@ export const TripProvider = ({ children }) => {
 
   const joinTrip = async (id, trip = {}) => {
     try {
-      const { data } = await post(`${joinTripUrl}/${id}`, trip)
+      const url = joinTripUrl(id)
+      const { data } = await post(url, trip)
       return data
     } catch (error) {
       return null
@@ -63,7 +57,8 @@ export const TripProvider = ({ children }) => {
 
   const showTrip = async (id) => {
     try {
-      const { data } = await get(`${showTripUrl}/${id}`)
+      const url = tripUrl(id)
+      const { data } = await get(url)
 
       if (data) {
         let status = null
@@ -86,7 +81,8 @@ export const TripProvider = ({ children }) => {
 
   const getParticipants = async (id) => {
     try {
-      const { data } = await get(`${getParticipantsUrl}/${id}`)
+      const url = getTripParticipantsUrl(id)
+      const { data } = await get(url)
       return data
     } catch (error) {
       return null
@@ -95,10 +91,8 @@ export const TripProvider = ({ children }) => {
 
   const deleteTrip = async (id) => {
     try {
-      const data = {
-        deleted_at: new Date().toISOString(),
-      }
-      await patch(`${deleteTripUrl}/${id}`, data)
+      const url = tripUrl(id)
+      await del(url)
       return { success: true }
     } catch (error) {
       return { success: false }
