@@ -108,7 +108,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="grid grid-cols-1 place-items-center md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 place-items-center md:grid-cols-2 2xl:grid-cols-3 gap-6">
           {trips.map((trip) => (
             <TravelCard
               key={trip.id}
