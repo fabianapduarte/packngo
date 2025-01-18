@@ -108,7 +108,8 @@ export const Travel = () => {
 
   useEffect(() => {
     const fetchTripData = async () => {
-      const trip = await tripContext.showTrip(`${id}`)
+      const trip = await tripContext.showTrip(id)
+      await fetchTripParticipants()
       if (trip) {
         setTrip(trip)
 
@@ -123,20 +124,18 @@ export const Travel = () => {
           status = enumTravelStatus.progress
         }
         setTripStatus(status)
-      } else {
       }
-      fetchTripParticipants()
     }
 
     const fetchTripParticipants = async () => {
-      const data = await tripContext.getParticipants(`${id}`)
+      const data = await tripContext.getParticipants(id)
       if (data) {
         setParticipants(data)
       }
     }
 
     fetchTripData()
-  }, [id, tripContext])
+  }, [])
 
   const [checklist, setChecklist] = useState(travel.checklist)
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
@@ -233,8 +232,8 @@ export const Travel = () => {
           </div>
           <div className="flex flex-col gap-2">
             <div className="mb-1 font-bold">Participantes</div>
-            {participants?.map((participant) => (
-              <Participant imageSrc={imgParticipantOne} name={participant} />
+            {participants.map((participant) => (
+              <Participant imageSrc={participant.image_path} name={participant.name} />
             ))}
             {isParticipant && (
               <ButtonOutlined

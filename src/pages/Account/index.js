@@ -7,6 +7,7 @@ import { Button, ButtonLoading, Card, Input, Layout, Loading } from '../../compo
 import { AuthContext, UserContext } from '../../context/AuthContext'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 import { storageUrl } from '../../utils/routesApi'
+import { getUserImage } from '../../utils/getUserImage'
 
 import './styles.css'
 
@@ -42,9 +43,7 @@ export default function Account() {
     if (user) {
       setName(user.name)
       setEmail(user.email)
-
-      if (user.image_path) setImage(storageUrl + user.image_path)
-      else setImage(profilePic)
+      setImage(getUserImage(user.image_path))
     }
   }, [user])
 
