@@ -135,10 +135,6 @@ export default function Account() {
       </Layout>
     )
   } else {
-    return (
-      <Layout>
-        <Loading />
-      </Layout>
-    )
+    return <Loading />
   }
 }

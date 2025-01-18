@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { LogIn, Plus } from 'react-feather'
 import { isBefore, isAfter } from 'date-fns'
 
-import { Button, Layout } from '../../components'
+import { Button, Layout, Loading } from '../../components'
 import { TravelCard } from '../../components/TravelCard'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 import { enumTravelStatus } from '../../enums/enumTravelStatus'
@@ -77,6 +77,8 @@ export default function Home() {
   useEffect(() => {
     getUserTrips()
   }, [])
+
+  if (trips.length === 0) return <Loading />
 
   return (
     <Layout>

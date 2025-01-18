@@ -20,6 +20,7 @@ import {
   Card,
   Checkbox,
   Layout,
+  Loading,
   Participant,
   SimpleInput,
   Slider,
@@ -45,6 +46,7 @@ import { ModalEditTrip } from './components/ModalEditTrip'
 import { calendarRoute } from '../../utils/routes'
 import { dateFormat } from '../../utils/dateFormat'
 import { TripContext } from '../../context/TripContext'
+import { getTripImage } from '../../utils/getTripImage'
 
 const InfoItem = ({ Icon, text }) => {
   return (
@@ -187,30 +189,19 @@ export const Travel = () => {
     setEventSelected(null)
   }
 
+  if (!trip || participants.length === 0) return <Loading />
+
   return (
     <Layout>
       <div className="grid-travel">
         <Card>
-          <img
-            src={trip && trip.image_path ? trip.image_path : img}
-            alt="Imagem da viagem"
-            className="rounded object-cover img-card self-center"
-          />
-          <h2 className="mt-2 mb-5 text-2xl font-bold w-full line-clamp-2">
-            {trip && trip.title ? trip.title : 'Carregando...'}
-          </h2>
+          <img src={img} alt="Imagem da viagem" className="rounded object-cover img-card self-center" />
+          <h2 className="mt-2 mb-5 text-2xl font-bold w-full line-clamp-2">{trip.title}</h2>
           <div className="flex flex-col gap-2 mb-5">
             <div className="mb-1 font-bold">Informações</div>
             <TravelStatus status={tripStatus ? tripStatus : '-'} />
-            <InfoItem Icon={MapPin} text={trip && trip.destination ? trip.destination : 'Carregando...'} />
-            <InfoItem
-              Icon={Calendar}
-              text={
-                trip && trip.start_date && trip.end_date
-                  ? `${dateFormat(trip.start_date, trip.end_date)}`
-                  : 'Período...'
-              }
-            />
+            <InfoItem Icon={MapPin} text={trip.destination} />
+            <InfoItem Icon={Calendar} text={dateFormat(trip.start_date, trip.end_date)} />
             <Tooltip
               element={<InfoItem Icon={DollarSign} text="R$ 7500,00" />}
               text="Seu gasto individual previsto para a viagem"
