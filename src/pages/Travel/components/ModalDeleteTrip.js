@@ -15,10 +15,14 @@ export const ModalDeleteTrip = ({ onClose }) => {
   const userContext = useContext(UserContext)
 
   const handleDelete = async () => {
-    const result = await userContext.addTrip({ id })
-    enqueueSnackbar('Viagem em grupo excluída', { variant: 'success' })
-    onClose()
-    navigate(homeRoute)
+    const result = await userContext.deleteTrip( id )
+    if(result.success){
+      enqueueSnackbar('Viagem em grupo excluída', { variant: 'success' })
+      onClose()
+      navigate(homeRoute)
+    }else{
+      enqueueSnackbar('Não foi possível deletar a viagem no momento. Tente novamente mais tarde.', { variant: 'error' });
+    }
   }
 
   return (

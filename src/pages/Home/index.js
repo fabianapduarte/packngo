@@ -1,16 +1,19 @@
 import { useNavigate } from 'react-router-dom'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { LogIn, Plus } from 'react-feather'
+import { format, isBefore, isAfter } from 'date-fns';
+
 import { Button, Layout } from '../../components'
 import { TravelCard } from '../../components/TravelCard'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import AddTrip from './AddTrip'
 import JoinTrip from './JoinTrip'
-import DATAF from '../../assets/data.json'
 import './styles.css'
 import { useSnackbar } from 'notistack'
 import { tripRoute } from '../../utils/routes'
+import { UserContext } from '../../context/UserContext'
+import { dateFormat } from '../../utils/dateFormat';
 
 export default function Home() {
   const [users, setUsers] = useState([])
@@ -20,6 +23,7 @@ export default function Home() {
   const [showJoinTrip, setShowJoinTrip] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
+  const userContext = useContext(UserContext)
 
   const handleOpenAddTrip = () => {
     setShowAddTrip(true)
@@ -57,13 +61,31 @@ export default function Home() {
     navigate(tripRoute(newTrip.id))
   }
 
-  const getUserTrips = () => {
-    if (!user) return []
-    return trips.filter((trip) => user.activeTrips.includes(trip.id))
-  }
+  const getUserTrips = async() => {
+    const trips = await userContext.getTrips()
+    if(trips){
+      console.log(trips)
+      
+      const updatedTrips = trips.map((tripItem) => {
+        let status = null;
+        const now = new Date();
+  
+        if (isBefore(now, new Date(tripItem.start_date))) {
+          status = enumTravelStatus.planned;
+        } else if (isAfter(now, new Date(tripItem.end_date))) {
+          status = enumTravelStatus.finished;
+        } else {
+          status = enumTravelStatus.progress;
+        }
+        
+        return { ...tripItem, status };
+      });
 
-  const dateFormat = (dateStart, dateEnd) => {
-    return new Date(dateStart).toLocaleDateString() + ' - ' + new Date(dateEnd).toLocaleDateString()
+      console.log(updatedTrips)
+      setTrips(updatedTrips);
+    }else{
+      return []
+    }
   }
 
   const statusFormat = (status) => {
@@ -73,10 +95,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (DATAF && DATAF[0] && DATAF[0].trips && DATAF[0].users) {
-      setTrips(DATAF[0].trips)
-      setUsers(DATAF[0].users)
-    }
+    getUserTrips()
   }, [])
 
   useEffect(() => {}, [trips])
@@ -113,15 +132,15 @@ export default function Home() {
           </div>
         </div>
         <div className="grid grid-cols-1 place-items-center md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {getUserTrips().map((trip) => (
+          {trips?.map((trip) => (
             <TravelCard
               key={trip.id}
               id={trip.id}
               name={trip.title}
-              status={statusFormat(trip.status)}
-              date={dateFormat(trip.dateStart, trip.dateEnd)}
+              status={trip.status}
+              date={dateFormat(trip.start_date, trip.end_date)}
               location={trip.destination}
-              image={trip.image}
+              image={trip.image_path}
             />
           ))}
         </div>

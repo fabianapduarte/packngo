@@ -1,15 +1,17 @@
 import { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import { post, get } from '../utils/api';
-import { addTripUrl, showTripUrl } from '../utils/routesApi';
+import { format, isBefore, isAfter } from 'date-fns';
+import { post, get, patch } from '../utils/api';
+import { addTripUrl, showTripUrl, getTripsUrl, deleteTripUrl, getParticipantsUrl, joinTripUrl } from '../utils/routesApi';
 import { homeRoute } from '../utils/routes';
+import { enumTravelStatus } from '../enums/enumTravelStatus'
+
 
 export const UserContext = createContext({});
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [trip, setTrip] = useState(null);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -36,27 +38,70 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const showTrip = async (id) => {
+  const getTrips = async () => {
     try {
-        const { data } = await get(`${showTripUrl}/${id}`);
-        return { success: true, trip: data }; 
+        const { data } = await get(getTripsUrl);
+        return data; 
     } catch (error) {
-        return { success: false };
+        return null;
     }
   };
 
+  const joinTrip = async (id, trip = {}) => {
+    try {
+      const { data } = await post(`${joinTripUrl}/${id}`, trip);
+      return data; 
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const showTrip = async (id) => {
+    try {
+      const { data } = await get(`${showTripUrl}/${id}`);
+
+      if (data) {
+        let status = null;
+        const now = new Date();
+  
+        if (isBefore(now, new Date(data.start_date))) {
+          status = enumTravelStatus.planned;
+        } else if (isAfter(now, new Date(data.end_date))) {
+          status = enumTravelStatus.finished;
+        } else {
+          status = enumTravelStatus.progress;
+        }
+  
+        return { ...data, status };
+      }
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const getParticipants = async (id) => {
+    try {
+      const { data } = await get(`${getParticipantsUrl}/${id}`);
+      return data; 
+    } catch (error) {
+      return null;
+    }
+  };
 
   const deleteTrip = async (id) => {
     try {
-        const { data } = await delete(`${showTripUrl}/${id}`);
-        return { success: true}; 
+      const data = {
+        deleted_at: new Date().toISOString(),
+      };
+      const { data: responseData } = await patch(`${deleteTripUrl}/${id}`, data);
+      return { success: true}; 
     } catch (error) {
-        return { success: false };
+      return { success: false };
     }
   };
 
   return (
-    <UserContext.Provider value={{ user, addTrip, showTrip, deleteTrip }}>
+    <UserContext.Provider value={{ user, addTrip, showTrip, deleteTrip, getTrips, getParticipants, joinTrip }}>
       {children}
     </UserContext.Provider>
   );

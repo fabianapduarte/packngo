@@ -108,6 +108,15 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const getUserId = async () => {
+    try {
+      return user.id
+    } catch (error) {
+      enqueueSnackbar('Erro ao buscar usuário. Tente novamente mais tarde.', { variant: 'error' })
+      return null
+    }
+  }
+
   const updateUser = async ({ name, password, passwordConfirmation }) => {
     try {
       setLoading(true)
@@ -163,7 +172,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ login, logout, register, loading, updateUser, updateUserImage }}>
+    <AuthContext.Provider value={{ login, logout, register, loading, updateUser, updateUserImage, getUserId }}>
       <UserProvider>{children}</UserProvider>
     </AuthContext.Provider>
   )

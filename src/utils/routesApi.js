@@ -10,6 +10,12 @@ export const registerUrl = '/register'
 
 export const addTripUrl = '/addTrip'
 
+export const getTripsUrl = '/getTrips'
+
+export const getParticipantsUrl = '/getParticipants'
+
+export const joinTripUrl = '/joinTrip'
+
 export const showTripUrl = '/showTrip'
 
 export const deleteTripUrl = '/deleteTrip'

@@ -17,9 +17,8 @@ export default function AddTrip({ show, onClose, onAddTrip, trips }) {
   const [imagePreview, setImagePreview] = useState(
     'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   )
-
-  const userContext = useContext(UserContext)
   const { enqueueSnackbar } = useSnackbar()
+  const userContext = useContext(UserContext)
 
   if (!show) {
     return null
