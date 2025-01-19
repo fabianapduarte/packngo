@@ -1,8 +1,8 @@
 import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { post, get, del } from '../utils/api'
-import { joinTripUrl, fetchTripUrl, tripsUrl, tripUrl, leaveTripUrl } from '../utils/routesApi'
+import { post, get, patch, del } from '../utils/api'
+import { joinTripUrl, fetchTripUrl, tripsUrl, tripUrl, leaveTripUrl, editTripUrl } from '../utils/routesApi'
 import { homeRoute, tripRoute } from '../utils/routes'
 
 export const TripContext = createContext({})
@@ -147,9 +147,41 @@ export const TripProvider = ({ children }) => {
     }
   }
 
+  const editTrip = async ({ title, destination, startDate, endDate, image, id }) => {
+    try {
+      const url = editTripUrl(id)
+
+      const newData = {}
+      newData.title = title
+      newData.destination = destination
+      newData.startDate = startDate
+      newData.endDate = endDate
+
+      const { data } = await patch(url, newData)
+      return { success: true }
+    } catch (error) {
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else if (error.status === 400) {
+        const parsedError = JSON.parse(error.response.data.error)
+
+        const errorMsg = Object.keys(parsedError).length
+          ? parsedError[Object.keys(parsedError)[0]][0]
+          : 'Revise os dados informados e tente novamente.'
+
+        enqueueSnackbar(errorMsg, { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
+      return { success: false }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <TripContext.Provider
-      value={{ loading, addTrip, showTrip, deleteTrip, getTrips, joinTrip, leaveTrip, previewTrip }}
+      value={{ loading, addTrip, showTrip, deleteTrip, getTrips, joinTrip, leaveTrip, previewTrip, editTrip }}
     >
       {children}
     </TripContext.Provider>

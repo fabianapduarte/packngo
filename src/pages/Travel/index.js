@@ -95,11 +95,11 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 
 export const Travel = () => {
   const travel = data[0].trips[0]
+  const [trip, setTrip] = useState(null)
   const { events, polls } = travel
   const { id } = useParams()
   const tripContext = useContext(TripContext)
-  const [trip, setTrip] = useState(null)
-
+  
   useEffect(() => {
     const fetchTripData = async () => {
       const trip = await tripContext.showTrip(id)
@@ -119,10 +119,7 @@ export const Travel = () => {
   const [openModalCreatePoll, setOpenModalCreatePoll] = useState(false)
   const [openModalCreateEvent, setOpenModalCreateEvent] = useState(false)
   const [openModalEditEvent, setOpenModalEditEvent] = useState(false)
-  const [openModalEditTrip, setOpenModalEditTrip] = useState({
-    isOpen: false,
-    tripId: null,
-  });
+  const [openModalEditTrip, setOpenModalEditTrip] = useState(false)
   const [openModalSeeEvent, setOpenModalSeeEvent] = useState(false)
   const [openModalSeePoll, setOpenModalSeePoll] = useState(false)
   const [openModalDeleteEvent, setOpenModalDeleteEvent] = useState(false)
@@ -190,7 +187,7 @@ export const Travel = () => {
                 color={enumButtonColor.primary}
                 label="Editar"
                 Icon={Edit3}
-                onClick={() => setOpenModalEditTrip({ isOpen: true, trip: trip })}
+                onClick={() => setOpenModalEditTrip(true)}
               />
               <ButtonOutlined
                 color={enumButtonColor.red}
@@ -202,9 +199,9 @@ export const Travel = () => {
           </div>
           <div className="flex flex-col gap-2">
             <div className="mb-1 font-bold">Participantes</div>
-            {trip.participants.map((participant) => (
+            {/* {trip.participants.map((participant) => (
               <Participant imageSrc={participant.image_path} name={participant.name} />
-            ))}
+            ))} */}
             <ButtonOutlined
               color={enumButtonColor.primary}
               label="Adicionar participante"
@@ -309,7 +306,7 @@ export const Travel = () => {
 
       {openModalEditEvent && <ModalEditEvent onClose={handleCloseModalEditEvent} event={eventSelected} />}
 
-      {openModalEditTrip && <ModalEditTrip onClose={() => setOpenModalEditTrip(false)} travel={travel} />}
+      {openModalEditTrip && <ModalEditTrip onClose={() => setOpenModalEditTrip(false)} trip={trip} />}
 
       {openModalSeeEvent && (
         <ModalSeeEvent

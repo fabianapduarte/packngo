@@ -6,24 +6,25 @@ import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
 import { TripContext } from '../../../context/TripContext'
 
-export const ModalEditTrip = ({ onClose, travel }) => {
+export const ModalEditTrip = ({ onClose, trip }) => {
   const { enqueueSnackbar } = useSnackbar()
 
-  const [title, setTitle] = useState(travel.title)
-  const [destination, setDestination] = useState(travel.destination)
-  const [startDate, setStartDate] = useState(travel.startDate)
-  const [endDate, setEndDate] = useState(travel.endDate)
-  const [image, setImage] = useState(
-    'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  const [title, setTitle] = useState(trip.title)
+  const [destination, setDestination] = useState(trip.destination)
+  const [startDate, setStartDate] = useState(trip.start_date)
+  const [endDate, setEndDate] = useState(trip.end_date)
+  const [image, setImage] = useState(trip.image_path || 'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   )
 
   const { id } = useParams()
   const tripContext = useContext(TripContext)
-  const [trip, setTrip] = useState(null)
 
-  const handleEdit = () => {
-    enqueueSnackbar('Viagem editada com sucesso!', { variant: 'success' })
-    onClose()
+  const handleEdit = async() => {
+    const result = await tripContext.editTrip({title, destination, startDate, endDate, image, id})
+    if(result.success){
+      enqueueSnackbar('Viagem editada com sucesso!', { variant: 'success' })
+      onClose()
+    }
   }
 
   const handleImageChange = (e) => {
