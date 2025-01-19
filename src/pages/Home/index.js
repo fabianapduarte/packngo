@@ -49,7 +49,7 @@ export default function Home() {
     getUserTrips()
   }, [])
 
-  if (trips.length === 0) return <Loading />
+  if (tripContext.loading) return <Loading />
 
   return (
     <Layout>

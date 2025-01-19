@@ -72,9 +72,11 @@ export const TripProvider = ({ children }) => {
 
   const getTrips = async () => {
     try {
+      setLoading(true)
       const { data } = await get(tripsUrl)
       return data
     } catch (error) {
+      setLoading(false)
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else {
@@ -86,11 +88,13 @@ export const TripProvider = ({ children }) => {
 
   const joinTrip = async (id) => {
     try {
+      setLoading(true)
       const url = joinTripUrl(id)
       const { data } = await post(url)
       enqueueSnackbar('Sucesso ao entrar no grupo da viagem!', { variant: 'success' })
       navigate(tripRoute(data.trip_id))
     } catch (error) {
+      setLoading(false)
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else {
@@ -101,6 +105,7 @@ export const TripProvider = ({ children }) => {
 
   const showTrip = async (id) => {
     try {
+      setLoading(true)
       const url = tripUrl(id)
       const { data } = await get(url)
 
@@ -109,16 +114,19 @@ export const TripProvider = ({ children }) => {
         return { ...data, status }
       }
     } catch (error) {
+      setLoading(false)
       return null
     }
   }
 
   const deleteTrip = async (id) => {
     try {
+      setLoading(true)
       const url = tripUrl(id)
       await del(url)
       return { success: true }
     } catch (error) {
+      setLoading(false)
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else {
