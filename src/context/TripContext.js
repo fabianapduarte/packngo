@@ -2,7 +2,15 @@ import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { post, get, patch, del } from '../utils/api'
-import { joinTripUrl, fetchTripUrl, tripsUrl, tripUrl, leaveTripUrl, editTripUrl, tripProfileUrl } from '../utils/routesApi'
+import {
+  joinTripUrl,
+  fetchTripUrl,
+  tripsUrl,
+  tripUrl,
+  leaveTripUrl,
+  editTripUrl,
+  tripProfileUrl,
+} from '../utils/routesApi'
 import { homeRoute, tripRoute } from '../utils/routes'
 
 export const TripContext = createContext({})
@@ -49,7 +57,6 @@ export const TripProvider = ({ children }) => {
 
   const previewTrip = async (code) => {
     try {
-
       const url = fetchTripUrl(code)
       const { data } = await get(url)
       return data
@@ -93,7 +100,7 @@ export const TripProvider = ({ children }) => {
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else if (error.status === 400) {
-        const errorMessage = error.response.data.error;
+        const errorMessage = error.response.data.error
         enqueueSnackbar(errorMessage, { variant: 'warning' })
       } else {
         enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
@@ -142,7 +149,7 @@ export const TripProvider = ({ children }) => {
       return { success: true }
     } catch (error) {
       if (error.status === 400) {
-        const errorMessage = error.response.data.error;
+        const errorMessage = error.response.data.error
         enqueueSnackbar(errorMessage, { variant: 'warning' })
       } else {
         enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
@@ -163,7 +170,7 @@ export const TripProvider = ({ children }) => {
       newData.startDate = startDate
       newData.endDate = endDate
 
-      const { data } = await patch(url, newData)
+      await patch(url, newData)
       return { success: true }
     } catch (error) {
       if (error.status === 401) {
@@ -185,9 +192,7 @@ export const TripProvider = ({ children }) => {
     }
   }
 
-  const editTripImage = async ({ file, id, onLoading, onSuccess, onError }) => {
-    onLoading()
-
+  const editTripImage = async ({ file, id, onSuccess }) => {
     try {
       const form = new FormData()
       form.append('image', file)
@@ -197,7 +202,6 @@ export const TripProvider = ({ children }) => {
       onSuccess(data.trip.image_path)
       enqueueSnackbar('Imagem da viagem atualizada com sucesso!', { variant: 'success' })
     } catch (error) {
-      onError()
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else {
@@ -208,7 +212,18 @@ export const TripProvider = ({ children }) => {
 
   return (
     <TripContext.Provider
-      value={{ loading, addTrip, showTrip, deleteTrip, getTrips, joinTrip, leaveTrip, previewTrip, editTrip, editTripImage }}
+      value={{
+        loading,
+        addTrip,
+        showTrip,
+        deleteTrip,
+        getTrips,
+        joinTrip,
+        leaveTrip,
+        previewTrip,
+        editTrip,
+        editTripImage,
+      }}
     >
       {children}
     </TripContext.Provider>

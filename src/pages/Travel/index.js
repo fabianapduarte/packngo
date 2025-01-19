@@ -99,7 +99,7 @@ export const Travel = () => {
   const { events, polls } = travel
   const { id } = useParams()
   const tripContext = useContext(TripContext)
-  
+
   useEffect(() => {
     const fetchTripData = async () => {
       const trip = await tripContext.showTrip(id)
@@ -109,15 +109,15 @@ export const Travel = () => {
     }
 
     fetchTripData()
-  }, [])
+  }, [id])
 
-  const refreshTrip = async() => {
+  const refreshTrip = async () => {
     setTrip(null)
     const trip = await tripContext.showTrip(id)
     if (trip) {
       setTrip(trip)
     }
-  };
+  }
 
   const [checklist, setChecklist] = useState(travel.checklist)
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
@@ -314,7 +314,9 @@ export const Travel = () => {
 
       {openModalEditEvent && <ModalEditEvent onClose={handleCloseModalEditEvent} event={eventSelected} />}
 
-      {openModalEditTrip && <ModalEditTrip onClose={() => setOpenModalEditTrip(false)} trip={trip} refreshTrip={refreshTrip} />}
+      {openModalEditTrip && (
+        <ModalEditTrip onClose={() => setOpenModalEditTrip(false)} trip={trip} refreshTrip={refreshTrip} />
+      )}
 
       {openModalSeeEvent && (
         <ModalSeeEvent

@@ -24,4 +24,4 @@ export const leaveTripUrl = (id) => `/trips/${id}/leave`
 
 export const editTripUrl = (id) => `/trips/${id}`
 
-export const tripProfileUrl = (id) => `/trips/${id}/update-profile-img`
+export const tripProfileUrl = (id) => `/trips/${id}/update-img`
