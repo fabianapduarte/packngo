@@ -9,7 +9,6 @@ import { dateFormat } from '../../utils/dateFormat'
 import AddTrip from './AddTrip'
 import JoinTrip from './JoinTrip'
 import './styles.css'
-import { getTripStatus } from '../../utils/getTripStatus'
 
 export default function Home() {
   const [trips, setTrips] = useState([])

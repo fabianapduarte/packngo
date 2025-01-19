@@ -4,7 +4,6 @@ import { useSnackbar } from 'notistack'
 import { post, get, del } from '../utils/api'
 import { joinTripUrl, fetchTripUrl, tripsUrl, tripUrl, leaveTripUrl } from '../utils/routesApi'
 import { homeRoute, tripRoute } from '../utils/routes'
-import { getTripStatus } from '../utils/getTripStatus'
 
 export const TripContext = createContext({})
 
@@ -54,8 +53,7 @@ export const TripProvider = ({ children }) => {
 
       const url = fetchTripUrl(code)
       const { data } = await get(url)
-      const status = getTripStatus(data.start_date, data.end_date)
-      return { ...data, status }
+      return data
     } catch (error) {
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
