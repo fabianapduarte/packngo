@@ -20,7 +20,7 @@ export default function JoinTrip({ show, onClose }) {
   const handleNext = async () => {
     if (inviteCode === '') enqueueSnackbar('Campo obrigatório.', { variant: 'warning' })
     else {
-      const foundTrip = await tripContext.fetchTrip(inviteCode)
+      const foundTrip = await tripContext.previewTrip(inviteCode)
       if (foundTrip) {
         setTrip(foundTrip)
         setStep(2)
