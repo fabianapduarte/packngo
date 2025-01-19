@@ -2,7 +2,7 @@ import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { post, get, patch, del } from '../utils/api'
-import { joinTripUrl, fetchTripUrl, tripsUrl, tripUrl, leaveTripUrl, editTripUrl } from '../utils/routesApi'
+import { joinTripUrl, fetchTripUrl, tripsUrl, tripUrl, leaveTripUrl, editTripUrl, tripProfileUrl } from '../utils/routesApi'
 import { homeRoute, tripRoute } from '../utils/routes'
 
 export const TripContext = createContext({})
@@ -153,7 +153,7 @@ export const TripProvider = ({ children }) => {
     }
   }
 
-  const editTrip = async ({ title, destination, startDate, endDate, image, id }) => {
+  const editTrip = async ({ title, destination, startDate, endDate, id }) => {
     try {
       const url = editTripUrl(id)
 
@@ -185,9 +185,30 @@ export const TripProvider = ({ children }) => {
     }
   }
 
+  const editTripImage = async ({ file, id, onLoading, onSuccess, onError }) => {
+    onLoading()
+
+    try {
+      const form = new FormData()
+      form.append('image', file)
+
+      const url = tripProfileUrl(id)
+      const { data } = await post(url, form)
+      onSuccess(data.trip.image_path)
+      enqueueSnackbar('Imagem da viagem atualizada com sucesso!', { variant: 'success' })
+    } catch (error) {
+      onError()
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
+    }
+  }
+
   return (
     <TripContext.Provider
-      value={{ loading, addTrip, showTrip, deleteTrip, getTrips, joinTrip, leaveTrip, previewTrip, editTrip }}
+      value={{ loading, addTrip, showTrip, deleteTrip, getTrips, joinTrip, leaveTrip, previewTrip, editTrip, editTripImage }}
     >
       {children}
     </TripContext.Provider>

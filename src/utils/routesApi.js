@@ -23,3 +23,5 @@ export const joinTripUrl = (id) => `/trips/${id}/join`
 export const leaveTripUrl = (id) => `/trips/${id}/leave`
 
 export const editTripUrl = (id) => `/trips/${id}`
+
+export const tripProfileUrl = (id) => `/trips/${id}/update-profile-img`

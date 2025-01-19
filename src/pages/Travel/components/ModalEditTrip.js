@@ -5,6 +5,7 @@ import { enumButtonColor } from '../../../enums/enumButtonColor'
 import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
 import { TripContext } from '../../../context/TripContext'
+import { storageUrl } from '../../../utils/routesApi'
 
 export const ModalEditTrip = ({ onClose, trip, refreshTrip }) => {
   const { enqueueSnackbar } = useSnackbar()
@@ -13,20 +14,23 @@ export const ModalEditTrip = ({ onClose, trip, refreshTrip }) => {
   const [destination, setDestination] = useState(trip.destination)
   const [startDate, setStartDate] = useState(trip.start_date)
   const [endDate, setEndDate] = useState(trip.end_date)
-  const [image, setImage] = useState(trip.image_path || 'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  const [image, setImage] = useState(storageUrl+trip.image_path || 'https://images.unsplash.com/photo-1553864250-05b20249ee0c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   )
+  const [loadingImage, setLoadingImage] = useState(false)
 
   const { id } = useParams()
   const tripContext = useContext(TripContext)
 
   const handleEdit = async() => {
-    const result = await tripContext.editTrip({title, destination, startDate, endDate, image, id})
+    const result = await tripContext.editTrip({title, destination, startDate, endDate, id})
     if(result.success){
       enqueueSnackbar('Viagem editada com sucesso!', { variant: 'success' })
       onClose()
       refreshTrip()
     }
   }
+
+  const { editTripImage } = useContext(TripContext)
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
@@ -36,7 +40,21 @@ export const ModalEditTrip = ({ onClose, trip, refreshTrip }) => {
         setImage(reader.result)
       }
       reader.readAsDataURL(file)
+      editTripImage({ file, id, onLoading, onSuccess, onError })
     }
+  }
+
+  const onSuccess = (filename) => {
+    setImage(storageUrl + filename)
+    setLoadingImage(false)
+  }
+
+  const onError = () => {
+    setLoadingImage(false)
+  }
+
+  const onLoading = () => {
+    setLoadingImage(true)
   }
 
   return (
