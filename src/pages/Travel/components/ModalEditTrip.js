@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { Image, Save } from 'react-feather'
 import { Button, Input, Modal } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'
@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
 import { TripContext } from '../../../context/TripContext'
 
-export const ModalEditTrip = ({ onClose, trip }) => {
+export const ModalEditTrip = ({ onClose, trip, refreshTrip }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [title, setTitle] = useState(trip.title)
@@ -24,6 +24,7 @@ export const ModalEditTrip = ({ onClose, trip }) => {
     if(result.success){
       enqueueSnackbar('Viagem editada com sucesso!', { variant: 'success' })
       onClose()
+      refreshTrip()
     }
   }
 
