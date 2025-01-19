@@ -207,9 +207,9 @@ export const Travel = () => {
           </div>
           <div className="flex flex-col gap-2">
             <div className="mb-1 font-bold">Participantes</div>
-            {/* {trip.participants.map((participant) => (
-              <Participant imageSrc={participant.image_path} name={participant.name} />
-            ))} */}
+            {trip.participants.map((participant, index) => (
+              <Participant key={`participant-${index}`} imageSrc={participant.image_path} name={participant.name} />
+            ))}
             <ButtonOutlined
               color={enumButtonColor.primary}
               label="Adicionar participante"
