@@ -17,9 +17,11 @@ export const ModalLeaveTrip = ({ onClose, tripTitle }) => {
 
   const handleExit = async() => {
     const leave = await tripContext.leaveTrip(id);
-    enqueueSnackbar('Você saiu da viagem em grupo', { variant: 'success' })
     onClose()
-    navigate(homeRoute)
+    if(leave.success){
+      enqueueSnackbar('Você saiu da viagem em grupo', { variant: 'success' })
+      navigate(homeRoute)
+    }
   }
 
   return (

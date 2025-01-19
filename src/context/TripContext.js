@@ -94,7 +94,6 @@ export const TripProvider = ({ children }) => {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else if (error.status === 400) {
         const errorMessage = error.response.data.error;
-
         enqueueSnackbar(errorMessage, { variant: 'warning' })
       } else {
         enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
@@ -142,6 +141,12 @@ export const TripProvider = ({ children }) => {
       await del(url)
       return { success: true }
     } catch (error) {
+      if (error.status === 400) {
+        const errorMessage = error.response.data.error;
+        enqueueSnackbar(errorMessage, { variant: 'warning' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
       return { success: false }
     } finally {
       setLoading(false)
