@@ -2,7 +2,7 @@ import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { post, get, del } from '../utils/api'
-import { getTripParticipantsUrl, joinTripUrl, previewTripUrl, tripsUrl, tripUrl } from '../utils/routesApi'
+import { joinTripUrl, previewTripUrl, tripsUrl, tripUrl } from '../utils/routesApi'
 import { tripRoute } from '../utils/routes'
 import { getTripStatus } from '../utils/getTripStatus'
 
@@ -113,16 +113,6 @@ export const TripProvider = ({ children }) => {
     }
   }
 
-  const getParticipants = async (id) => {
-    try {
-      const url = getTripParticipantsUrl(id)
-      const { data } = await get(url)
-      return data
-    } catch (error) {
-      return null
-    }
-  }
-
   const deleteTrip = async (id) => {
     try {
       const url = tripUrl(id)
@@ -139,9 +129,7 @@ export const TripProvider = ({ children }) => {
   }
 
   return (
-    <TripContext.Provider
-      value={{ loading, addTrip, showTrip, deleteTrip, getTrips, getParticipants, joinTrip, previewTrip }}
-    >
+    <TripContext.Provider value={{ loading, addTrip, showTrip, deleteTrip, getTrips, joinTrip, previewTrip }}>
       {children}
     </TripContext.Provider>
   )

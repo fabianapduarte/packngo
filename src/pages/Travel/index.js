@@ -101,22 +101,13 @@ export const Travel = () => {
   const tripContext = useContext(TripContext)
   const [trip, setTrip] = useState(null)
   const [tripStatus, setTripStatus] = useState(null)
-  const [participants, setParticipants] = useState([])
 
   useEffect(() => {
     const fetchTripData = async () => {
       const trip = await tripContext.showTrip(id)
-      await fetchTripParticipants()
       if (trip) {
         setTrip(trip)
         setTripStatus(getTripStatus(trip.start_date, trip.end_date))
-      }
-    }
-
-    const fetchTripParticipants = async () => {
-      const data = await tripContext.getParticipants(id)
-      if (data) {
-        setParticipants(data)
       }
     }
 
@@ -173,7 +164,7 @@ export const Travel = () => {
     setEventSelected(null)
   }
 
-  if (!trip || participants.length === 0) return <Loading />
+  if (!trip) return <Loading />
 
   return (
     <Layout>
@@ -211,7 +202,7 @@ export const Travel = () => {
           </div>
           <div className="flex flex-col gap-2">
             <div className="mb-1 font-bold">Participantes</div>
-            {participants.map((participant) => (
+            {trip.participants.map((participant) => (
               <Participant imageSrc={participant.image_path} name={participant.name} />
             ))}
             <ButtonOutlined
