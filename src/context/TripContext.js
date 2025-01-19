@@ -15,6 +15,8 @@ import { homeRoute, tripRoute } from '../utils/routes'
 
 export const TripContext = createContext({})
 
+export const EventContext = createContext({})
+
 export const TripProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
 
@@ -225,7 +227,9 @@ export const TripProvider = ({ children }) => {
         editTripImage,
       }}
     >
-      {children}
+      <EventContext.Provider value={{ getEvents: () => {} }}>
+        {children}
+      </EventContext.Provider>
     </TripContext.Provider>
   )
 }

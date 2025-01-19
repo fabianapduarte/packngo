@@ -25,3 +25,5 @@ export const leaveTripUrl = (id) => `/trips/${id}/leave`
 export const editTripUrl = (id) => `/trips/${id}`
 
 export const tripProfileUrl = (id) => `/trips/${id}/update-img`
+
+export const eventsUrl = (id) => `/trips/${id}/events`

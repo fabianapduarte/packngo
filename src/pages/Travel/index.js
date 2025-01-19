@@ -41,6 +41,7 @@ import { ModalEditTrip } from './components/ModalEditTrip'
 import { calendarRoute } from '../../utils/routes'
 import { dateFormat } from '../../utils/dateFormat'
 import { TripContext } from '../../context/TripContext'
+import { EventContext } from '../../context/EventContext'
 import { getTripImage } from '../../utils/getTripImage'
 
 const InfoItem = ({ Icon, text }) => {
@@ -96,15 +97,22 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 export const Travel = () => {
   const travel = data[0].trips[0]
   const [trip, setTrip] = useState(null)
-  const { events, polls } = travel
+  const [events, setEvents] = useState([])
+  const { polls } = travel
   const { id } = useParams()
   const tripContext = useContext(TripContext)
+  const eventContext = useContext(EventContext)
 
   useEffect(() => {
     const fetchTripData = async () => {
       const trip = await tripContext.showTrip(id)
       if (trip) {
         setTrip(trip)
+      }
+      console.log(eventContext);
+      const events = await eventContext.getEvents(id)
+      if(events){
+        setEvents(events)
       }
     }
 
