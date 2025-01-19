@@ -14,6 +14,7 @@ export const Checkbox = ({ name, text, isChecked, onChange }) => {
         type="checkbox"
         className="size-4 rounded-sm border border-gray text-primary focus:ring-primary cursor-pointer"
         name={name}
+        id={name}
         checked={checkedValue}
         onChange={handleCheck}
       />
