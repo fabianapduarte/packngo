@@ -76,13 +76,14 @@ export const TripProvider = ({ children }) => {
       const { data } = await get(tripsUrl)
       return data
     } catch (error) {
-      setLoading(false)
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else {
         enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
       }
       return null
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -94,12 +95,13 @@ export const TripProvider = ({ children }) => {
       enqueueSnackbar('Sucesso ao entrar no grupo da viagem!', { variant: 'success' })
       navigate(tripRoute(data.trip_id))
     } catch (error) {
-      setLoading(false)
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else {
         enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
       }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -110,18 +112,22 @@ export const TripProvider = ({ children }) => {
       const { data } = await get(url)
       return data
     } catch (error) {
-      setLoading(false)
       return null
+    } finally {
+      setLoading(false)
     }
   }
 
   const fetchTrip = async (code) => {
     try {
+      setLoading(true)
       const url = fetchTripUrl(code)
       const { data } = await get(url)
       return data
     } catch (error) {
       return null
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -132,13 +138,14 @@ export const TripProvider = ({ children }) => {
       await del(url)
       return { success: true }
     } catch (error) {
-      setLoading(false)
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else {
         enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
       }
       return { success: false }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -149,11 +156,15 @@ export const TripProvider = ({ children }) => {
       return { success: true }
     } catch (error) {
       return { success: false }
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <TripContext.Provider value={{ loading, addTrip, showTrip, deleteTrip, getTrips, fetchTrip, joinTrip, leaveTrip, previewTrip }}>
+    <TripContext.Provider
+      value={{ loading, addTrip, showTrip, deleteTrip, getTrips, fetchTrip, joinTrip, leaveTrip, previewTrip }}
+    >
       {children}
     </TripContext.Provider>
   )
