@@ -7,6 +7,7 @@ module.exports = {
       DEFAULT: '10px',
       sm: '4px',
       full: '9999px',
+      none: '0',
     },
     container: {
       center: true,

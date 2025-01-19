@@ -50,9 +50,9 @@ export default function Home() {
       <div className="lg:items-center self-start w-full">
         <JoinTrip show={showJoinTrip} onClose={handleCloseJoinTrip} />
         <AddTrip show={showAddTrip} onClose={handleCloseAddTrip} />
-        <div className="flex items-center justify-between mb-7">
+        <div className="flex flex-wrap gap-4 items-center justify-between mb-7">
           <h3 className="font-bold text-2xl">Minhas viagens</h3>
-          <div className="flex space-x-4">
+          <div className="flex flex-wrap gap-3">
             <Button
               label="Entrar em viagem"
               onClick={handleOpenJoinTrip}
