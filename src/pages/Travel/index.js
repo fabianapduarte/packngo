@@ -122,7 +122,10 @@ export const Travel = () => {
   const [openModalCreatePoll, setOpenModalCreatePoll] = useState(false)
   const [openModalCreateEvent, setOpenModalCreateEvent] = useState(false)
   const [openModalEditEvent, setOpenModalEditEvent] = useState(false)
-  const [openModalEditTrip, setOpenModalEditTrip] = useState(false)
+  const [openModalEditTrip, setOpenModalEditTrip] = useState({
+    isOpen: false,
+    tripId: null,
+  });
   const [openModalSeeEvent, setOpenModalSeeEvent] = useState(false)
   const [openModalSeePoll, setOpenModalSeePoll] = useState(false)
   const [openModalDeleteEvent, setOpenModalDeleteEvent] = useState(false)
@@ -190,7 +193,7 @@ export const Travel = () => {
                 color={enumButtonColor.primary}
                 label="Editar"
                 Icon={Edit3}
-                onClick={() => setOpenModalEditTrip(true)}
+                onClick={() => setOpenModalEditTrip({ isOpen: true, trip: trip })}
               />
               <ButtonOutlined
                 color={enumButtonColor.red}
