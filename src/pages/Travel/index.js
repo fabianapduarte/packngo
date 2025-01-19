@@ -12,8 +12,6 @@ import {
   Trash2,
   UserPlus,
 } from 'react-feather'
-import img from '../../assets/london.jpg'
-import imgParticipantOne from '../../assets/avatar1.png'
 import data from '../../assets/data.json'
 import {
   ButtonOutlined,
@@ -101,7 +99,7 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 export const Travel = () => {
   const isParticipant = false
   const travel = data[0].trips[0]
-  const { events, polls, inviteCode, title } = travel
+  const { events, polls } = travel
   const { id } = useParams()
   const tripContext = useContext(TripContext)
   const [trip, setTrip] = useState(null)
@@ -324,9 +322,11 @@ export const Travel = () => {
         </div>
       </div>
 
-      {openModalAddParticipant && <ModalAddParticipant code={id} onClose={() => setOpenModalAddParticipant(false)} />}
+      {openModalAddParticipant && (
+        <ModalAddParticipant code={trip.code} onClose={() => setOpenModalAddParticipant(false)} />
+      )}
 
-      {openModalLeaveTrip && <ModalLeaveTrip tripTitle={title} onClose={() => setOpenModalLeaveTrip(false)} />}
+      {openModalLeaveTrip && <ModalLeaveTrip tripTitle={trip.title} onClose={() => setOpenModalLeaveTrip(false)} />}
 
       {openModalDeleteTrip && <ModalDeleteTrip onClose={() => setModalOpenDeleteTrip(false)} />}
 
