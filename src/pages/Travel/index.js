@@ -97,7 +97,6 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 }
 
 export const Travel = () => {
-  const isParticipant = false
   const travel = data[0].trips[0]
   const { events, polls } = travel
   const { id } = useParams()
@@ -228,22 +227,18 @@ export const Travel = () => {
             {participants.map((participant) => (
               <Participant imageSrc={participant.image_path} name={participant.name} />
             ))}
-            {isParticipant && (
-              <ButtonOutlined
-                color={enumButtonColor.primary}
-                label="Sair da viagem em grupo"
-                Icon={LogOut}
-                onClick={() => setOpenModalLeaveTrip(true)}
-              />
-            )}
-            {!isParticipant && (
-              <ButtonOutlined
-                color={enumButtonColor.primary}
-                label="Adicionar participante"
-                Icon={UserPlus}
-                onClick={() => setOpenModalAddParticipant(true)}
-              />
-            )}
+            <ButtonOutlined
+              color={enumButtonColor.primary}
+              label="Adicionar participante"
+              Icon={UserPlus}
+              onClick={() => setOpenModalAddParticipant(true)}
+            />
+            <ButtonOutlined
+              color={enumButtonColor.primary}
+              label="Sair da viagem em grupo"
+              Icon={LogOut}
+              onClick={() => setOpenModalLeaveTrip(true)}
+            />
           </div>
         </Card>
 
