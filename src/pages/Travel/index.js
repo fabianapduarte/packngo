@@ -96,6 +96,8 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 export const Travel = () => {
   const travel = data[0].trips[0]
   const [trip, setTrip] = useState(null)
+  //const [events, setEvents] = useState(null)
+  //const [polls, setPolls] = useState(null)
   const { events, polls } = travel
   const { id } = useParams()
   const tripContext = useContext(TripContext)
@@ -105,6 +107,10 @@ export const Travel = () => {
       const trip = await tripContext.showTrip(id)
       if (trip) {
         setTrip(trip)
+        console.log('Trip\n')
+        console.log(trip)
+        console.log('Travel \n')
+        console.log(travel)
       }
     }
 
@@ -116,6 +122,7 @@ export const Travel = () => {
     const trip = await tripContext.showTrip(id)
     if (trip) {
       setTrip(trip)
+      console.log(trip)
     }
   };
 

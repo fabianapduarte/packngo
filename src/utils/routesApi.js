@@ -23,3 +23,7 @@ export const joinTripUrl = (id) => `/trips/${id}/join`
 export const leaveTripUrl = (id) => `/trips/${id}/leave`
 
 export const editTripUrl = (id) => `/trips/${id}`
+
+export const listsUrl = (id) => `/trips/${id}/lists`
+
+export const deleteListsUrl = (id, id_list) = `/trips/${id}/lists/${id_list}`
