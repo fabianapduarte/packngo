@@ -1,27 +1,20 @@
-import { useNavigate } from 'react-router-dom'
 import React, { useState, useEffect, useContext } from 'react'
 import { LogIn, Plus } from 'react-feather'
-import { isBefore, isAfter } from 'date-fns'
 
 import { Button, Layout, Loading } from '../../components'
 import { TravelCard } from '../../components/TravelCard'
+import { TripContext } from '../../context/TripContext'
 import { enumButtonColor } from '../../enums/enumButtonColor'
-import { enumTravelStatus } from '../../enums/enumTravelStatus'
+import { dateFormat } from '../../utils/dateFormat'
 import AddTrip from './AddTrip'
 import JoinTrip from './JoinTrip'
 import './styles.css'
-import { useSnackbar } from 'notistack'
-import { tripRoute } from '../../utils/routes'
-import { dateFormat } from '../../utils/dateFormat'
-import { TripContext } from '../../context/TripContext'
+import { getTripStatus } from '../../utils/getTripStatus'
 
 export default function Home() {
-  const [users, setUsers] = useState([])
   const [trips, setTrips] = useState([])
   const [showAddTrip, setShowAddTrip] = useState(false)
   const [showJoinTrip, setShowJoinTrip] = useState(false)
-  const { enqueueSnackbar } = useSnackbar()
-  const navigate = useNavigate()
   const tripContext = useContext(TripContext)
 
   const handleOpenAddTrip = () => {
@@ -38,26 +31,11 @@ export default function Home() {
     setShowJoinTrip(false)
   }
 
-  const handleJoinTrip = (newTrip) => {
-    enqueueSnackbar('Sucesso ao entrar no grupo da viagem', { variant: 'success' })
-    navigate(tripRoute(newTrip.id))
-  }
-
   const getUserTrips = async () => {
     const trips = await tripContext.getTrips()
     if (trips) {
       const updatedTrips = trips.map((tripItem) => {
-        let status = null
-        const now = new Date()
-
-        if (isBefore(now, new Date(tripItem.start_date))) {
-          status = enumTravelStatus.planned
-        } else if (isAfter(now, new Date(tripItem.end_date))) {
-          status = enumTravelStatus.finished
-        } else {
-          status = enumTravelStatus.progress
-        }
-
+        const status = getTripStatus(tripItem.start_date, tripItem.end_date)
         return { ...tripItem, status }
       })
 
@@ -76,13 +54,7 @@ export default function Home() {
   return (
     <Layout>
       <div className="lg:items-center self-start w-full">
-        <JoinTrip
-          show={showJoinTrip}
-          onClose={handleCloseJoinTrip}
-          onJoinTrip={handleJoinTrip}
-          trips={trips}
-          users={users}
-        />
+        <JoinTrip show={showJoinTrip} onClose={handleCloseJoinTrip} />
         <AddTrip show={showAddTrip} onClose={handleCloseAddTrip} />
         <div className="flex items-center justify-between mb-7">
           <h3 className="font-bold text-2xl">Minhas viagens</h3>

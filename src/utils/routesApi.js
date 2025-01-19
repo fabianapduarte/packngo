@@ -18,4 +18,6 @@ export const tripUrl = (id) => `/trips/${id}`
 
 export const joinTripUrl = (id) => `/trips/${id}/join`
 
+export const previewTripUrl = (code) => `/trips/${code}/preview-trip`
+
 export const getTripParticipantsUrl = (id) => `/trips/${id}/participants`

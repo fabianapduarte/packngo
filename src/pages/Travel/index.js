@@ -26,10 +26,7 @@ import {
   Tooltip,
   TravelStatus,
 } from '../../components'
-import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import { enumButtonColor } from '../../enums/enumButtonColor'
-import { isBefore, isAfter } from 'date-fns'
-
 import { ModalAddParticipant } from './components/ModalAddParticipant'
 import { ModalLeaveTrip } from './components/ModalLeaveTrip'
 import { ModalDeleteTrip } from './components/ModalDeleteTrip'
@@ -45,6 +42,7 @@ import { calendarRoute } from '../../utils/routes'
 import { dateFormat } from '../../utils/dateFormat'
 import { TripContext } from '../../context/TripContext'
 import { getTripImage } from '../../utils/getTripImage'
+import { getTripStatus } from '../../utils/getTripStatus'
 
 const InfoItem = ({ Icon, text }) => {
   return (
@@ -111,18 +109,7 @@ export const Travel = () => {
       await fetchTripParticipants()
       if (trip) {
         setTrip(trip)
-
-        //Decisao de status
-        let status = null
-        const now = new Date()
-        if (isBefore(now, new Date(trip.start_date))) {
-          status = enumTravelStatus.planned
-        } else if (isAfter(now, new Date(trip.end_date))) {
-          status = enumTravelStatus.finished
-        } else {
-          status = enumTravelStatus.progress
-        }
-        setTripStatus(status)
+        setTripStatus(getTripStatus(trip.start_date, trip.end_date))
       }
     }
 
@@ -200,7 +187,7 @@ export const Travel = () => {
           <h2 className="mt-2 mb-5 text-2xl font-bold w-full line-clamp-2">{trip.title}</h2>
           <div className="flex flex-col gap-2 mb-5">
             <div className="mb-1 font-bold">Informações</div>
-            <TravelStatus status={tripStatus ? tripStatus : '-'} />
+            <TravelStatus status={tripStatus} />
             <InfoItem Icon={MapPin} text={trip.destination} />
             <InfoItem Icon={Calendar} text={dateFormat(trip.start_date, trip.end_date)} />
             <Tooltip

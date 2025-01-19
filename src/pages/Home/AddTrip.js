@@ -42,7 +42,7 @@ export default function AddTrip({ show, onClose }) {
   }
 
   return (
-    <Modal title="Criar nova viagem" size="sm" onClose={onClose}>
+    <Modal title="Criar nova viagem" size="md" onClose={onClose}>
       <div>
         <div className="mb-4">
           <Input
