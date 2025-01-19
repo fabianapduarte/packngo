@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { LogIn, Calendar, MapPin, Check } from 'react-feather'
+import { Search, Calendar, MapPin, Check } from 'react-feather'
 import { TravelStatus } from '../../components/TravelStatus'
 import { Button, Input, Modal } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
@@ -7,6 +7,7 @@ import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import './styles.css'
 import { useSnackbar } from 'notistack'
 import { TripContext } from '../../context/TripContext'
+import { getTripImage } from '../../utils/getTripImage'
 
 export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
   const [tripUsers, setTripUsers] = useState(0)
@@ -22,7 +23,8 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
 
   const handleNext = async (e) => {
     e.preventDefault()
-    const foundTrip = await tripContext.showTrip(inviteCode)
+    const foundTrip = await tripContext.fetchTrip(inviteCode)
+    //const foundTrip = await tripContext.showTrip(inviteCode)
     if (foundTrip) {
       setTrip(foundTrip)
       setStep(step + 1)
@@ -53,24 +55,6 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
     return new Date(dateStart).toLocaleDateString() + ' - ' + new Date(dateEnd).toLocaleDateString()
   }
 
-  const statusFormat = (status) => {
-    switch (status) {
-      case 0:
-        return enumTravelStatus.planned
-      case 1:
-        return enumTravelStatus.progress
-      case 2:
-        return enumTravelStatus.finished
-      default:
-        return 'Desconhecido'
-    }
-  }
-
-  const getTripUsers = (trip) => {
-    if (!trip || !users) return []
-    return users.filter((user) => user.activeTrips.includes(trip.id))
-  }
-
   return (
     <Modal size="md" title={step === 1 ? 'Entrar em uma viagem' : `Deseja entrar em ${trip.title}?`} onClose={onClose}>
       <form onSubmit={handleSubmit}>
@@ -88,7 +72,7 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
             </div>
             <div className="flex justify-end space-x-4">
               <Button label="Cancelar" color={enumButtonColor.transparentPrimary} type="button" onClick={onClose} />
-              <Button Icon={LogIn} label="Entrar" onClick={handleNext} color={enumButtonColor.primary} type="button" />
+              <Button Icon={Search} label="Buscar" onClick={handleNext} color={enumButtonColor.primary} type="button" />
             </div>
           </>
         )}
@@ -98,7 +82,7 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
               <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl overflow-hidden bg-white my-4 rounded min-h-36 h-full">
                 <div className="grid grid-cols-1 lg:grid-cols-3 min-h-full">
                   <div className="relative overflow-hidden object-cover min-w-[175px] min-h-[175px] rounded col-span-1">
-                    <img src={trip.image_path} alt={trip.imageAlt} className="w-full h-full object-cover" />
+                    <img src={getTripImage(trip.image_path)} alt={trip.imageAlt} className="w-full h-full object-cover" />
                   </div>
                   <div className="px-6 py-4 col-span-2 my-auto ml-5">
                     <div className="pl-0.5">
@@ -136,7 +120,7 @@ export default function JoinTrip({ show, onClose, onJoinTrip, trips, users }) {
               </div>
             </div>
             <div className="flex justify-end space-x-4">
-              <Button label="Cancelar" color={enumButtonColor.transparentPrimary} type="button" onClick={handlePrev} />
+              <Button label="Tentar outro código" color={enumButtonColor.transparentPrimary} type="button" onClick={handlePrev} />
               <Button Icon={Check} label="Confirmar" color={enumButtonColor.primary} type="submit" />
             </div>
           </>

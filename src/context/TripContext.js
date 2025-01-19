@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { isBefore, isAfter } from 'date-fns'
 import { post, get, del } from '../utils/api'
-import { getTripParticipantsUrl, joinTripUrl, tripsUrl, tripUrl } from '../utils/routesApi'
+import { getTripParticipantsUrl, joinTripUrl, tripsUrl, tripUrl, leaveTripUrl, fetchTripUrl } from '../utils/routesApi'
 import { tripRoute } from '../utils/routes'
 import { enumTravelStatus } from '../enums/enumTravelStatus'
 
@@ -72,21 +72,7 @@ export const TripProvider = ({ children }) => {
     try {
       const url = tripUrl(id)
       const { data } = await get(url)
-
-      if (data) {
-        let status = null
-        const now = new Date()
-
-        if (isBefore(now, new Date(data.start_date))) {
-          status = enumTravelStatus.planned
-        } else if (isAfter(now, new Date(data.end_date))) {
-          status = enumTravelStatus.finished
-        } else {
-          status = enumTravelStatus.progress
-        }
-
-        return { ...data, status }
-      }
+      return data
     } catch (error) {
       return null
     }
@@ -95,6 +81,16 @@ export const TripProvider = ({ children }) => {
   const getParticipants = async (id) => {
     try {
       const url = getTripParticipantsUrl(id)
+      const { data } = await get(url)
+      return data
+    } catch (error) {
+      return null
+    }
+  }
+
+  const fetchTrip = async (code) => {
+    try {
+      const url = fetchTripUrl(code)
       const { data } = await get(url)
       return data
     } catch (error) {
@@ -112,8 +108,18 @@ export const TripProvider = ({ children }) => {
     }
   }
 
+  const leaveTrip = async (id) => {
+    try {
+      const url = leaveTripUrl(id)
+      await del(url)
+      return { success: true }
+    } catch (error) {
+      return { success: false }
+    }
+  }
+
   return (
-    <TripContext.Provider value={{ loading, addTrip, showTrip, deleteTrip, getTrips, getParticipants, joinTrip }}>
+    <TripContext.Provider value={{ loading, addTrip, showTrip, deleteTrip, getTrips, getParticipants, fetchTrip, joinTrip, leaveTrip }}>
       {children}
     </TripContext.Provider>
   )

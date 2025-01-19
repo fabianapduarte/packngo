@@ -46,22 +46,7 @@ export default function Home() {
   const getUserTrips = async () => {
     const trips = await tripContext.getTrips()
     if (trips) {
-      const updatedTrips = trips.map((tripItem) => {
-        let status = null
-        const now = new Date()
-
-        if (isBefore(now, new Date(tripItem.start_date))) {
-          status = enumTravelStatus.planned
-        } else if (isAfter(now, new Date(tripItem.end_date))) {
-          status = enumTravelStatus.finished
-        } else {
-          status = enumTravelStatus.progress
-        }
-
-        return { ...tripItem, status }
-      })
-
-      setTrips(updatedTrips)
+      setTrips(trips)
     } else {
       return []
     }
