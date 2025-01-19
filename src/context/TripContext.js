@@ -1,11 +1,10 @@
 import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { isBefore, isAfter } from 'date-fns'
 import { post, get, del } from '../utils/api'
-import { getTripParticipantsUrl, joinTripUrl, tripsUrl, tripUrl, leaveTripUrl, fetchTripUrl } from '../utils/routesApi'
+import { joinTripUrl, fetchTripUrl, tripsUrl, tripUrl, leaveTripUrl } from '../utils/routesApi'
 import { tripRoute } from '../utils/routes'
-import { enumTravelStatus } from '../enums/enumTravelStatus'
+import { getTripStatus } from '../utils/getTripStatus'
 
 export const TripContext = createContext({})
 
@@ -49,41 +48,69 @@ export const TripProvider = ({ children }) => {
     }
   }
 
+  const previewTrip = async (code) => {
+    try {
+      setLoading(true)
+
+      const url = fetchTripUrl(code)
+      const { data } = await get(url)
+      const status = getTripStatus(data.start_date, data.end_date)
+      return { ...data, status }
+    } catch (error) {
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else if (error.status === 404) {
+        enqueueSnackbar('Viagem não encontrada. Verifique o código e tente novamente.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
+      return null
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const getTrips = async () => {
     try {
+      setLoading(true)
       const { data } = await get(tripsUrl)
       return data
     } catch (error) {
+      setLoading(false)
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
       return null
     }
   }
 
-  const joinTrip = async (id, trip = {}) => {
+  const joinTrip = async (id) => {
     try {
+      setLoading(true)
       const url = joinTripUrl(id)
-      const { data } = await post(url, trip)
-      return data
+      const { data } = await post(url)
+      enqueueSnackbar('Sucesso ao entrar no grupo da viagem!', { variant: 'success' })
+      navigate(tripRoute(data.trip_id))
     } catch (error) {
-      return null
+      setLoading(false)
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
     }
   }
 
   const showTrip = async (id) => {
     try {
+      setLoading(true)
       const url = tripUrl(id)
       const { data } = await get(url)
       return data
     } catch (error) {
-      return null
-    }
-  }
-
-  const getParticipants = async (id) => {
-    try {
-      const url = getTripParticipantsUrl(id)
-      const { data } = await get(url)
-      return data
-    } catch (error) {
+      setLoading(false)
       return null
     }
   }
@@ -100,10 +127,17 @@ export const TripProvider = ({ children }) => {
 
   const deleteTrip = async (id) => {
     try {
+      setLoading(true)
       const url = tripUrl(id)
       await del(url)
       return { success: true }
     } catch (error) {
+      setLoading(false)
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
       return { success: false }
     }
   }
@@ -119,7 +153,7 @@ export const TripProvider = ({ children }) => {
   }
 
   return (
-    <TripContext.Provider value={{ loading, addTrip, showTrip, deleteTrip, getTrips, getParticipants, fetchTrip, joinTrip, leaveTrip }}>
+    <TripContext.Provider value={{ loading, addTrip, showTrip, deleteTrip, getTrips, fetchTrip, joinTrip, leaveTrip, previewTrip }}>
       {children}
     </TripContext.Provider>
   )

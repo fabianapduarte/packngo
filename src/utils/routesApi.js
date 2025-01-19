@@ -16,10 +16,8 @@ export const tripsUrl = '/trips'
 
 export const tripUrl = (id) => `/trips/${id}`
 
-export const fetchTripUrl = (id) => `/trips/${id}/fetch`
+export const fetchTripUrl = (id) => `/trips/${id}/fetch-trip`
 
 export const joinTripUrl = (id) => `/trips/${id}/join`
 
 export const leaveTripUrl = (id) => `/trips/${id}/leave`
-
-export const getTripParticipantsUrl = (id) => `/trips/${id}/participants`
