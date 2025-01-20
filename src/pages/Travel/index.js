@@ -265,8 +265,8 @@ export const Travel = () => {
             </div>
             <Slider
               noElementsMessage="Não há eventos cadastrados."
-              elements={events.map((event, index) => (
-                <EventCard key={`event-${index}`} event={event} onClick={() => handleSeeEvent(event)} />
+              elements={events.map((event) => (
+                <EventCard key={event.id} event={event} onClick={() => handleSeeEvent(event)} />
               ))}
             />
           </Card>
@@ -282,17 +282,14 @@ export const Travel = () => {
             </div>
             <Slider
               noElementsMessage="Não há enquetes cadastradas."
-              elements={
-                polls.length > 0 &&
-                polls.map((poll, index) => (
-                  <PollCard
-                    key={`poll-${index}`}
-                    title={poll.title}
-                    isOpen={poll.open}
-                    openPoll={() => handleSeePoll(poll)}
-                  />
-                ))
-              }
+              elements={polls.map((poll, index) => (
+                <PollCard
+                  key={`poll-${index}`}
+                  title={poll.title}
+                  isOpen={poll.open}
+                  openPoll={() => handleSeePoll(poll)}
+                />
+              ))}
             />
           </Card>
           <Card>
