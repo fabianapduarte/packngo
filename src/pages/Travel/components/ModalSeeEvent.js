@@ -1,14 +1,26 @@
-import { Check, Edit3, Trash2 } from 'react-feather'
+import { Check, Edit3, Trash2, X } from 'react-feather'
 import { ButtonOutlined, Modal } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'
-import { useSnackbar } from 'notistack'
 import { formatDatetime } from '../../../utils/dateFormat'
+import { useContext, useState } from 'react'
+import { EventContext } from '../../../context/EventContext'
+import { UserContext } from '../../../context/AuthContext'
 
 export const ModalSeeEvent = ({ onClose, event, openDeleteModal, openEditModal }) => {
-  const { enqueueSnackbar } = useSnackbar()
+  const { user } = useContext(UserContext)
+  const eventContext = useContext(EventContext)
+  const [isParticipant, setIsParticipant] = useState(
+    event.participants.some((participant) => participant.id === user.id),
+  )
 
-  const handleConfirmPresence = () => {
-    enqueueSnackbar('Presença confirmada', { variant: 'success' })
+  const handleConfirmPresence = async () => {
+    const { success } = await eventContext.joinEvent(event.id_trip, event.id)
+    if (success) setIsParticipant(true)
+  }
+
+  const handleCancelPresence = async () => {
+    const { success } = await eventContext.leaveEvent(event.id_trip, event.id)
+    if (success) setIsParticipant(false)
   }
 
   const handleDeleteEvent = () => {
@@ -47,12 +59,22 @@ export const ModalSeeEvent = ({ onClose, event, openDeleteModal, openEditModal }
           <ButtonOutlined color={enumButtonColor.primary} label="Editar" Icon={Edit3} onClick={handleEditEvent} />
           <ButtonOutlined color={enumButtonColor.red} label="Excluir" Icon={Trash2} onClick={handleDeleteEvent} />
         </div>
-        <ButtonOutlined
-          color={enumButtonColor.primary}
-          label="Confirmar presença"
-          Icon={Check}
-          onClick={handleConfirmPresence}
-        />
+        {isParticipant && (
+          <ButtonOutlined
+            color={enumButtonColor.primary}
+            label="Cancelar presença"
+            Icon={X}
+            onClick={handleCancelPresence}
+          />
+        )}
+        {!isParticipant && (
+          <ButtonOutlined
+            color={enumButtonColor.primary}
+            label="Confirmar presença"
+            Icon={Check}
+            onClick={handleConfirmPresence}
+          />
+        )}
       </div>
     </Modal>
   )

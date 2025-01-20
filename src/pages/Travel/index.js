@@ -29,6 +29,7 @@ import { ModalEditTrip } from './components/ModalEditTrip'
 import { calendarRoute } from '../../utils/routes'
 import { dateFormat, formatDatetime } from '../../utils/dateFormat'
 import { TripContext } from '../../context/TripContext'
+import { ListsContext } from '../../context/ListsContext'
 import { EventContext } from '../../context/EventContext'
 import { getTripImage } from '../../utils/getTripImage'
 
@@ -83,18 +84,21 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 export const Travel = () => {
   const travel = data[0].trips[0]
   const [trip, setTrip] = useState(null)
-  const [events, setEvents] = useState(null)
-  const { polls } = travel
+  const [events, setEvents] = useState([])
+  const [lists, setLists] = useState([])
+  const [polls, setPolls] = useState([])
   const { id } = useParams()
   const tripContext = useContext(TripContext)
   const eventContext = useContext(EventContext)
+  const listsContext = useContext(ListsContext)
 
   useEffect(() => {
     const fetchTripData = async () => {
       const trip = await tripContext.showTrip(id)
       if (trip) {
         setTrip(trip)
-      }
+      }       
+      await updateItemsList()
       await updateEventsList()
     }
 
@@ -106,9 +110,18 @@ export const Travel = () => {
     const trip = await tripContext.showTrip(id)
     if (trip) {
       setTrip(trip)
+      
     }
   }
 
+  const updateItemsList = async () => {    
+    const lists = await listsContext.getLists(id)
+    console.log(lists)
+    if(lists){
+      setLists(lists)
+    }
+  }
+  
   const updateEventsList = async () => {
     const events = await eventContext.getEvents(id)
     if (events) {
@@ -116,7 +129,7 @@ export const Travel = () => {
     }
   }
 
-  const [checklist, setChecklist] = useState(travel.checklist)
+  const [checklist, setChecklist] = useState([])
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
   const [openModalAddParticipant, setOpenModalAddParticipant] = useState(false)
   const [openModalLeaveTrip, setOpenModalLeaveTrip] = useState(false)
@@ -270,7 +283,7 @@ export const Travel = () => {
             <div className="flex flex-col">
               <h3 className="font-bold text-xl">Listas</h3>
               <div className="mt-6 mb-3 flex flex-col gap-2">
-                {checklist.map((item, index) => (
+                {lists.map((item, index) => (
                   <ChecklistItem
                     key={item.title}
                     text={item.title}

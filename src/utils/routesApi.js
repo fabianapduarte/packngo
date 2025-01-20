@@ -24,8 +24,16 @@ export const leaveTripUrl = (id) => `/trips/${id}/leave`
 
 export const editTripUrl = (id) => `/trips/${id}`
 
+export const listsUrl = (id) => `/trips/${id}/lists`
+
+export const deleteListsUrl = (id, id_list) => `/trips/${id}/lists/${id_list}`
+
 export const tripProfileUrl = (id) => `/trips/${id}/update-img`
 
 export const eventsUrl = (id) => `/trips/${id}/events`
 
 export const eventUrl = (idTrip, idEvent) => `/trips/${idTrip}/events/${idEvent}`
+
+export const joinEventUrl = (idTrip, idEvent) => `/trips/${idTrip}/events/${idEvent}/join`
+
+export const leaveEventUrl = (idTrip, idEvent) => `/trips/${idTrip}/events/${idEvent}/leave`
