@@ -16,7 +16,7 @@ export const ModalCreateEvent = ({ onClose, onSuccess }) => {
   const [endDateTime, setEndDateTime] = useState('')
   const [cost, setCost] = useState('')
   const [shareCost, setShareCost] = useState(false)
-  const [idCategory, setIdCategory] = useState(0)
+  const [idCategory, setIdCategory] = useState(-1)
 
   const eventContext = useContext(EventContext)
 
@@ -26,7 +26,6 @@ export const ModalCreateEvent = ({ onClose, onSuccess }) => {
       description,
       destination,
       startDate,
-      endDate,
       startDateTime,
       endDateTime,
       cost,
