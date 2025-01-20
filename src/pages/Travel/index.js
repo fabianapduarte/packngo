@@ -41,6 +41,7 @@ import { ModalEditTrip } from './components/ModalEditTrip'
 import { calendarRoute } from '../../utils/routes'
 import { dateFormat } from '../../utils/dateFormat'
 import { TripContext } from '../../context/TripContext'
+import { ListsContext } from '../../context/ListsContext'
 import { EventContext } from '../../context/EventContext'
 import { getTripImage } from '../../utils/getTripImage'
 
@@ -97,32 +98,28 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 export const Travel = () => {
   const travel = data[0].trips[0]
   const [trip, setTrip] = useState(null)
-<<<<<<< HEAD
-  //const [events, setEvents] = useState(null)
-  //const [polls, setPolls] = useState(null)
-  const { events, polls } = travel
-=======
   const [events, setEvents] = useState([])
-  const { polls } = travel
->>>>>>> 88221f061888db47f53af3b8232071f1ba52a9d8
+  const [lists, setLists] = useState([])
+  const [polls, setPolls] = useState([])
   const { id } = useParams()
   const tripContext = useContext(TripContext)
   const eventContext = useContext(EventContext)
+  const listsContext = useContext(ListsContext)
 
   useEffect(() => {
     const fetchTripData = async () => {
       const trip = await tripContext.showTrip(id)
       if (trip) {
         setTrip(trip)
-        console.log('Trip\n')
-        console.log(trip)
-        console.log('Travel \n')
-        console.log(travel)
       }
       console.log(eventContext);
       const events = await eventContext.getEvents(id)
       if(events){
         setEvents(events)
+      }
+      const lists = await listsContext.getLists(id)
+      if(lists){
+        setLists(lists)
       }
     }
 
@@ -134,11 +131,11 @@ export const Travel = () => {
     const trip = await tripContext.showTrip(id)
     if (trip) {
       setTrip(trip)
-      console.log(trip)
+      
     }
   }
 
-  const [checklist, setChecklist] = useState(travel.checklist)
+  const [checklist, setChecklist] = useState([])
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
   const [openModalAddParticipant, setOpenModalAddParticipant] = useState(false)
   const [openModalLeaveTrip, setOpenModalLeaveTrip] = useState(false)
@@ -296,7 +293,7 @@ export const Travel = () => {
             <div className="flex flex-col">
               <h3 className="font-bold text-xl">Listas</h3>
               <div className="mt-6 mb-3 flex flex-col gap-2">
-                {checklist.map((item, index) => (
+                {lists.map((item, index) => (
                   <ChecklistItem
                     key={item.title}
                     text={item.title}

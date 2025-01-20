@@ -8,14 +8,12 @@ import { tripRoute } from '../utils/routes'
 
 export const ListsContext = createContext({})
 
-export const ListsProvider = ({ children }) => {
-  cpmt
+export const ListsProvider = ({ children }) => {  
   
   const { enqueueSnackbar } = useSnackbar()
 
   const addLists = async ({ title, is_checked, id_trip }) => {
-    try {
-      setLoading(true)
+    try {      
       const form = new FormData()
       form.append('title', title)
       form.append('is_checked', is_checked)
@@ -38,19 +36,17 @@ export const ListsProvider = ({ children }) => {
       } else {
         enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
       }
-    } finally {
-      setLoading(false)
+    } finally {      
     }
   }
 
 
   const getLists = async (id_trip) => {
-    try {
-      setLoading(true)
-      const { data } = await get(listsUrl(id_trip))      
+    try {      
+      const { data } = await get(listsUrl(id_trip))    
+      console.log(data)  
       return data
-    } catch (error) {
-      setLoading(false)
+    } catch (error) {      
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else {
@@ -77,7 +73,7 @@ export const ListsProvider = ({ children }) => {
   }
 
   return (
-    <ListsContext.Provider value={{ loading, addLists, deleteLists, getLists}}>
+    <ListsContext.Provider value={{ addLists, deleteLists, getLists}}>
       {children}
     </ListsContext.Provider>
   )
