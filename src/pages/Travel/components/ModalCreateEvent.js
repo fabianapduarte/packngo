@@ -15,17 +15,16 @@ export const ModalCreateEvent = ({ onClose }) => {
   const [description, setDescription] = useState()
   const [destination, setDestination] = useState('')
   const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
   const [startDateTime, setStartDateTime] = useState('')
   const [endDateTime, setEndDateTime] = useState('')
   const [cost, setCost] = useState('')
   const [shareCost, setShareCost] = useState(false)
-  const [idCategory, setIdCategory] = useState(-1)
+  const [idCategory, setIdCategory] = useState(0)
 
   const eventContext = useContext(EventContext)
 
   const handleCreate = async () => {
-    const data = await eventContext.addEvent({title, description, destination, startDate, endDate, startDateTime, endDateTime, cost, shareCost, idCategory, id})
+    const data = await eventContext.addEvent({title, description, destination, startDate, startDateTime, endDateTime, cost, shareCost, idCategory, id})
     if(data){
       enqueueSnackbar('Evento criado com sucesso!', { variant: 'success' })
     }
@@ -56,30 +55,26 @@ export const ModalCreateEvent = ({ onClose }) => {
             value={startDate} 
             onChange={(e) => setStartDate(e.target.value)}
           />
-          <Input type="time" label="Hora de início" id="timeStart" required 
-            value={startDateTime} 
-            onChange={(e) => setStartDateTime(e.target.value)}
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <Input type="date" label="Data final" id="dateEnd" required 
-            value={endDate} 
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-          <Input type="time" label="Hora final" id="timeEnd" required 
-            value={endDateTime} 
-            onChange={(e) => setEndDateTime(e.target.value)}
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <Input type="time" label="Hora de início" id="timeStart" required 
+              value={startDateTime} 
+              onChange={(e) => setStartDateTime(e.target.value)}
+            />
+            <Input type="time" label="Hora final" id="timeEnd" required 
+              value={endDateTime} 
+              onChange={(e) => setEndDateTime(e.target.value)}
+            />
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <Input type="number" label="Custo médio" id="amount" required 
             value={cost} onChange={(e) => setCost(e.target.value)}
           />
           <Select label="Categoria"
-            value={idCategory === -1 ? "" : idCategory}
+            value={idCategory === 0 ? "" : idCategory}
             onChange={(e) => handleChangeCategory(e.target.value)}
           >
-            <option value="-1" disabled>
+            <option value="0" disabled>
               Selecione uma opção
             </option>
             <option value="1">Alimentação</option>
