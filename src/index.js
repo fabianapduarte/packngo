@@ -7,6 +7,7 @@ import { AuthProvider } from './context/AuthContext'
 import { TripProvider } from './context/TripContext'
 import { EventProvider } from './context/EventContext'
 import { ListsProvider } from './context/ListsContext'
+import { PollProvider } from './context/PollContext'
 import './index.css'
 import App from './App'
 
@@ -19,7 +20,9 @@ root.render(
           <TripProvider>
             <EventProvider>
               <ListsProvider>
-                <App />
+                <PollProvider>
+                  <App />
+                </PollProvider>
               </ListsProvider>
             </EventProvider>
           </TripProvider>

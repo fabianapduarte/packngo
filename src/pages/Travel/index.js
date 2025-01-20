@@ -29,6 +29,7 @@ import { calendarRoute } from '../../utils/routes'
 import { dateFormat, formatDatetime } from '../../utils/dateFormat'
 import { TripContext } from '../../context/TripContext'
 import { ListsContext } from '../../context/ListsContext'
+import { PollContext } from '../../context/PollContext'
 import { EventContext } from '../../context/EventContext'
 import { getTripImage } from '../../utils/getTripImage'
 
@@ -89,6 +90,7 @@ export const Travel = () => {
   const tripContext = useContext(TripContext)
   const eventContext = useContext(EventContext)
   const listsContext = useContext(ListsContext)
+  const pollContext = useContext(PollContext)
 
   useEffect(() => {
     fetchTripData()
@@ -98,6 +100,7 @@ export const Travel = () => {
     const trip = await tripContext.showTrip(id)
     if (trip) setTrip(trip)
     await updateItemsList()
+    await updatePollsList()
     await updateEventsList()
   }
 
@@ -117,6 +120,13 @@ export const Travel = () => {
     const listsSearched = await listsContext.getList(id)
     if (listsSearched) {
       setList(listsSearched)
+    }
+  }
+
+  const updatePollsList = async () => {
+    const pollsSearched = await pollContext.getList(id)
+    if (pollsSearched) {
+      setPolls(pollsSearched)
     }
   }
 
