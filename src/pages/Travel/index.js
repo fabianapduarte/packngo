@@ -97,16 +97,8 @@ export const Travel = () => {
       const trip = await tripContext.showTrip(id)
       if (trip) {
         setTrip(trip)
-      }
-      console.log(eventContext);
-      const events = await eventContext.getEvents(id)
-      if(events){
-        setEvents(events)
-      }
-      const lists = await listsContext.getLists(id)
-      if(lists){
-        setLists(lists)
-      }
+      }       
+      await updateItemsList()
       await updateEventsList()
     }
 
@@ -122,6 +114,13 @@ export const Travel = () => {
     }
   }
 
+  const updateItemsList = async () => {    
+    const lists = await listsContext.getLists(id)
+    console.log(lists)
+    if(lists){
+      setLists(lists)
+    }
+  }
   
   const updateEventsList = async () => {
     const events = await eventContext.getEvents(id)
@@ -129,7 +128,7 @@ export const Travel = () => {
       setEvents(events)
     }
   }
-  
+
   const [checklist, setChecklist] = useState([])
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
   const [openModalAddParticipant, setOpenModalAddParticipant] = useState(false)
