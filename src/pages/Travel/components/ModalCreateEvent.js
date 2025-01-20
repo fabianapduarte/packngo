@@ -1,14 +1,11 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import { Plus } from 'react-feather'
 import { Button, Checkbox, Input, Modal, Select, TextArea } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'
-import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
 import { EventContext } from '../../../context/EventContext'
 
-export const ModalCreateEvent = ({ onClose }) => {
-  const { enqueueSnackbar } = useSnackbar()
-  const [events, setEvents] = useState([])
+export const ModalCreateEvent = ({ onClose, onSuccess }) => {
   const { id } = useParams()
 
   const [title, setTitle] = useState('')
@@ -25,60 +22,101 @@ export const ModalCreateEvent = ({ onClose }) => {
   const eventContext = useContext(EventContext)
 
   const handleCreate = async () => {
-    const data = await eventContext.addEvent({title, description, destination, startDate, endDate, startDateTime, endDateTime, cost, shareCost, idCategory, id})
-    if(data){
-      enqueueSnackbar('Evento criado com sucesso!', { variant: 'success' })
-    }
-    onClose()
+    await eventContext.addEvent({
+      title,
+      description,
+      destination,
+      startDate,
+      endDate,
+      startDateTime,
+      endDateTime,
+      cost,
+      shareCost,
+      idCategory,
+      id,
+      handleSuccess,
+    })
   }
 
-  const handleChangeCategory = async (category) => {  
+  const handleSuccess = async () => {
+    onClose()
+    await onSuccess()
+  }
+
+  const handleChangeCategory = async (category) => {
     setIdCategory(category)
   }
 
   return (
     <Modal title="Criar novo evento" onClose={onClose} size="md">
       <div className="flex flex-col gap-3 w-full mb-4">
-        <Input id="title" label="Título" type="text" required 
-          value={title} 
+        <Input
+          id="title"
+          label="Título"
+          type="text"
+          required
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <TextArea id="description" label="Descrição" 
+        <TextArea
+          id="description"
+          label="Descrição"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <Input id="place" label="Local" type="text" 
-          value={destination} 
+        <Input
+          id="place"
+          label="Local"
+          type="text"
+          value={destination}
           onChange={(e) => setDestination(e.target.value)}
         />
         <div className="grid grid-cols-2 gap-4">
-          <Input type="date" label="Data de início" id="dateStart" required 
-            value={startDate} 
+          <Input
+            type="date"
+            label="Data de início"
+            id="dateStart"
+            required
+            value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
-          <Input type="time" label="Hora de início" id="timeStart" required 
-            value={startDateTime} 
+          <Input
+            type="time"
+            label="Hora de início"
+            id="timeStart"
+            required
+            value={startDateTime}
             onChange={(e) => setStartDateTime(e.target.value)}
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <Input type="date" label="Data final" id="dateEnd" required 
-            value={endDate} 
+          <Input
+            type="date"
+            label="Data final"
+            id="dateEnd"
+            required
+            value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
-          <Input type="time" label="Hora final" id="timeEnd" required 
-            value={endDateTime} 
+          <Input
+            type="time"
+            label="Hora final"
+            id="timeEnd"
+            required
+            value={endDateTime}
             onChange={(e) => setEndDateTime(e.target.value)}
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <Input type="number" label="Custo médio" id="amount" required 
-            value={cost} onChange={(e) => setCost(e.target.value)}
+          <Input
+            type="number"
+            label="Custo médio"
+            id="amount"
+            required
+            value={cost}
+            onChange={(e) => setCost(e.target.value)}
           />
-          <Select label="Categoria"
-            value={idCategory === -1 ? "" : idCategory}
-            onChange={(e) => handleChangeCategory(e.target.value)}
-          >
+          <Select label="Categoria" value={idCategory} onChange={(e) => handleChangeCategory(e.target.value)}>
             <option value="-1" disabled>
               Selecione uma opção
             </option>
@@ -91,7 +129,9 @@ export const ModalCreateEvent = ({ onClose }) => {
             <option value="7">Transporte</option>
           </Select>
         </div>
-        <Checkbox name="share-cost" text="Dividir custo entre participantes do evento" 
+        <Checkbox
+          name="share-cost"
+          text="Dividir custo entre participantes do evento"
           checked={shareCost}
           onChange={(e) => setShareCost(e.target.checked)}
         />

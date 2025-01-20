@@ -1,17 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import {
-  ArrowRight,
-  Calendar,
-  CheckSquare,
-  DollarSign,
-  Edit3,
-  LogOut,
-  MapPin,
-  Plus,
-  Trash2,
-  UserPlus,
-} from 'react-feather'
+import { ArrowRight, Calendar, CheckSquare, Edit3, LogOut, MapPin, Plus, Trash2, UserPlus } from 'react-feather'
 import data from '../../assets/data.json'
 import {
   ButtonOutlined,
@@ -23,7 +12,6 @@ import {
   SimpleInput,
   Slider,
   TextButton,
-  Tooltip,
   TravelStatus,
 } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
@@ -71,9 +59,7 @@ const EventCard = ({ event, onClick }) => {
         <h4 className="text-md font-bold text-ellipsis whitespace-nowrap overflow-hidden">{event.title}</h4>
         <div className="flex gap-2 items-center mb-3">
           <Calendar size={16} />
-          <span>
-            {formatDatetime(event.start_datetime)}
-          </span>
+          <span>{formatDatetime(event.start_datetime)}</span>
         </div>
         <TextButton label="Ver evento" Icon={ArrowRight} onClick={onClick} />
       </div>
@@ -97,7 +83,7 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 export const Travel = () => {
   const travel = data[0].trips[0]
   const [trip, setTrip] = useState(null)
-  const [events, setEvents] = useState([])
+  const [events, setEvents] = useState(null)
   const { polls } = travel
   const { id } = useParams()
   const tripContext = useContext(TripContext)
@@ -109,10 +95,7 @@ export const Travel = () => {
       if (trip) {
         setTrip(trip)
       }
-      const events = await eventContext.getEvents(id)
-      if(events){
-        setEvents(events)
-      }
+      await updateEventsList()
     }
 
     fetchTripData()
@@ -123,6 +106,13 @@ export const Travel = () => {
     const trip = await tripContext.showTrip(id)
     if (trip) {
       setTrip(trip)
+    }
+  }
+
+  const updateEventsList = async () => {
+    const events = await eventContext.getEvents(id)
+    if (events) {
+      setEvents(events)
     }
   }
 
@@ -176,7 +166,7 @@ export const Travel = () => {
     setEventSelected(null)
   }
 
-  if (!trip) return <Loading />
+  if (!trip || !events) return <Loading />
 
   return (
     <Layout>
@@ -193,10 +183,6 @@ export const Travel = () => {
             <TravelStatus status={trip.status} />
             <InfoItem Icon={MapPin} text={trip.destination} />
             <InfoItem Icon={Calendar} text={dateFormat(trip.start_date, trip.end_date)} />
-            <Tooltip
-              element={<InfoItem Icon={DollarSign} text="R$ 7500,00" />}
-              text="Seu gasto individual previsto para a viagem"
-            />
             <div className="flex gap-2">
               <ButtonOutlined
                 color={enumButtonColor.primary}
@@ -317,7 +303,9 @@ export const Travel = () => {
 
       {openModalCreatePoll && <ModalCreatePoll onClose={() => setOpenModalCreatePoll(false)} />}
 
-      {openModalCreateEvent && <ModalCreateEvent onClose={() => setOpenModalCreateEvent(false)} />}
+      {openModalCreateEvent && (
+        <ModalCreateEvent onClose={() => setOpenModalCreateEvent(false)} onSuccess={updateEventsList} />
+      )}
 
       {openModalEditEvent && <ModalEditEvent onClose={handleCloseModalEditEvent} event={eventSelected} />}
 
