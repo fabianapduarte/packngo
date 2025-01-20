@@ -1,17 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import {
-  ArrowRight,
-  Calendar,
-  CheckSquare,
-  DollarSign,
-  Edit3,
-  LogOut,
-  MapPin,
-  Plus,
-  Trash2,
-  UserPlus,
-} from 'react-feather'
+import { ArrowRight, Calendar, CheckSquare, Edit3, LogOut, MapPin, Plus, Trash2, UserPlus } from 'react-feather'
 import data from '../../assets/data.json'
 import {
   ButtonOutlined,
@@ -23,7 +12,6 @@ import {
   SimpleInput,
   Slider,
   TextButton,
-  Tooltip,
   TravelStatus,
 } from '../../components'
 import { enumButtonColor } from '../../enums/enumButtonColor'
@@ -39,7 +27,7 @@ import { ModalCreateEvent } from './components/ModalCreateEvent'
 import { ModalEditEvent } from './components/ModalEditEvent'
 import { ModalEditTrip } from './components/ModalEditTrip'
 import { calendarRoute } from '../../utils/routes'
-import { dateFormat } from '../../utils/dateFormat'
+import { dateFormat, formatDatetime } from '../../utils/dateFormat'
 import { TripContext } from '../../context/TripContext'
 import { ListsContext } from '../../context/ListsContext'
 import { EventContext } from '../../context/EventContext'
@@ -72,9 +60,7 @@ const EventCard = ({ event, onClick }) => {
         <h4 className="text-md font-bold text-ellipsis whitespace-nowrap overflow-hidden">{event.title}</h4>
         <div className="flex gap-2 items-center mb-3">
           <Calendar size={16} />
-          <span>
-            {event.dateStart} - {event.timeStart}
-          </span>
+          <span>{formatDatetime(event.start_datetime)}</span>
         </div>
         <TextButton label="Ver evento" Icon={ArrowRight} onClick={onClick} />
       </div>
@@ -121,6 +107,7 @@ export const Travel = () => {
       if(lists){
         setLists(lists)
       }
+      await updateEventsList()
     }
 
     fetchTripData()
@@ -135,6 +122,14 @@ export const Travel = () => {
     }
   }
 
+  
+  const updateEventsList = async () => {
+    const events = await eventContext.getEvents(id)
+    if (events) {
+      setEvents(events)
+    }
+  }
+  
   const [checklist, setChecklist] = useState([])
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
   const [openModalAddParticipant, setOpenModalAddParticipant] = useState(false)
@@ -185,7 +180,7 @@ export const Travel = () => {
     setEventSelected(null)
   }
 
-  if (!trip) return <Loading />
+  if (!trip || !events) return <Loading />
 
   return (
     <Layout>
@@ -202,10 +197,6 @@ export const Travel = () => {
             <TravelStatus status={trip.status} />
             <InfoItem Icon={MapPin} text={trip.destination} />
             <InfoItem Icon={Calendar} text={dateFormat(trip.start_date, trip.end_date)} />
-            <Tooltip
-              element={<InfoItem Icon={DollarSign} text="R$ 7500,00" />}
-              text="Seu gasto individual previsto para a viagem"
-            />
             <div className="flex gap-2">
               <ButtonOutlined
                 color={enumButtonColor.primary}
@@ -326,7 +317,9 @@ export const Travel = () => {
 
       {openModalCreatePoll && <ModalCreatePoll onClose={() => setOpenModalCreatePoll(false)} />}
 
-      {openModalCreateEvent && <ModalCreateEvent onClose={() => setOpenModalCreateEvent(false)} />}
+      {openModalCreateEvent && (
+        <ModalCreateEvent onClose={() => setOpenModalCreateEvent(false)} onSuccess={updateEventsList} />
+      )}
 
       {openModalEditEvent && <ModalEditEvent onClose={handleCloseModalEditEvent} event={eventSelected} />}
 

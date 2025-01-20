@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { ChevronLeft, ChevronRight } from 'react-feather'
+import { useParams } from 'react-router-dom'
 
 import imgParticipantOne from '../../assets/avatar1.png'
 import imgParticipantTwo from '../../assets/avatar2.png'
 import imgParticipantThree from '../../assets/avatar3.png'
-import { ButtonIcon, Card, Layout, Participant, TravelStatus } from '../../components'
+import { ButtonIcon, Card, Layout, Participant, TravelStatus, Loading } from '../../components'
 import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import { enumButtonColor } from '../../enums/enumButtonColor'
 
@@ -17,39 +18,10 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 import './styles.css'
 
+import { TripContext } from '../../context/TripContext'
+import { EventContext } from '../../context/EventContext'
+
 const localizer = momentLocalizer(moment)
-const events = [
-  {
-    title: 'Reunião Web I',
-    start: new Date(2024, 10, 27, 15, 0),
-    end: new Date(2024, 10, 27, 17, 0),
-    desc: 'Reunião com grupo de Web I - Tema react',
-  },
-  {
-    title: 'Almoço especial',
-    start: new Date(2024, 10, 28, 12, 0),
-    end: new Date(2024, 10, 28, 13, 15),
-    desc: 'Almoço com amigos no restaurante central',
-  },
-  {
-    title: 'Almoço especial',
-    start: new Date(2024, 10, 29, 12, 0),
-    end: new Date(2024, 10, 29, 13, 15),
-    desc: 'Almoço com a equipe para planejar próximos passos',
-  },
-  {
-    title: 'Trilha',
-    start: new Date(2024, 10, 29, 8, 0),
-    end: new Date(2024, 10, 29, 9, 30),
-    desc: 'Caminhada matinal na trilha do parque',
-  },
-  {
-    title: 'Coffee break',
-    start: new Date(2024, 10, 29, 15, 0),
-    end: new Date(2024, 10, 29, 16, 30),
-    desc: 'Pausa para café com snacks na sala de reuniões',
-  },
-]
 
 const CustomDayHeader = ({ date, label }) => {
   const formattedDate = moment(date).format('DD')
@@ -64,19 +36,71 @@ const CustomDayHeader = ({ date, label }) => {
 }
 
 export const Schedule = () => {
-  const [titleDetails, setDetailsTitle] = useState('Detalhes')
+  const {id} = useParams()
+  const tripContext = useContext(TripContext)
+  const eventContext = useContext(EventContext)
 
+  const [tripName, setTripName] = useState('')
+  const [tripStatus, setTripStatus] = useState('')
+
+  const [titleDetails, setDetailsTitle] = useState('Detalhes')
+  const [events, setEvents] = useState(null)
+  const [participants, setParticipants] = useState([])
+  const [isLoaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoaded(false);
+  
+      try {
+        const trip = await tripContext.showTrip(id);
+        if (trip) {
+          setTripName(trip.title);
+          setTripStatus(trip.status);
+        }
+  
+        const events = await eventContext.getEvents(id);
+        if (events) {
+          const adaptedEvents = events.map(event => ({
+            id: event.id,
+            id_trip: event.id_trip,
+            id_category: event.id_category,
+            title: event.title,
+            start: new Date(event.start_datetime),
+            end: new Date(event.end_datetime),
+            description: event.description,
+            destination: event.destination,
+            cost: event.cost,
+            share_cost: event.share_cost,
+            individualCost: event.individualCost,
+            category_name: event.category_name,
+          }));
+          setEvents(adaptedEvents);
+        }
+      } catch (error) {
+        //
+      } finally {
+        setLoaded(true);
+      }
+    };
+  
+    loadData();
+  }, [id]);
+  
   const [selectedEvent, setSelectedEvent] = useState('Clique em um evento para ver mais detalhes sobre ele.')
-  const handleEventClick = (eventTitle, eventDesc, eventStart) => {
+
+  const handleEventClick = (event) => {
     setDetailsTitle('Descrição')
     setIsEventVisible(true)
 
+    setParticipants(event.participants)
+
     setSelectedEvent(
       <>
-        {eventTitle} <br />
-        {eventDesc || 'Sem descrição'} <br />
-        Inicia às: {new Date(eventStart).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-      </>,
+        {event.title} <br />
+        {event.description || 'Sem descrição'} <br />
+        Inicia às: {new Date(event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+      </>
     )
   }
 
@@ -112,14 +136,16 @@ export const Schedule = () => {
 
   const diasDaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 
+  if (!isLoaded) return <Loading />
+
   return (
     <Layout>
       <Card>
         <div className="grid-schedule overflow-hidden">
           <div className="border-x-slate-300">
-            <h2 className="my-2 text-2xl font-bold w-full line-clamp-2">Viagem de fim de ano</h2>
+            <h2 className="my-2 text-2xl font-bold w-full line-clamp-2">{tripName || "Nome da viagem"}</h2>
             <div className="flex flex-col gap-2 mb-5">
-              <TravelStatus status={enumTravelStatus.progress} />
+              <TravelStatus status={tripStatus || enumTravelStatus.planned} />
 
               <div className="calendar-container w-full mt-4">
                 <Calendar
@@ -162,10 +188,9 @@ export const Schedule = () => {
               {!isEventVisible && (
                 <div className="flex bg-cardGray w-full min-h-64 rounded overflow-hidden items-center">
                   <div className="flex flex-col gap-2 p-6">
-                    {/* <div className="mb-1 font-bold">Participantes</div> */}
-                    <Participant imageSrc={imgParticipantOne} name="Leonardo Oliveira" />
-                    <Participant imageSrc={imgParticipantTwo} name="Maria da Silva" />
-                    <Participant imageSrc={imgParticipantThree} name="Rafael Rodrigues" />
+                    {participants.map((participant, index) => (
+                      <Participant key={`participant-${index}`} imageSrc={participant.image_path} name={participant.name} />
+                    ))}
                   </div>
                 </div>
               )}
@@ -175,17 +200,18 @@ export const Schedule = () => {
           <div className="h-full w-full gap-6 overflow-auto">
             <BigCalendar
               localizer={localizer}
-              events={events}
+              events={events || []}
               toolbar={false}
               startAccessor="start"
               endAccessor="end"
               defaultView="week"
+              onNavigate={(newDate) => setSelectedDate(newDate)}
               min={new Date(2001, 1, 1, 6, 0)}
               className="max-h-full min-calendar"
               components={{
                 header: CustomDayHeader,
               }}
-              onSelectEvent={(event) => handleEventClick(event.title, event.desc, event.start)}
+              onSelectEvent={(event) => handleEventClick(event)}
               date={selectedDate}
             />
           </div>

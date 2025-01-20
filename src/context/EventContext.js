@@ -1,35 +1,44 @@
-import { createContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { createContext } from 'react'
 import { useSnackbar } from 'notistack'
-import { post, get, patch, del } from '../utils/api'
-import {
-  eventsUrl
-} from '../utils/routesApi'
-import { homeRoute, tripRoute } from '../utils/routes'
+import { post, get } from '../utils/api'
+import { eventsUrl } from '../utils/routesApi'
 
 export const EventContext = createContext({})
 
 export const EventProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar()
 
-  const addEvent = async ({title, description, destination, startDate, endDate, cost, shareCost, id}) => {
+  const addEvent = async ({
+    title,
+    description,
+    destination,
+    startDate,
+    endDate,
+    startDateTime,
+    endDateTime,
+    cost,
+    shareCost,
+    idCategory,
+    id,
+    handleSuccess,
+  }) => {
     try {
       const form = new FormData()
       form.append('title', title)
-      form.append('description', description)
+      if (description) form.append('description', description)
       form.append('destination', destination)
-      form.append('startDate', startDate)
-      form.append('endDate', endDate)
+      form.append('startDatetime', `${startDate} ${startDateTime}`)
+      form.append('endDatetime', `${endDate} ${endDateTime}`)
       form.append('cost', cost)
-      form.append('shareCost', shareCost)
+      form.append('shareCost', shareCost ? 1 : 0)
       form.append('id', id)
+      form.append('idCategory', Number(idCategory))
 
       const url = eventsUrl(id)
-      const { data } = await post(url, form)
+      await post(url, form)
 
       enqueueSnackbar('Evento cadastrado com sucesso!', { variant: 'success' })
-      //navigate(tripRoute(data.trip.id))
-      return data
+      handleSuccess()
     } catch (error) {
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
@@ -66,7 +75,7 @@ export const EventProvider = ({ children }) => {
     <EventContext.Provider
       value={{
         addEvent,
-        getEvents
+        getEvents,
       }}
     >
       {children}
