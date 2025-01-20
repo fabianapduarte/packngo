@@ -31,3 +31,7 @@ export const deleteListsUrl = (id, id_list) => `/trips/${id}/lists/${id_list}`
 export const tripProfileUrl = (id) => `/trips/${id}/update-img`
 
 export const eventsUrl = (id) => `/trips/${id}/events`
+
+export const joinEventUrl = (idTrip, idEvent) => `/trips/${idTrip}/events/${idEvent}/join`
+
+export const leaveEventUrl = (idTrip, idEvent) => `/trips/${idTrip}/events/${idEvent}/leave`

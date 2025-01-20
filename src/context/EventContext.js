@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 import { useSnackbar } from 'notistack'
 import { post, get } from '../utils/api'
-import { eventsUrl } from '../utils/routesApi'
+import { eventsUrl, joinEventUrl, leaveEventUrl } from '../utils/routesApi'
 
 export const EventContext = createContext({})
 
@@ -13,7 +13,6 @@ export const EventProvider = ({ children }) => {
     description,
     destination,
     startDate,
-    endDate,
     startDateTime,
     endDateTime,
     cost,
@@ -27,8 +26,8 @@ export const EventProvider = ({ children }) => {
       form.append('title', title)
       if (description) form.append('description', description)
       form.append('destination', destination)
-      form.append('startDatetime', `${startDate} ${startDateTime}`);
-      form.append('endDatetime', `${startDate} ${endDateTime}`);
+      form.append('startDatetime', `${startDate} ${startDateTime}`)
+      form.append('endDatetime', `${startDate} ${endDateTime}`)
       form.append('cost', cost)
       form.append('shareCost', shareCost ? 1 : 0)
       form.append('id', id)
@@ -71,11 +70,45 @@ export const EventProvider = ({ children }) => {
     }
   }
 
+  const joinEvent = async (idTrip, idEvent) => {
+    try {
+      const url = joinEventUrl(idTrip, idEvent)
+      await post(url)
+      enqueueSnackbar('Sua participação no evento foi confirmada com sucesso.', { variant: 'success' })
+      return { success: true }
+    } catch (error) {
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado ao obter eventos.', { variant: 'error' })
+      }
+      return { success: false }
+    }
+  }
+
+  const leaveEvent = async (idTrip, idEvent) => {
+    try {
+      const url = leaveEventUrl(idTrip, idEvent)
+      await post(url)
+      enqueueSnackbar('Sua participação no evento foi cancelada com sucesso.', { variant: 'success' })
+      return { success: true }
+    } catch (error) {
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado ao obter eventos.', { variant: 'error' })
+      }
+      return { success: false }
+    }
+  }
+
   return (
     <EventContext.Provider
       value={{
         addEvent,
         getEvents,
+        joinEvent,
+        leaveEvent,
       }}
     >
       {children}
