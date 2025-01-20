@@ -27,8 +27,8 @@ export const EventProvider = ({ children }) => {
       form.append('title', title)
       if (description) form.append('description', description)
       form.append('destination', destination)
-      form.append('startDatetime', `${startDate} ${startDateTime}`)
-      form.append('endDatetime', `${endDate} ${endDateTime}`)
+      form.append('startDatetime', `${startDate} ${startDateTime}`);
+      form.append('endDatetime', `${startDate} ${endDateTime}`);
       form.append('cost', cost)
       form.append('shareCost', shareCost ? 1 : 0)
       form.append('id', id)

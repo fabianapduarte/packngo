@@ -12,12 +12,11 @@ export const ModalCreateEvent = ({ onClose, onSuccess }) => {
   const [description, setDescription] = useState()
   const [destination, setDestination] = useState('')
   const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
   const [startDateTime, setStartDateTime] = useState('')
   const [endDateTime, setEndDateTime] = useState('')
   const [cost, setCost] = useState('')
   const [shareCost, setShareCost] = useState(false)
-  const [idCategory, setIdCategory] = useState(-1)
+  const [idCategory, setIdCategory] = useState(0)
 
   const eventContext = useContext(EventContext)
 
@@ -80,32 +79,16 @@ export const ModalCreateEvent = ({ onClose, onSuccess }) => {
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
-          <Input
-            type="time"
-            label="Hora de início"
-            id="timeStart"
-            required
-            value={startDateTime}
-            onChange={(e) => setStartDateTime(e.target.value)}
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <Input
-            type="date"
-            label="Data final"
-            id="dateEnd"
-            required
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-          <Input
-            type="time"
-            label="Hora final"
-            id="timeEnd"
-            required
-            value={endDateTime}
-            onChange={(e) => setEndDateTime(e.target.value)}
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <Input type="time" label="Hora de início" id="timeStart" required 
+              value={startDateTime} 
+              onChange={(e) => setStartDateTime(e.target.value)}
+            />
+            <Input type="time" label="Hora final" id="timeEnd" required 
+              value={endDateTime} 
+              onChange={(e) => setEndDateTime(e.target.value)}
+            />
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <Input
