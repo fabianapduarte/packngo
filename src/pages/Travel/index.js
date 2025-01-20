@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowRight, Calendar, CheckSquare, Edit3, LogOut, MapPin, Plus, Trash2, UserPlus } from 'react-feather'
-import data from '../../assets/data.json'
 import {
   ButtonOutlined,
   Card,
@@ -83,26 +82,26 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 
 export const Travel = () => {
   const [trip, setTrip] = useState(null)
-  const [events, setEvents] = useState([])
+  const [events, setEvents] = useState(null)
   const [lists, setLists] = useState([])
   const [polls, setPolls] = useState([])
   const { id } = useParams()
   const tripContext = useContext(TripContext)
   const eventContext = useContext(EventContext)
   const listsContext = useContext(ListsContext)
-  
+
   useEffect(() => {
-    const fetchTripData = async () => {
-      const trip = await tripContext.showTrip(id)
-      if (trip) setTrip(trip)
-      await updateItemsList()
-      await updateEventsList()
-    }
-
     fetchTripData()
-  }, [id])
+  }, [])
 
-  const handleCancelPresence = async() => {
+  const fetchTripData = async () => {
+    const trip = await tripContext.showTrip(id)
+    if (trip) setTrip(trip)
+    await updateItemsList()
+    await updateEventsList()
+  }
+
+  const handleCancelPresence = async () => {
     await fetchTripData()
   }
 
@@ -111,22 +110,21 @@ export const Travel = () => {
     const trip = await tripContext.showTrip(id)
     if (trip) {
       setTrip(trip)
-      
     }
   }
 
-  const updateItemsList = async () => {    
+  const updateItemsList = async () => {
     const lists = await listsContext.getLists(id)
     console.log(lists)
-    if(lists){
+    if (lists) {
       setLists(lists)
     }
   }
-  
+
   const updateEventsList = async () => {
-    const events = await eventContext.getEvents(id)
-    if (events) {
-      setEvents(events)
+    const eventsSearched = await eventContext.getEvents(id)
+    if (eventsSearched) {
+      setEvents(eventsSearched)
     }
   }
 
@@ -321,7 +319,9 @@ export const Travel = () => {
         <ModalCreateEvent onClose={() => setOpenModalCreateEvent(false)} onSuccess={updateEventsList} />
       )}
 
-      {openModalEditEvent && <ModalEditEvent onClose={handleCloseModalEditEvent} event={eventSelected} onSuccess={updateEventsList}/>}
+      {openModalEditEvent && (
+        <ModalEditEvent onClose={handleCloseModalEditEvent} event={eventSelected} onSuccess={updateEventsList} />
+      )}
 
       {openModalEditTrip && (
         <ModalEditTrip onClose={() => setOpenModalEditTrip(false)} trip={trip} refreshTrip={refreshTrip} />
@@ -337,7 +337,13 @@ export const Travel = () => {
         />
       )}
 
-      {openModalDeleteEvent && <ModalDeleteEvent onClose={() => setOpenModalDeleteEvent(false)} event={eventSelected} onSuccess={updateEventsList}/>}
+      {openModalDeleteEvent && (
+        <ModalDeleteEvent
+          onClose={() => setOpenModalDeleteEvent(false)}
+          event={eventSelected}
+          onSuccess={updateEventsList}
+        />
+      )}
 
       {openModalSeePoll && <ModalSeePoll onClose={handleCloseModalSeePoll} poll={pollSelected} />}
     </Layout>

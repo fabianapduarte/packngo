@@ -16,11 +16,10 @@ export const ModalEditEvent = ({ onClose, event, onSuccess }) => {
   const [destination, setDestination] = useState(event.destination)
   const [startDate, setStartDate] = useState(event.start_datetime.split(' ')[0])
   const [startDateTime, setStartDateTime] = useState(getHour(event.start_datetime))
-  const [endDateTime, setEndDateTime] =  useState(getHour(event.end_datetime))
+  const [endDateTime, setEndDateTime] = useState(getHour(event.end_datetime))
   const [cost, setCost] = useState(event.cost)
   const [shareCost, setShareCost] = useState(event.shareCost)
   const [idCategory, setIdCategory] = useState(event.id_category)
-  const [idEvent, setId] = useState(event.id)
 
   const eventContext = useContext(EventContext)
 
@@ -35,7 +34,7 @@ export const ModalEditEvent = ({ onClose, event, onSuccess }) => {
       cost,
       shareCost,
       idCategory,
-      idEvent,
+      idEvent: event.id,
       id,
       handleSuccess,
     })
@@ -84,12 +83,20 @@ export const ModalEditEvent = ({ onClose, event, onSuccess }) => {
             onChange={(e) => setStartDate(e.target.value)}
           />
           <div className="grid grid-cols-2 gap-4">
-            <Input type="time" label="Hora de início" id="timeStart" required 
-              value={startDateTime} 
+            <Input
+              type="time"
+              label="Hora de início"
+              id="timeStart"
+              required
+              value={startDateTime}
               onChange={(e) => setStartDateTime(e.target.value)}
             />
-            <Input type="time" label="Hora final" id="timeEnd" required 
-              value={endDateTime} 
+            <Input
+              type="time"
+              label="Hora final"
+              id="timeEnd"
+              required
+              value={endDateTime}
               onChange={(e) => setEndDateTime(e.target.value)}
             />
           </div>

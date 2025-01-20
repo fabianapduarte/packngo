@@ -86,20 +86,17 @@ export const EventProvider = ({ children }) => {
   }) => {
     try {
       const newData = {}
-      newData.title = title;
-      newData.description = description;
-      newData.destination = destination;
-      newData.startDatetime = startDate + ' ' + startDateTime;
-      newData.endDatetime = startDate + ' ' + endDateTime;
-      newData.cost = cost;
-      newData.shareCost = (shareCost ? 1 : 0);
-      newData.idCategory = idCategory;
-      newData.id = idEvent;
-      newData.id_trip = id;
-      newData.handleSuccess = handleSuccess;
+      newData.title = title
+      newData.description = description
+      newData.destination = destination
+      newData.startDatetime = startDate + ' ' + startDateTime
+      newData.endDatetime = startDate + ' ' + endDateTime
+      newData.cost = cost
+      newData.shareCost = shareCost ? 1 : 0
+      newData.idCategory = Number(idCategory)
 
       const url = eventUrl(id, idEvent)
-      
+
       await patch(url, newData)
       enqueueSnackbar('Evento editado', { variant: 'success' })
       handleSuccess()
