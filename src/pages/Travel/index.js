@@ -102,7 +102,7 @@ export const Travel = () => {
   }
 
   const handleCancelPresence = async () => {
-    await fetchTripData()
+    await updateEventsList()
   }
 
   const refreshTrip = async () => {

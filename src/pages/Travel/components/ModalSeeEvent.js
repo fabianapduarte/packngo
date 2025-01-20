@@ -18,7 +18,7 @@ export const ModalSeeEvent = ({ onClose, event, openDeleteModal, openEditModal, 
     const { success } = await eventContext.joinEvent(event.id_trip, event.id)
     if (success) {
       setIsParticipant(true)
-      await onChangePresence
+      await onChangePresence()
       onClose()
     }
   }
@@ -27,7 +27,7 @@ export const ModalSeeEvent = ({ onClose, event, openDeleteModal, openEditModal, 
     const { success } = await eventContext.leaveEvent(event.id_trip, event.id)
     if (success) {
       setIsParticipant(false)
-      await onChangePresence
+      await onChangePresence()
       onClose()
     }
   }
