@@ -74,6 +74,7 @@ export const Schedule = () => {
             share_cost: event.share_cost,
             individualCost: event.individualCost,
             category_name: event.category_name,
+            participants: event.participants,
           }));
           setEvents(adaptedEvents);
         }
@@ -86,7 +87,7 @@ export const Schedule = () => {
   
     loadData();
   }, [id]);
-  
+
   const [selectedEvent, setSelectedEvent] = useState('Clique em um evento para ver mais detalhes sobre ele.')
 
   const handleEventClick = (event) => {
