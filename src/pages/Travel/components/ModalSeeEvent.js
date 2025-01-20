@@ -38,8 +38,8 @@ export const ModalSeeEvent = ({ onClose, event, openDeleteModal, openEditModal }
           <EventData label="Data final" value={formatDatetime(event.end_datetime)} />
         </div>
         <div className="grid grid-cols-2 gap-8">
-          <EventData label="Categoria" value={event.id_category} />
-          <EventData label="Custo por participante" value={`R$ ${event.cost}`} />
+          <EventData label="Categoria" value={event.category_name} />
+          <EventData label="Custo por participante" value={`R$ ${event.individualCost}`} />
         </div>
       </div>
       <div className="mt-4 flex justify-between">
