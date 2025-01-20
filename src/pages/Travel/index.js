@@ -72,9 +72,7 @@ const PollCard = ({ title, isOpen, openPoll }) => {
   return (
     <div className="card">
       <div className="p-4 rounded bg-cardGray card-slider block max-w-full">
-        <h4 className="text-md font-bold text-ellipsis whitespace-nowrap overflow-hidden">{title}</h4>
-        {isOpen && <div className="text-primary mb-3">Votação aberta</div>}
-        {!isOpen && <div className="text-red mb-3">Votação fechada</div>}
+        <h4 className="text-md font-bold text-ellipsis whitespace-nowrap overflow-hidden mb-3">{title}</h4>
         <TextButton label="Ver votação" Icon={CheckSquare} onClick={openPoll} />
       </div>
     </div>
@@ -85,7 +83,7 @@ export const Travel = () => {
   const [trip, setTrip] = useState(null)
   const [events, setEvents] = useState(null)
   const [list, setList] = useState(null)
-  const [polls, setPolls] = useState([])
+  const [polls, setPolls] = useState(null)
   const { id } = useParams()
   const tripContext = useContext(TripContext)
   const eventContext = useContext(EventContext)
@@ -205,7 +203,7 @@ export const Travel = () => {
     setEventSelected(null)
   }
 
-  if (!trip || !events || !list) return <Loading />
+  if (!trip || !events || !list || !polls) return <Loading />
 
   return (
     <Layout>
@@ -292,13 +290,8 @@ export const Travel = () => {
             </div>
             <Slider
               noElementsMessage="Não há enquetes cadastradas."
-              elements={polls.map((poll, index) => (
-                <PollCard
-                  key={`poll-${index}`}
-                  title={poll.title}
-                  isOpen={poll.open}
-                  openPoll={() => handleSeePoll(poll)}
-                />
+              elements={polls.map((poll) => (
+                <PollCard key={poll.id} title={poll.title} openPoll={() => handleSeePoll(poll)} />
               ))}
             />
           </Card>
@@ -338,7 +331,9 @@ export const Travel = () => {
 
       {openModalDeleteTrip && <ModalDeleteTrip onClose={() => setModalOpenDeleteTrip(false)} />}
 
-      {openModalCreatePoll && <ModalCreatePoll onClose={() => setOpenModalCreatePoll(false)} />}
+      {openModalCreatePoll && (
+        <ModalCreatePoll onClose={() => setOpenModalCreatePoll(false)} onSuccess={updatePollsList} idTrip={id} />
+      )}
 
       {openModalCreateEvent && (
         <ModalCreateEvent onClose={() => setOpenModalCreateEvent(false)} onSuccess={updateEventsList} />

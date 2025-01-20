@@ -1,32 +1,28 @@
-import { useState, useContext, useEffect } from 'react'
-import { useSnackbar } from 'notistack'
+import { useState, useContext } from 'react'
 import { Plus, X } from 'react-feather'
 import { Button, Input, Modal, TextButton } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'
 
-import { TripContext } from '../../../context/TripContext'
 import { PollContext } from '../../../context/PollContext'
 
-export const ModalCreatePoll = ({ onClose }) => {
-  const initialOptions = [{ value: '' }, { value: '' }]
-  const { enqueueSnackbar } = useSnackbar()
+export const ModalCreatePoll = ({ onClose, onSuccess, idTrip }) => {
+  const initialOptions = ['Opção 1', 'Opção 2']
   const [title, setTitle] = useState('Nova enquete')
   const [options, setOptions] = useState(initialOptions)
 
-
-  const tripContext = useContext(TripContext)
   const pollContext = useContext(PollContext)
 
-  const handleDelete = async() => {
-    const data = await pollContext()
-    if(data.success){
-      enqueueSnackbar('Enquete criada com sucesso!', { variant: 'success' })
+  const handleCreate = async () => {
+    const filteredOptions = options.filter((option) => option.length > 0)
+    const data = await pollContext.addPoll({ title, options: filteredOptions, idTrip })
+    if (data.success) {
+      onSuccess()
       onClose()
     }
   }
 
   const handleAddOption = () => {
-    const newOptions = [...options, { value: '' }]
+    const newOptions = [...options, '']
     setOptions(newOptions)
   }
 
@@ -35,9 +31,20 @@ export const ModalCreatePoll = ({ onClose }) => {
     setOptions(newOptions)
   }
 
-  const OptionInput = ({ id, required }) => (
+  const handleChangeOption = (e) => (indexToUpdate) => {
+    const optionsUpdated = options.map((option, index) => {
+      if (index === indexToUpdate) return e.target.value
+      else return option
+    })
+    console.log(optionsUpdated)
+    setOptions(optionsUpdated)
+  }
+
+  const OptionInput = ({ id, required, value, handleChangeOption }) => (
     <div className="flex gap-4 items-center">
       <input
+        onBlur={(e) => handleChangeOption(e)(id)}
+        defaultValue={value}
         name={`option-${id}`}
         type="text"
         required={true}
@@ -54,14 +61,20 @@ export const ModalCreatePoll = ({ onClose }) => {
         <div className="flex flex-col gap-2">
           <p>Opções</p>
           {options.map((option, index) => (
-            <OptionInput key={index} id={index} required={index === 0 || index === 1} />
+            <OptionInput
+              key={index}
+              id={index}
+              value={option}
+              required={index === 0 || index === 1}
+              handleChangeOption={handleChangeOption}
+            />
           ))}
         </div>
         <TextButton label="Adicionar opção" Icon={Plus} onClick={handleAddOption} />
       </div>
       <div className="mt-4 flex justify-end gap-4">
         <Button color={enumButtonColor.transparent} label="Cancelar" onClick={onClose} />
-        <Button color={enumButtonColor.primary} label="Criar" Icon={Plus} onClick={handleDelete} />
+        <Button color={enumButtonColor.primary} label="Criar" Icon={Plus} onClick={handleCreate} />
       </div>
     </Modal>
   )

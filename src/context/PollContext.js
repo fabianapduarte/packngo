@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 import { useSnackbar } from 'notistack'
-import { post, get, del, patch } from '../utils/api'
+import { post, get, patch } from '../utils/api'
 import { pollsUrl, votePollsUrl } from '../utils/routesApi'
 
 export const PollContext = createContext({})
@@ -8,10 +8,11 @@ export const PollContext = createContext({})
 export const PollProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar()
 
-  const addPoll = async ({ idTrip, item }) => {
+  const addPoll = async ({ idTrip, title, options }) => {
     try {
-      const { data } = await post(pollsUrl(idTrip), { item })
-      return { success: true, newItem: data }
+      await post(pollsUrl(idTrip), { title, options })
+      enqueueSnackbar('Enquete cadastrada com sucesso', { variant: 'success' })
+      return { success: true }
     } catch (error) {
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
@@ -57,21 +58,6 @@ export const PollProvider = ({ children }) => {
       return null
     }
   }
-
-  // const deleteItem = async ({ idItem, idTrip }) => {
-  //   try {
-  //     const url = deleteItemUrl(idTrip, idItem)
-  //     await del(url)
-  //     return { success: true }
-  //   } catch (error) {
-  //     if (error.status === 401) {
-  //       enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
-  //     } else {
-  //       enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
-  //     }
-  //     return { success: false }
-  //   }
-  // }
 
   return <PollContext.Provider value={{ addPoll, getPoll, voteItem }}>{children}</PollContext.Provider>
 }
