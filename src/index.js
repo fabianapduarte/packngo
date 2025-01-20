@@ -5,6 +5,7 @@ import { SnackbarProvider } from 'notistack'
 
 import { AuthProvider } from './context/AuthContext'
 import { TripProvider } from './context/TripContext'
+import { EventProvider } from './context/EventContext'
 import './index.css'
 import App from './App'
 
@@ -15,7 +16,9 @@ root.render(
       <SnackbarProvider anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
         <AuthProvider>
           <TripProvider>
-            <App />
+            <EventProvider>
+              <App />
+            </EventProvider>
           </TripProvider>
         </AuthProvider>
       </SnackbarProvider>

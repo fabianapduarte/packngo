@@ -27,3 +27,7 @@ export const editTripUrl = (id) => `/trips/${id}`
 export const listsUrl = (id) => `/trips/${id}/lists`
 
 export const deleteListsUrl = (id, id_list) = `/trips/${id}/lists/${id_list}`
+
+export const tripProfileUrl = (id) => `/trips/${id}/update-img`
+
+export const eventsUrl = (id) => `/trips/${id}/events`

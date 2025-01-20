@@ -41,6 +41,7 @@ import { ModalEditTrip } from './components/ModalEditTrip'
 import { calendarRoute } from '../../utils/routes'
 import { dateFormat } from '../../utils/dateFormat'
 import { TripContext } from '../../context/TripContext'
+import { EventContext } from '../../context/EventContext'
 import { getTripImage } from '../../utils/getTripImage'
 
 const InfoItem = ({ Icon, text }) => {
@@ -96,12 +97,18 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 export const Travel = () => {
   const travel = data[0].trips[0]
   const [trip, setTrip] = useState(null)
+<<<<<<< HEAD
   //const [events, setEvents] = useState(null)
   //const [polls, setPolls] = useState(null)
   const { events, polls } = travel
+=======
+  const [events, setEvents] = useState([])
+  const { polls } = travel
+>>>>>>> 88221f061888db47f53af3b8232071f1ba52a9d8
   const { id } = useParams()
   const tripContext = useContext(TripContext)
-  
+  const eventContext = useContext(EventContext)
+
   useEffect(() => {
     const fetchTripData = async () => {
       const trip = await tripContext.showTrip(id)
@@ -112,19 +119,24 @@ export const Travel = () => {
         console.log('Travel \n')
         console.log(travel)
       }
+      console.log(eventContext);
+      const events = await eventContext.getEvents(id)
+      if(events){
+        setEvents(events)
+      }
     }
 
     fetchTripData()
-  }, [])
+  }, [id])
 
-  const refreshTrip = async() => {
+  const refreshTrip = async () => {
     setTrip(null)
     const trip = await tripContext.showTrip(id)
     if (trip) {
       setTrip(trip)
       console.log(trip)
     }
-  };
+  }
 
   const [checklist, setChecklist] = useState(travel.checklist)
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
@@ -214,9 +226,9 @@ export const Travel = () => {
           </div>
           <div className="flex flex-col gap-2">
             <div className="mb-1 font-bold">Participantes</div>
-            {/* {trip.participants.map((participant) => (
-              <Participant imageSrc={participant.image_path} name={participant.name} />
-            ))} */}
+            {trip.participants.map((participant, index) => (
+              <Participant key={`participant-${index}`} imageSrc={participant.image_path} name={participant.name} />
+            ))}
             <ButtonOutlined
               color={enumButtonColor.primary}
               label="Adicionar participante"
@@ -321,7 +333,9 @@ export const Travel = () => {
 
       {openModalEditEvent && <ModalEditEvent onClose={handleCloseModalEditEvent} event={eventSelected} />}
 
-      {openModalEditTrip && <ModalEditTrip onClose={() => setOpenModalEditTrip(false)} trip={trip} refreshTrip={refreshTrip} />}
+      {openModalEditTrip && (
+        <ModalEditTrip onClose={() => setOpenModalEditTrip(false)} trip={trip} refreshTrip={refreshTrip} />
+      )}
 
       {openModalSeeEvent && (
         <ModalSeeEvent
