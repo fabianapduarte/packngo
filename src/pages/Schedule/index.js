@@ -2,9 +2,6 @@ import { useState, useContext, useEffect } from 'react'
 import { ChevronLeft, ChevronRight } from 'react-feather'
 import { useParams } from 'react-router-dom'
 
-import imgParticipantOne from '../../assets/avatar1.png'
-import imgParticipantTwo from '../../assets/avatar2.png'
-import imgParticipantThree from '../../assets/avatar3.png'
 import { ButtonIcon, Card, Layout, Participant, TravelStatus, Loading } from '../../components'
 import { enumTravelStatus } from '../../enums/enumTravelStatus'
 import { enumButtonColor } from '../../enums/enumButtonColor'
@@ -36,7 +33,7 @@ const CustomDayHeader = ({ date, label }) => {
 }
 
 export const Schedule = () => {
-  const {id} = useParams()
+  const { id } = useParams()
   const tripContext = useContext(TripContext)
   const eventContext = useContext(EventContext)
 
@@ -50,18 +47,18 @@ export const Schedule = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      setLoaded(false);
-  
+      setLoaded(false)
+
       try {
-        const trip = await tripContext.showTrip(id);
+        const trip = await tripContext.showTrip(id)
         if (trip) {
-          setTripName(trip.title);
-          setTripStatus(trip.status);
+          setTripName(trip.title)
+          setTripStatus(trip.status)
         }
-  
-        const events = await eventContext.getEvents(id);
+
+        const events = await eventContext.getEvents(id)
         if (events) {
-          const adaptedEvents = events.map(event => ({
+          const adaptedEvents = events.map((event) => ({
             id: event.id,
             id_trip: event.id_trip,
             id_category: event.id_category,
@@ -75,18 +72,18 @@ export const Schedule = () => {
             individualCost: event.individualCost,
             category_name: event.category_name,
             participants: event.participants,
-          }));
-          setEvents(adaptedEvents);
+          }))
+          setEvents(adaptedEvents)
         }
       } catch (error) {
         //
       } finally {
-        setLoaded(true);
+        setLoaded(true)
       }
-    };
-  
-    loadData();
-  }, [id]);
+    }
+
+    loadData()
+  }, [id])
 
   const [selectedEvent, setSelectedEvent] = useState('Clique em um evento para ver mais detalhes sobre ele.')
 
@@ -101,7 +98,7 @@ export const Schedule = () => {
         {event.title} <br />
         {event.description || 'Sem descrição'} <br />
         Inicia às: {new Date(event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-      </>
+      </>,
     )
   }
 
@@ -144,7 +141,7 @@ export const Schedule = () => {
       <Card>
         <div className="grid-schedule overflow-hidden">
           <div className="border-x-slate-300">
-            <h2 className="my-2 text-2xl font-bold w-full line-clamp-2">{tripName || "Nome da viagem"}</h2>
+            <h2 className="my-2 text-2xl font-bold w-full line-clamp-2">{tripName || 'Nome da viagem'}</h2>
             <div className="flex flex-col gap-2 mb-5">
               <TravelStatus status={tripStatus || enumTravelStatus.planned} />
 
@@ -190,7 +187,11 @@ export const Schedule = () => {
                 <div className="flex bg-cardGray w-full min-h-64 rounded overflow-hidden items-center">
                   <div className="flex flex-col gap-2 p-6">
                     {participants.map((participant, index) => (
-                      <Participant key={`participant-${index}`} imageSrc={participant.image_path} name={participant.name} />
+                      <Participant
+                        key={`participant-${index}`}
+                        imageSrc={participant.image_path}
+                        name={participant.name}
+                      />
                     ))}
                   </div>
                 </div>
