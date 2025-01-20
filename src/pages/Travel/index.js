@@ -320,7 +320,7 @@ export const Travel = () => {
         <ModalCreateEvent onClose={() => setOpenModalCreateEvent(false)} onSuccess={updateEventsList} />
       )}
 
-      {openModalEditEvent && <ModalEditEvent onClose={handleCloseModalEditEvent} event={eventSelected} />}
+      {openModalEditEvent && <ModalEditEvent onClose={handleCloseModalEditEvent} event={eventSelected} onSuccess={updateEventsList}/>}
 
       {openModalEditTrip && (
         <ModalEditTrip onClose={() => setOpenModalEditTrip(false)} trip={trip} refreshTrip={refreshTrip} />

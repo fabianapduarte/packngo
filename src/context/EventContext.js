@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 import { useSnackbar } from 'notistack'
-import { post, get, put, del } from '../utils/api'
+import { post, get, patch, del } from '../utils/api'
 import { eventsUrl, eventUrl, joinEventUrl, leaveEventUrl } from '../utils/routesApi'
 
 export const EventContext = createContext({})
@@ -69,7 +69,50 @@ export const EventProvider = ({ children }) => {
       return null
     }
   }
-  
+
+  const editEvent = async ({
+    title,
+    description,
+    destination,
+    startDate,
+    startDateTime,
+    endDateTime,
+    cost,
+    shareCost,
+    idCategory,
+    idEvent,
+    id,
+    handleSuccess,
+  }) => {
+    try {
+      const newData = {}
+      newData.title = title;
+      newData.description = description;
+      newData.destination = destination;
+      newData.startDatetime = startDate + ' ' + startDateTime;
+      newData.endDatetime = startDate + ' ' + endDateTime;
+      newData.cost = cost;
+      newData.shareCost = (shareCost ? 1 : 0);
+      newData.idCategory = idCategory;
+      newData.id = idEvent;
+      newData.id_trip = id;
+      newData.handleSuccess = handleSuccess;
+
+      const url = eventUrl(id, idEvent)
+      
+      await patch(url, newData)
+      enqueueSnackbar('Evento editado', { variant: 'success' })
+      handleSuccess()
+      return { success: true }
+    } catch (error) {
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
+      return { success: false }
+    }
+  }
 
   const deleteEvent = async (id_trip, id) => {
     try {
@@ -124,6 +167,7 @@ export const EventProvider = ({ children }) => {
       value={{
         addEvent,
         getEvents,
+        editEvent,
         deleteEvent,
         joinEvent,
         leaveEvent,
