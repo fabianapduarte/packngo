@@ -41,13 +41,13 @@ const InfoItem = ({ Icon, text }) => {
   )
 }
 
-const ChecklistItem = ({ text, isChecked, onClick }) => {
+const ChecklistItem = ({ text, isChecked, onDelete, onCheck }) => {
   return (
     <div className="flex items-center gap-3">
       <div className="w-full">
-        <Checkbox text={text} isChecked={isChecked} />
+        <Checkbox text={text} isChecked={isChecked} onChange={onCheck} />
       </div>
-      <Trash2 size={16} color="#BCC1BA" className="cursor-pointer" onClick={onClick} />
+      <Trash2 size={16} color="#BCC1BA" className="cursor-pointer" onClick={onDelete} />
     </div>
   )
 }
@@ -83,7 +83,7 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 export const Travel = () => {
   const [trip, setTrip] = useState(null)
   const [events, setEvents] = useState(null)
-  const [lists, setLists] = useState([])
+  const [list, setList] = useState(null)
   const [polls, setPolls] = useState([])
   const { id } = useParams()
   const tripContext = useContext(TripContext)
@@ -114,10 +114,9 @@ export const Travel = () => {
   }
 
   const updateItemsList = async () => {
-    const lists = await listsContext.getLists(id)
-    console.log(lists)
-    if (lists) {
-      setLists(lists)
+    const listsSearched = await listsContext.getList(id)
+    if (listsSearched) {
+      setList(listsSearched)
     }
   }
 
@@ -128,7 +127,6 @@ export const Travel = () => {
     }
   }
 
-  const [checklist, setChecklist] = useState([])
   const [newItemOnChecklist, setNewItemOnChecklist] = useState(false)
   const [openModalAddParticipant, setOpenModalAddParticipant] = useState(false)
   const [openModalLeaveTrip, setOpenModalLeaveTrip] = useState(false)
@@ -143,15 +141,34 @@ export const Travel = () => {
   const [eventSelected, setEventSelected] = useState(null)
   const [pollSelected, setPollSelected] = useState(null)
 
-  const handleDeleteItemOnChecklist = (indexToDelete) => {
-    const newChecklist = checklist.filter((_, index) => index !== indexToDelete)
-    setChecklist(newChecklist)
+  const handleDeleteItemOnChecklist = async (idItem) => {
+    const { success } = await listsContext.deleteItem({ idItem, idTrip: id })
+    if (success) {
+      const newList = list.filter(({ id }) => id !== idItem)
+      setList(newList)
+    }
   }
 
-  const handleChangeOnAddItem = (value) => {
-    const newChecklist = [...checklist, { title: value, isChecked: false }]
-    setChecklist(newChecklist)
-    setNewItemOnChecklist(false)
+  const handleCheckItem = async (idItem) => {
+    const { success, itemUpdated } = await listsContext.checkItem({ idItem, idTrip: id })
+    if (success) {
+      const newList = list.map((item) => {
+        if (item.id === idItem) return itemUpdated
+        else return item
+      })
+      setList(newList)
+    }
+  }
+
+  const handleChangeOnAddItem = async (value) => {
+    if (value.length > 0) {
+      const { success, newItem } = await listsContext.addItem({ item: value, idTrip: id })
+      if (success) {
+        const newList = [...list, newItem]
+        setList(newList)
+        setNewItemOnChecklist(false)
+      }
+    }
   }
 
   const handleSeeEvent = (event) => {
@@ -178,7 +195,7 @@ export const Travel = () => {
     setEventSelected(null)
   }
 
-  if (!trip || !events) return <Loading />
+  if (!trip || !events || !list) return <Loading />
 
   return (
     <Layout>
@@ -282,12 +299,13 @@ export const Travel = () => {
             <div className="flex flex-col">
               <h3 className="font-bold text-xl">Listas</h3>
               <div className="mt-6 mb-3 flex flex-col gap-2">
-                {lists.map((item, index) => (
+                {list.map(({ item, is_checked, id }) => (
                   <ChecklistItem
-                    key={item.title}
-                    text={item.title}
-                    isChecked={item.isChecked}
-                    onClick={() => handleDeleteItemOnChecklist(index)}
+                    key={id}
+                    text={item}
+                    isChecked={is_checked}
+                    onDelete={() => handleDeleteItemOnChecklist(id)}
+                    onCheck={() => handleCheckItem(id)}
                   />
                 ))}
               </div>

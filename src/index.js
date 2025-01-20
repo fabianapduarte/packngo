@@ -16,9 +16,9 @@ root.render(
     <BrowserRouter>
       <SnackbarProvider anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
         <AuthProvider>
-          <TripProvider>            
+          <TripProvider>
             <EventProvider>
-              <ListsProvider>                                        
+              <ListsProvider>
                 <App />
               </ListsProvider>
             </EventProvider>

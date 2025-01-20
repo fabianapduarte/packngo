@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Check, Edit3, Trash2, X } from 'react-feather'
 import { ButtonOutlined, Modal } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'

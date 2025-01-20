@@ -1,27 +1,17 @@
-import { createContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { createContext } from 'react'
 import { useSnackbar } from 'notistack'
-import { post, get, del } from '../utils/api'
-import { listsUrl, deleteListsUrl } from '../utils/routesApi'
-import { tripRoute } from '../utils/routes'
-
+import { post, get, del, patch } from '../utils/api'
+import { listsUrl, deleteItemUrl, checkItemUrl } from '../utils/routesApi'
 
 export const ListsContext = createContext({})
 
-export const ListsProvider = ({ children }) => {  
-  
+export const ListsProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar()
 
-  const addLists = async ({ title, is_checked, id_trip }) => {
-    try {      
-      const form = new FormData()
-      form.append('title', title)
-      form.append('is_checked', is_checked)
-      form.append('id_trip', id_trip)    
-
-      const { data } = await post(listsUrl(id_trip), form)
-
-      //enqueueSnackbar('Item criada com sucesso!', { variant: 'success' })      
+  const addItem = async ({ idTrip, item }) => {
+    try {
+      const { data } = await post(listsUrl(idTrip), { item })
+      return { success: true, newItem: data }
     } catch (error) {
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
@@ -36,33 +26,15 @@ export const ListsProvider = ({ children }) => {
       } else {
         enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
       }
-    } finally {      
+      return { success: false }
     }
   }
 
-
-  const getLists = async (id_trip) => {
-    try {      
-      const { data } = await get(listsUrl(id_trip))    
-      console.log(data)  
-      return data
-    } catch (error) {      
-      if (error.status === 401) {
-        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
-      } else {
-        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
-      }
-      return null
-    }
-  }
-  
-
-  const deleteLists = async (id,id_trip) => {
-    try {      
-      const url = deleteListsUrl(id_trip,id)
-      await del(url)
-      return { success: true }
-    } catch (error) {      
+  const checkItem = async ({ idTrip, idItem }) => {
+    try {
+      const { data } = await patch(checkItemUrl(idTrip, idItem))
+      return { success: true, itemUpdated: data }
+    } catch (error) {
       if (error.status === 401) {
         enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
       } else {
@@ -72,9 +44,34 @@ export const ListsProvider = ({ children }) => {
     }
   }
 
-  return (
-    <ListsContext.Provider value={{ addLists, deleteLists, getLists}}>
-      {children}
-    </ListsContext.Provider>
-  )
+  const getList = async (idTrip) => {
+    try {
+      const { data } = await get(listsUrl(idTrip))
+      return data
+    } catch (error) {
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
+      return null
+    }
+  }
+
+  const deleteItem = async ({ idItem, idTrip }) => {
+    try {
+      const url = deleteItemUrl(idTrip, idItem)
+      await del(url)
+      return { success: true }
+    } catch (error) {
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
+      return { success: false }
+    }
+  }
+
+  return <ListsContext.Provider value={{ addItem, deleteItem, getList, checkItem }}>{children}</ListsContext.Provider>
 }
