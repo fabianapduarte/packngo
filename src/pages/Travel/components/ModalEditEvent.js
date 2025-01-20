@@ -42,8 +42,8 @@ export const ModalEditEvent = ({ onClose, event, onSuccess }) => {
   }
 
   const handleSuccess = async () => {
-    onClose()
     await onSuccess()
+    onClose()
   }
 
   const handleChangeCategory = async (category) => {

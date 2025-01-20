@@ -82,7 +82,6 @@ const PollCard = ({ title, isOpen, openPoll }) => {
 }
 
 export const Travel = () => {
-  const travel = data[0].trips[0]
   const [trip, setTrip] = useState(null)
   const [events, setEvents] = useState([])
   const [lists, setLists] = useState([])
@@ -91,19 +90,21 @@ export const Travel = () => {
   const tripContext = useContext(TripContext)
   const eventContext = useContext(EventContext)
   const listsContext = useContext(ListsContext)
-
+  
   useEffect(() => {
     const fetchTripData = async () => {
       const trip = await tripContext.showTrip(id)
-      if (trip) {
-        setTrip(trip)
-      }       
+      if (trip) setTrip(trip)
       await updateItemsList()
       await updateEventsList()
     }
 
     fetchTripData()
   }, [id])
+
+  const handleCancelPresence = async() => {
+    await fetchTripData()
+  }
 
   const refreshTrip = async () => {
     setTrip(null)
@@ -332,6 +333,7 @@ export const Travel = () => {
           onClose={handleCloseModalSeeEvent}
           openDeleteModal={() => setOpenModalDeleteEvent(true)}
           openEditModal={() => setOpenModalEditEvent(true)}
+          onChangePresence={handleCancelPresence}
         />
       )}
 

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Check, Edit3, Trash2, X } from 'react-feather'
 import { ButtonOutlined, Modal } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'
@@ -6,7 +7,7 @@ import { useContext, useState } from 'react'
 import { EventContext } from '../../../context/EventContext'
 import { UserContext } from '../../../context/AuthContext'
 
-export const ModalSeeEvent = ({ onClose, event, openDeleteModal, openEditModal }) => {
+export const ModalSeeEvent = ({ onClose, event, openDeleteModal, openEditModal, onChangePresence }) => {
   const { user } = useContext(UserContext)
   const eventContext = useContext(EventContext)
   const [isParticipant, setIsParticipant] = useState(
@@ -15,12 +16,20 @@ export const ModalSeeEvent = ({ onClose, event, openDeleteModal, openEditModal }
 
   const handleConfirmPresence = async () => {
     const { success } = await eventContext.joinEvent(event.id_trip, event.id)
-    if (success) setIsParticipant(true)
+    if (success) {
+      setIsParticipant(true)
+      await onChangePresence
+      onClose()
+    }
   }
 
   const handleCancelPresence = async () => {
     const { success } = await eventContext.leaveEvent(event.id_trip, event.id)
-    if (success) setIsParticipant(false)
+    if (success) {
+      setIsParticipant(false)
+      await onChangePresence
+      onClose()
+    }
   }
 
   const handleDeleteEvent = () => {
