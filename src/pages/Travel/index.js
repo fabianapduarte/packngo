@@ -124,7 +124,7 @@ export const Travel = () => {
   }
 
   const updatePollsList = async () => {
-    const pollsSearched = await pollContext.getList(id)
+    const pollsSearched = await pollContext.getPoll(id)
     if (pollsSearched) {
       setPolls(pollsSearched)
     }
