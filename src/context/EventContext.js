@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 import { useSnackbar } from 'notistack'
-import { post, get } from '../utils/api'
-import { eventsUrl } from '../utils/routesApi'
+import { post, get, put, del } from '../utils/api'
+import { eventsUrl, eventUrl } from '../utils/routesApi'
 
 export const EventContext = createContext({})
 
@@ -70,12 +70,30 @@ export const EventProvider = ({ children }) => {
       return null
     }
   }
+  
+
+  const deleteEvent = async (id_trip, id) => {
+    try {
+      const url = eventUrl(id_trip, id)
+      await del(url)
+      enqueueSnackbar('Evento excluído', { variant: 'success' })
+      return { success: true }
+    } catch (error) {
+      if (error.status === 401) {
+        enqueueSnackbar('Credenciais inválidas.', { variant: 'error' })
+      } else {
+        enqueueSnackbar('Ocorreu um problema inesperado. Tente novamente mais tarde.', { variant: 'error' })
+      }
+      return { success: false }
+    }
+  }
 
   return (
     <EventContext.Provider
       value={{
         addEvent,
         getEvents,
+        deleteEvent
       }}
     >
       {children}

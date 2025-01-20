@@ -322,7 +322,7 @@ export const Travel = () => {
         />
       )}
 
-      {openModalDeleteEvent && <ModalDeleteEvent onClose={() => setOpenModalDeleteEvent(false)} />}
+      {openModalDeleteEvent && <ModalDeleteEvent onClose={() => setOpenModalDeleteEvent(false)} event={eventSelected} onSuccess={updateEventsList}/>}
 
       {openModalSeePoll && <ModalSeePoll onClose={handleCloseModalSeePoll} poll={pollSelected} />}
     </Layout>

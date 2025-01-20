@@ -1,13 +1,17 @@
+import { useState, useContext, useEffect } from 'react'
 import { Trash2 } from 'react-feather'
 import { Button, Modal } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'
 import { useSnackbar } from 'notistack'
+import { EventContext } from '../../../context/EventContext'
 
-export const ModalDeleteEvent = ({ onClose }) => {
+export const ModalDeleteEvent = ({ onClose, event, onSuccess }) => {
   const { enqueueSnackbar } = useSnackbar()
+  const eventContext = useContext(EventContext)
 
-  const handleDelete = () => {
-    enqueueSnackbar('Evento excluído', { variant: 'success' })
+  const handleDelete = async() => {
+    const events = await eventContext.deleteEvent(event.id_trip, event.id)
+    await onSuccess()
     onClose()
   }
 
