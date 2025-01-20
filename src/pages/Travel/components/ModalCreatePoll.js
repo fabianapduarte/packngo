@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useSnackbar } from 'notistack'
 import { Plus, X } from 'react-feather'
 import { Button, Input, Modal, TextButton } from '../../../components'
 import { enumButtonColor } from '../../../enums/enumButtonColor'
+
+import { TripContext } from '../../../context/TripContext'
+import { PollContext } from '../../../context/PollContext'
 
 export const ModalCreatePoll = ({ onClose }) => {
   const initialOptions = [{ value: '' }, { value: '' }]
@@ -10,9 +13,16 @@ export const ModalCreatePoll = ({ onClose }) => {
   const [title, setTitle] = useState('Nova enquete')
   const [options, setOptions] = useState(initialOptions)
 
-  const handleDelete = () => {
-    enqueueSnackbar('Enquete criada com sucesso!', { variant: 'success' })
-    onClose()
+
+  const tripContext = useContext(TripContext)
+  const pollContext = useContext(PollContext)
+
+  const handleDelete = async() => {
+    const data = await pollContext()
+    if(data.success){
+      enqueueSnackbar('Enquete criada com sucesso!', { variant: 'success' })
+      onClose()
+    }
   }
 
   const handleAddOption = () => {

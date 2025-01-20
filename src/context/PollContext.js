@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 import { useSnackbar } from 'notistack'
 import { post, get, del, patch } from '../utils/api'
-import { pollsUrl, voteItemUrl } from '../utils/routesApi'
+import { pollsUrl, votePollsUrl } from '../utils/routesApi'
 
 export const PollContext = createContext({})
 
@@ -32,7 +32,7 @@ export const PollProvider = ({ children }) => {
 
   const voteItem = async ({ idTrip, idItem }) => {
     try {
-      const { data } = await patch(voteItemUrl(idTrip, idItem))
+      const { data } = await patch(votePollsUrl(idTrip, idItem))
       return { success: true, itemUpdated: data }
     } catch (error) {
       if (error.status === 401) {
