@@ -39,7 +39,7 @@ import { ModalCreateEvent } from './components/ModalCreateEvent'
 import { ModalEditEvent } from './components/ModalEditEvent'
 import { ModalEditTrip } from './components/ModalEditTrip'
 import { calendarRoute } from '../../utils/routes'
-import { dateFormat } from '../../utils/dateFormat'
+import { dateFormat, formatDatetime } from '../../utils/dateFormat'
 import { TripContext } from '../../context/TripContext'
 import { EventContext } from '../../context/EventContext'
 import { getTripImage } from '../../utils/getTripImage'
@@ -72,7 +72,7 @@ const EventCard = ({ event, onClick }) => {
         <div className="flex gap-2 items-center mb-3">
           <Calendar size={16} />
           <span>
-            {event.dateStart} - {event.timeStart}
+            {formatDatetime(event.start_datetime)}
           </span>
         </div>
         <TextButton label="Ver evento" Icon={ArrowRight} onClick={onClick} />
@@ -109,7 +109,6 @@ export const Travel = () => {
       if (trip) {
         setTrip(trip)
       }
-      console.log(eventContext);
       const events = await eventContext.getEvents(id)
       if(events){
         setEvents(events)
