@@ -5,47 +5,57 @@ import { useParams } from 'react-router-dom'
 
 import { PollContext } from '../../../context/PollContext'
 
-export const ModalSeePoll = ({ onClose, poll }) => {
-  const [options, setOptions] = useState(poll.options)
-  const [showResults, setShowResults] = useState(!poll.open)
+export const ModalSeePoll = ({ onClose, poll, onSuccess }) => {
+  const [options, setOptions] = useState([])
+  const [showResults, setShowResults] = useState(false)
   const [optionMostVotedIndex, setOptionMostVotedIndex] = useState(null)
   const [totalVotes, setTotalVotes] = useState(0)
   const pollContext = useContext(PollContext)
   const { id } = useParams()
 
   useEffect(() => {
-    let total = 0
-    options.forEach((option) => (total += option.votes))
-    setTotalVotes(total)
-  }, [options])
+    if (poll) {
+      let total = 0
+      poll.options.forEach((option) => (total += option.totalVotes))
+      setTotalVotes(total)
+
+      setOptions(poll.options)
+
+      const isToShowResults = poll.options.some((option) => option.isVoted)
+      setShowResults(isToShowResults)
+
+      if (isToShowResults) calculateResult(poll.options, total)
+    }
+  }, [poll])
 
   const handleVote = async (indexToVote) => {
     const updatedOptions = options.map((option, index) => {
-      if (index === indexToVote){ 
-        return { ...option, votes: option.votes + 1 }
-      }
-      else return option
+      if (index === indexToVote) {
+        return { ...option, totalVotes: option.totalVotes + 1 }
+      } else return option
     })
 
-    console.log(id +' '+ poll.id +' '+ updatedOptions[indexToVote].id)
-    await pollContext.voteItem({ id, idPoll: poll.id, idOption: updatedOptions[indexToVote].id })
-    setTotalVotes(totalVotes + 1)
-    
-    calculateResult(updatedOptions)
-    setShowResults(true)
+    const { success } = await pollContext.voteItem({ id, idPoll: poll.id, idOption: updatedOptions[indexToVote].id })
+    if (success) {
+      setTotalVotes(totalVotes + 1)
+      setShowResults(true)
+      calculateResult(updatedOptions, totalVotes + 1)
+      onSuccess()
+    }
   }
 
-  const calculateResult = (pollOptions) => {
+  const calculateResult = (pollOptions, total) => {
     let maxVotes = 0
     let optionMostVoted = null
 
     const updatedOptions = pollOptions.map((option, index) => {
-      if (option.votes > maxVotes) {
-        maxVotes = option.votes
+      if (option.totalVotes > maxVotes) {
+        maxVotes = option.totalVotes
         optionMostVoted = index
       }
 
-      return { ...option, percentage: Math.ceil((option.votes / totalVotes) * 100) }
+      if (total === 0) return { ...option, percentage: 0 }
+      else return { ...option, percentage: Math.ceil((option.totalVotes / total) * 100) }
     })
 
     setOptions(updatedOptions)
@@ -55,13 +65,16 @@ export const ModalSeePoll = ({ onClose, poll }) => {
   const OptionVoted = ({ isMostVoted, option, index }) => {
     return (
       <div className="flex items-center gap-2">
-        {isMostVoted && <div className="rounded px-3 py-2 bg-secondary text-white w-full cursor-pointer"
-          onClick={() => handleVote(index)}>
-          {option.option}
-        </div>}
+        {isMostVoted && (
+          <div className="rounded px-3 py-2 bg-secondary text-white w-full" onClick={() => handleVote(index)}>
+            {option.option}
+          </div>
+        )}
         {!isMostVoted && (
-          <div className="rounded px-3 py-2 bg-white text-black border border-gray w-full cursor-pointer"
-            onClick={() => handleVote(index)}>
+          <div
+            className="rounded px-3 py-2 bg-white text-black border border-gray w-full"
+            onClick={() => handleVote(index)}
+          >
             {option.option}
           </div>
         )}
@@ -75,15 +88,19 @@ export const ModalSeePoll = ({ onClose, poll }) => {
       <div className="flex flex-col gap-3 w-full mb-4">
         {showResults &&
           options.map((option, index) => (
-            <OptionVoted key={`option-${index}`} isMostVoted={index === optionMostVotedIndex} option={option} index={index} />
+            <OptionVoted
+              key={`option-${index}`}
+              isMostVoted={index === optionMostVotedIndex}
+              option={option}
+              index={index}
+            />
           ))}
         {!showResults &&
           options.map((option, index) => (
             <ButtonOutlined
               key={`option-${index}`}
               color={enumButtonColor.gray}
-              label={option.value}
-              disabled={!poll.open}
+              label={option.option}
               onClick={() => handleVote(index)}
               size="full"
             />

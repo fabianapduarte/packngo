@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 import { useSnackbar } from 'notistack'
-import { post, get, patch } from '../utils/api'
+import { post, get } from '../utils/api'
 import { pollsUrl, votePollsUrl } from '../utils/routesApi'
 
 export const PollContext = createContext({})
@@ -35,6 +35,7 @@ export const PollProvider = ({ children }) => {
     try {
       const emptyDate = {}
       const { data } = await post(votePollsUrl(id, idPoll, idOption), emptyDate)
+      enqueueSnackbar('Voto salvo com sucesso', { variant: 'success' })
       return { success: true, itemUpdated: data }
     } catch (error) {
       if (error.status === 401) {

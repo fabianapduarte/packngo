@@ -365,7 +365,9 @@ export const Travel = () => {
         />
       )}
 
-      {openModalSeePoll && <ModalSeePoll onClose={handleCloseModalSeePoll} poll={pollSelected} />}
+      {openModalSeePoll && (
+        <ModalSeePoll onClose={handleCloseModalSeePoll} poll={pollSelected} onSuccess={updatePollsList} />
+      )}
     </Layout>
   )
 }
