@@ -15,11 +15,26 @@
 
 ## 💻 Sobre o projeto
 
-[Em construção...]
+Aplicação web que centraliza a organização de viagens em grupo em um só local, facilitando o planejamento das atividades e a divisão de custos. O projeto desenvolvido para a disciplina de Desenvolvimento de Sistemas Web I do curso de Tecnologia da Informação do IMD/UFRN.
 
 ---
 
 ## ⚙ Funcionalidades
+
+- [x] Cadastro de usuário
+- [x] Login
+- [x] Criação, listagem, edição e exclusão de viagem
+- [x] Entrar em viagem já existente
+- [x] Sair de uma viagem
+- [x] Criação, listagem, edição e exclusão de eventos
+- [x] Confirmar presença em evento
+- [x] Cancelar presença em evento
+- [x] Criação de enquete
+- [x] Votação em uma opção de uma enquete
+- [x] Criação, listagem e exclusão de item em um checklist
+- [x] Ver os eventos planejados em um agenda
+- [x] Edição de conta
+- [x] Sair da conta
 
 ---
 
@@ -55,6 +70,7 @@ Clique [aqui](https://www.figma.com/design/ti62MlWQowmtZcukm6VTS8/Prot%C3%B3tipo
 ## 🛠 Tecnologias
 
 - React
+- Tailwind
 
 ---
 
