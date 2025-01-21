@@ -15,7 +15,7 @@
 
 ## 💻 Sobre o projeto
 
-Aplicação web que centraliza a organização de viagens em grupo em um só local, facilitando o planejamento das atividades e a divisão de custos. O projeto desenvolvido para a disciplina de Desenvolvimento de Sistemas Web I do curso de Tecnologia da Informação do IMD/UFRN.
+Aplicação web que centraliza a organização de viagens em grupo em um só local, facilitando o planejamento das atividades e a divisão de custos. O projeto desenvolvido para a disciplina de Desenvolvimento de Sistemas Web I do curso de Tecnologia da Informação do IMD/UFRN. Clique [aqui](https://github.com/fabianapduarte/packngo-api) para acessar o projeto da API.
 
 ---
 
