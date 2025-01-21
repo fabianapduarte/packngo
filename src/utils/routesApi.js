@@ -42,4 +42,4 @@ export const leaveEventUrl = (idTrip, idEvent) => `/trips/${idTrip}/events/${idE
 
 export const pollsUrl = (id) => `/trips/${id}/polls`
 
-export const votePollsUrl = (id, idPoll, idOption) => `/trips/${id}/polls/${idPoll}/vote/${idOption}`
+export const votePollsUrl = (idTrip, idPoll, idOption) => `/trips/${idTrip}/polls/${idPoll}/vote/${idOption}`

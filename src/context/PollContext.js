@@ -31,9 +31,10 @@ export const PollProvider = ({ children }) => {
     }
   }
 
-  const voteItem = async ({ idTrip, idItem }) => {
+  const voteItem = async ({ id, idPoll, idOption }) => {
     try {
-      const { data } = await patch(votePollsUrl(idTrip, idItem))
+      const emptyDate = {}
+      const { data } = await post(votePollsUrl(id, idPoll, idOption), emptyDate)
       return { success: true, itemUpdated: data }
     } catch (error) {
       if (error.status === 401) {
